@@ -1,0 +1,26 @@
+<chapter id="logmanager_configuration">
+	<title>Configuration</title>
+	<para>여기서는 Log Manager를 위한 Legacy Application 및 Log Manager Web 모듈의 설정방법에 대하여 안내하고 있다.</para>
+	<section id="logmanager_web_xml">
+		<title>web.xml과 log4j.xml - Legacy Application</title>
+		<para>Legacy Application의 web.xml 을 설정하는 방법은 Log Agent 매뉴얼에서 제공하고 있으며 내용은 <ulink url="http://dev.anyframejava.org/docs/anyframe/plugin/optional/logmanager/1.0.0/reference/htmlsingle/logmanager.html#logmanager_configuration">여기</ulink>를 클릭하여 참조한다.</para>
+	</section>
+	<section id="logmanager_mongo_properties">
+		<title>mongo.properties - Log Manager Web</title>
+		<para>war 파일 배포 후 /WEB-INF/classes/mongo.properties 파일을 열어서 mongo.host, mongo.port 등의 MongoDB 관련설정 값을 설치환경에 맞도록 설정한다.</para>
+		<para>mongo.properties에서 굵은 글씨로 표시된 부분이 수정해야할 대상이다.</para>
+		<programlisting language="xml"><emphasis role="bold">mongo.host=localhost</emphasis>
+<emphasis role="bold">mongo.port=27017</emphasis><![CDATA[
+mongo.connectionsPerHost=8
+mongo.threadsAllowedToBlockForConnectionMultiplier=4
+mongo.connectTimeout=1000
+mongo.maxWaitTime=1500
+mongo.autoConnectRetry=true 
+mongo.socketKeepAlive=true
+mongo.socketTimeout=1500
+mongo.slaveOk=true
+mongo.database.name=logs
+mongo.admin.collection=LogApplication
+mongo.account.collectionName=Account]]></programlisting>
+	</section>
+</chapter>

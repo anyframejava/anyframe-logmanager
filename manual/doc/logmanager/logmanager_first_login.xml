@@ -1,0 +1,69 @@
+<chapter id="logmanager_first_login">
+	<title>최초 접근 시 로그인 방법</title>
+		<para>Log Manager Web 모듈이 처음 설치된 경우 등록된 사용자가 없으므로 최초 사용자를 등록하여야 로그인하여 시스템 사용이 가능하다.</para>
+		<para>최초 사용을 위한 최초 사용자 등록 절차는 다음과 같다.</para>
+	<para>
+		<itemizedlist>
+			<listitem>
+				<para>등록된 사용자가 없는 경우 아래와 같은 최초 사용자 등록 화면을 띄우기 위한 버튼이 display 된다.</para>
+			</listitem>
+		</itemizedlist>
+	</para>
+	<mediaobject>
+		<imageobject role="html">
+			<imagedata fileref="../image/logmanager/logmanager015.jpg" format="JPG" align="center"/>
+		</imageobject>
+		<imageobject role="fo">
+			<imagedata fileref="../image/logmanager/pdf/logmanager015.jpg" format="JPG" align="center"/>
+		</imageobject>
+		<caption>최초 접속 시 로그인 화면</caption>
+	</mediaobject>
+	<para>
+		<itemizedlist>
+			<listitem>
+				<para>버튼을 클릭하면 아래와 같이 최초 사용자 등록을 위한 팝업화면이 표시된다.</para>
+			</listitem>
+		</itemizedlist>
+	</para>
+	<mediaobject>
+		<imageobject role="html">
+			<imagedata fileref="../image/logmanager/logmanager016.jpg" format="JPG" align="center"/>
+		</imageobject>
+		<imageobject role="fo">
+			<imagedata fileref="../image/logmanager/pdf/logmanager016.jpg" format="JPG" align="center"/>
+		</imageobject>
+		<caption>최초 사용자 등록 팝업</caption>
+	</mediaobject>
+	<para>
+		<itemizedlist>
+			<listitem>
+				<para>최초 사용자 정보를 입력한다. 최초 사용자는  &quot;Administrator&quot; 타입으로 할 것을 권장한다. </para>
+			</listitem>
+		</itemizedlist>
+	</para>
+	<mediaobject>
+		<imageobject role="html">
+			<imagedata fileref="../image/logmanager/logmanager017.jpg" format="JPG" align="center"/>
+		</imageobject>
+		<imageobject role="fo">
+			<imagedata fileref="../image/logmanager/pdf/logmanager017.jpg" format="JPG" align="center"/>
+		</imageobject>
+		<caption>최초 사용자 정보 입력</caption>
+	</mediaobject>
+	<para>
+		<itemizedlist>
+			<listitem>
+				<para>최초 사용자 정보가 등록되었으므로 등록한 정보에 따라 로그인 한 후 Log Manager 를 사용한다.</para>
+			</listitem>
+		</itemizedlist>
+	</para>
+	<mediaobject>
+		<imageobject role="html">
+			<imagedata fileref="../image/logmanager/logmanager018.jpg" format="JPG" align="center"/>
+		</imageobject>
+		<imageobject role="fo">
+			<imagedata fileref="../image/logmanager/pdf/logmanager018.jpg" format="JPG" align="center"/>
+		</imageobject>
+		<caption>사용자 등록 후 최초 로그인</caption>
+	</mediaobject>
+</chapter>

@@ -1,0 +1,17 @@
+<chapter id="logmanager_logmanagerweb_install">
+	<title>Log Manager Web 설치</title>
+	<para>Log Manager Web의 설치 절차는 다음과 같다</para>
+	<itemizedlist>
+		<listitem><para>WAS 또는 Servlet Container에 log-manager-web-1.0.0.war 배포</para></listitem>
+		<listitem><para>Configuration 관련 파일 설정</para></listitem>
+	</itemizedlist>
+	<section>
+		<title>war 파일 배포</title>
+		<para>다운로드 받은 <ulink url="http://anyframejava.org/project/logmanager#downloads">Anyframe-LogManager-1.0.0-bin.zip</ulink> 파일의 압축을 해제 하면 나오는 anyframe-log-manager-web-1.0.0.war 파일을 WAS에 배포한다.</para>
+		<para>WAS 별 배포 방법에 대한 설명은 본 문서 범위를 넘어가므로 생략하였다.</para>
+	</section>
+	<section>
+		<title>Configuration</title>
+		<para>최초 설치시의 설정 방법은 <ulink url="#logmanager_configuration">여기</ulink>를 참조한다.</para>
+	</section>
+</chapter>

@@ -1,0 +1,49 @@
+<chapter id="logmanager_account_management">
+	<title>Account Management</title>
+	<para>Account Management에서는 로그 조회 및 로그 정책을 관리할 수 있는 사용자 계정을 생성/관리한다.</para>
+	<para>본 기능은 목록 화면과 등록/수정 화면으로 구성되어 있다.</para>
+	<section id="logmanager_account_list">
+		<title>Account 목록</title>
+		<para>Account 목록화면에서는 다음과 같은 기능을 제공한다.</para>
+		<itemizedlist>
+			<listitem><para>Account 등록 화면 호출</para></listitem>
+			<listitem><para>Accouunt 상세조회 및 수정화면 호출</para></listitem>
+			<listitem><para>등록된 Account의 검색 기능 제공</para></listitem>
+		</itemizedlist>
+		<mediaobject>
+			<imageobject role="html">
+				<imagedata fileref="../image/logmanager/logmanager008.jpg" align="center" />
+			</imageobject>
+			<imageobject role="fo">
+				<imagedata fileref="../image/logmanager/pdf/logmanager008.jpg" format="JPG" align="center"/>
+			</imageobject>
+			<caption>Account Management List</caption>
+		</mediaobject>
+	</section>
+	<section id="logmanager_account_add">
+		<title>Account 등록/수정</title>
+		<para>Account 등록/수정화면에서는 다음과 같은 기능을 제공한다.</para>
+		<itemizedlist>
+			<listitem><para>Account 정보 입력</para></listitem>
+			<listitem><para>Account Type 설정 - Administrator/Developer</para></listitem>
+			<listitem><para>Account 삭제</para></listitem>
+		</itemizedlist>
+		<mediaobject>
+			<imageobject role="html">
+				<imagedata fileref="../image/logmanager/logmanager009.jpg" align="center" />
+			</imageobject>
+			<imageobject role="fo">
+				<imagedata fileref="../image/logmanager/pdf/logmanager009.jpg" format="JPG" align="center"/>
+			</imageobject>
+			<caption>Account Management Regist/Update</caption>
+		</mediaobject>
+	</section>
+	<warning>
+		<title>Account Type</title>
+		<para>Log Manager에서는 Account Type에 따라 로그에 대한 조회권한 및 로그 정책 및 사용자 관리 등의 기능에 대한 권한을 제한하고 있다.</para>
+		<itemizedlist>
+			<listitem><para>Administrator - 해당 시스템의 운영자 또는 개발 책임자에게 부여되는 타입으로 Log Manager의 모든 기능을 사용가능</para></listitem>
+			<listitem><para>Developer - 일반 개발자 또는 단위 시스템 운영담당자에게 부여되는 타입으로 Log Analysis 기능만 사용가능하며, Administrator가 볼 수 있도록 허락한 Log만 접근이 가능하다.</para></listitem>
+		</itemizedlist>
+	</warning>
+</chapter>

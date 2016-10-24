@@ -1,0 +1,23 @@
+<chapter id="logmanager_logagent_install">
+	<title>Log Agent 설치</title>
+	<section id="logagent_plugin_install">
+		<title>Plug-in 설치</title>
+		<para>Log Agent는 Legacy Application에 Anyframe Java plug-in 형태로 배포된다.</para>
+		<para>Command 창에서 다음과 같이 명령어를 입력하여 Anyframe Log Manager plugin을 설치한다.</para>
+		<programlisting language="java"><![CDATA[mvn anyframe:install -Dname=logmanager]]></programlisting>
+		<para>
+			installed(mvn anyframe:installed) 혹은 jetty:run(mvn clean jetty:run) command를 이용하여 설치 결과를 확인해볼 수 있다. 
+		</para>
+		<para><ulink url="#logmanager_configuration">Configuration</ulink>을 참고하여 legacy application의 'web.xml'과 'log4j.xml'을 configulation 한다.</para>
+		<warning>
+			<title>Log Agent 수동 설치</title>
+			<para>Legacy Application이 Anyframe IDE를 지원하지 않거나(즉, Anyframe 기반이 아니거나), 사용할 수 없는 경우에는 <ulink url="http://dev.anyframejava.org/docs/anyframe/plugin/optional/logmanager/1.0.0/reference/htmlsingle/logmanager.html#logmanager_dependency">여기</ulink>를 참고하여 수동으로 설치해야 한다.</para>
+			<para>수동으로 설치하는 경우 Anyframe Java Plugin 에서 제공하는 샘플을 별도 제공되지 않음을 유의하기 바란다.</para>
+		</warning>
+		<warning>
+			<title>Log Agent Plugin</title>
+			<para>Log Agent는 Anyframe Plugin 형태로 제공되는 만큼 관련 매뉴얼이 별도로 제공되고 있다.</para>
+			<para>Log Agent의 설치 뿐만 아니라 보다 상세한 정보가 필요한 경우에는 <ulink url="http://dev.anyframejava.org/docs/anyframe/plugin/optional/logmanager/1.0.0/reference/htmlsingle/logmanager.html">여기</ulink>를 참고한다.</para>
+		</warning>
+	</section>
+</chapter>

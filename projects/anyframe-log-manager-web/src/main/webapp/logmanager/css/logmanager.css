@@ -1,0 +1,55 @@
+@charset "utf-8";
+
+h1 {margin:15px 0 0 10px}
+
+pre {word-wrap:break-word;white-space:pre-wrap;white-space:-moz-pre-wrap;white-space:-pre-wrap;white-space:-o-pre-wrap;word-break:break-all;}
+
+.FATAL {color:red;}
+.ERROR {color:red;}
+.ERROR > pre {color:red;}
+.WARN {color:blue;}
+
+/* keyword highlight */
+.highlight {background-color:#c1ace3 !important; color:#29264d !important; font-weight:bold; display:inline-block; padding:0 3px; margin:0 1px;}
+/*.highlight { background-color: #aaeb75; }*/
+
+.poplayer {width : 100%;}
+#wrap {min-height:700px;}
+#footer {text-align:center;}
+
+.search_area table.btn td {background:none; background-color:#FFF; padding:0; line-height:130%;}
+
+#tabs {position:relative; float:left; width:100%; border-bottom:1px solid #BBB;}
+#tabs ul {margin:0; width:100% !important; margin:5px 0 0 0;}
+#tabs ul li {background:none; float:left; background-color:#E9E9E9; border-bottom:none; margin:0 1px 0 0; padding:3px 20px;}
+#tabs ul li a {text-decoration:none; color:#555; width:100%;; display:block;}
+#tabs ul li.selected {background:url(../images/bg_bottom.jpg) repeat; }
+#tabs ul li.selected a {color:#fff;}
+
+#divMessageText {width:100%;border:solid 1px gray;}
+#divMessageGrid {width:100%;}/* border:solid 1px gray; */
+#divSearchCondition {width:100%;border:solid 1px gray;}
+
+#inputMessageText {width:450px;}
+#inputClientIp,#inputUserId {width:100%;}
+#inputClassName,#inputMethodName{width:250px;}
+#textFromDate,#textToDate {width:70px;}
+#btnLog4jXmlLoad {padding : 0 2px 0 2px;}
+
+#txtAppName {width:100%;}
+#txtLog4jXmlPath {width:80%;}
+
+#pageNav {text-align:center;}
+#btnPagenationSearch {display:none;}
+#checkboxLogTailingModeBottom {display:none;}
+#checkboxLogTailingModeBottom + label {display:none;}
+
+th {text-align:right;}
+.input_search{width:100%;}
+.log-row {border-bottom:dotted 1px gray;height:20px;}
+.log-cell {border-left:dotted 1px gray;height:20px;}
+.number-cell {text-align:right;padding:0 2px 0 2px;}
+.log-row:hover {background-color:#E8EEFA;}
+.advanced-option {display:none;}
+
+

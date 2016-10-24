@@ -1,0 +1,16 @@
+﻿Anyframe Log Manager CHANGELOG
+==========================
+http://www.anyframejava.org
+
+Changes in version 1.0.0 (2012-01-31)
+-------------------------------------
+* 기능
+  - 로그 조회
+  - 로그 정책 관리 
+  - 사용자 계정 관리 
+  
+* 해결된 이슈 목록
+  [LA-2] Log Analyzer 로그 관리 기능 개발
+  [LA-3] Log Analyzer 로그 조회 기능 개발
+  [LA-4] Log Analyzer 로그 저장 기능 개발
+  [LA-5] Log Analyzer 사용자 관리 기능 개발
