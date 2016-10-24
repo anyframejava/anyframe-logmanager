@@ -14,9 +14,10 @@
 <!ENTITY review_log_analysis SYSTEM "logmanager/review/log_analysis.xml">
 <!ENTITY review_log_app_management SYSTEM "logmanager/review/log_app_management.xml">
 <!ENTITY review_login_logout SYSTEM "logmanager/review/login_logout.xml">
-<!ENTITY mongodb_install SYSTEM "logmanager/mongodb_install.xml">
+<!ENTITY MongoDB_install SYSTEM "logmanager/MongoDB_install.xml">
 <!ENTITY logmanagerweb_install SYSTEM "logmanager/logmanagerweb_install.xml">
 <!ENTITY logmanager_first_login SYSTEM "logmanager/logmanager_first_login.xml">
+<!ENTITY review_log_agent_management SYSTEM "logmanager/review/log_agent_management.xml">
 ]
 >
 <!--
@@ -43,7 +44,7 @@
 			<year>2007-2012</year>
 			<holder>삼성SDS</holder>
 		</copyright>
-		<releaseinfo>Version 1.0.0</releaseinfo>
+		<releaseinfo>Version 1.5.0</releaseinfo>
 
 		<productname>Anyframe Log Manager</productname>
 		
@@ -58,7 +59,7 @@
 		</mediaobject>
 		<legalnotice>
 			<para>
-				본본 문서의 저작권은 삼성SDS에 있으며 Anyframe 오픈소스 커뮤니티 활동의 목적하에서 자유로운 이용이 가능합니다.
+				본 문서의 저작권은 삼성SDS에 있으며 Anyframe 오픈소스 커뮤니티 활동의 목적하에서 자유로운 이용이 가능합니다.
 				본 문서를 복제, 배포할 경우에는 저작권자를 명시하여 주시기 바라며 본 문서를 변경하실 경우에는 원문과 변경된 내용을 표시하여 주시기 바랍니다. 
 				원문과 변경된 문서에 대한 상업적 용도의 활용은 허용되지 않습니다. 본 문서에 오류가 있다고 판단될 경우 이슈로 등록해 주시면 적절한 조치를 취하도록 하겠습니다.
 			</para>
@@ -81,7 +82,7 @@
 		<title>S/W 아키텍쳐 구성도 및 기술 구조</title>
 		<partintro>
 			<para>이번 장에서는 Log Manager의 소프트웨어 구성과 기술 구조에 대하여 다이어그램을 통하여 설명한다.</para>
-			<para>Log Manager는 Log Agent, Log Repository, Log Manager(web)으로 구성되며, Log Agent는 Anyframe Java Plugin, Repository는 MongoDB, Log Manager는 Anyframe Java 기반 웹 어플리케이션으로 각각 구현되어 있다.</para>
+			<para>Log Manager는 Log Agent, Log Repository, Log Manager(web)으로 구성되며, Log Agent는 Anyframe Java Plugin과 osgi 기반 서버, Repository는 MongoDB, Log Manager는 Anyframe Java 기반 웹 어플리케이션으로 각각 구현되어 있다.</para>
 			
 		</partintro>
 		&diagram;
@@ -93,10 +94,10 @@
 			<para>이번 장에서는 Log Manager의 각 구현체에 대한 설치와 설정 방법에 대한 내용을 설명한다.</para>
 		</partintro>
 		&logagent_install;
-		&mongodb_install;
+		&MongoDB_install;
 		&logmanagerweb_install;
-		&logmanager_first_login;
 		&configuration_install;
+		&logmanager_first_login;
 	</part>
 	
 	<part id="logmanager_review_part">
@@ -104,6 +105,7 @@
 		&review_menu_intro;
 		&review_login_logout;
 		&review_log_analysis;
+		&review_log_agent_management;
 		&review_log_app_management;
 		&review_accunt_management;
 	</part>

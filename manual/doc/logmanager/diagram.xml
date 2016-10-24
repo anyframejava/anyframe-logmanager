@@ -4,10 +4,10 @@
 	<para>
 		<itemizedlist>
 			<listitem>
-				<para>Log Agent는 로그를 관리할 대상 어플리케이션(Legacy Application)에 같이 설치되어 원하는 로그 정보를 Log Repository로 저장하는 역할을 수행한다.</para>
+				<para>Log Agent는 로그를 관리할 대상 어플리케이션(Legacy Application)에 같이 설치되어 원하는 로그 정보를 Log Repository로 저장하는 역할을 수행하는 Log Manager plugin 부분과 독립적으로 구동되어 로그데이타를 수집하고, 로그 정책정보를 관리하는 Agent Service로 나누어진다.</para>
 			</listitem>
 			<listitem>
-				<para>Log Repository는 말 그대로 로그데이타와 로그어플리케이션 정보를 저장하는 역할을 수행하며, Mongo-DB를 활용하여 구축된다.</para>		
+				<para>Log Repository는 말 그대로 로그데이타와 로그어플리케이션 정보를 저장하는 역할을 수행하며, 오픈소스 NoSQL DB 제품인 MongoDB를 활용하여 구축된다.</para>		
 			</listitem>
 			<listitem>
 				<para>마지막으로 Log Manager Web 모듈은 별도의 웹 어플리케이션으로 구성되며, 저장된 로그정보를 조회(Log Analysis)하거나, 로그 어플리케이션을 관리(Log Application Management)하고, 사용자 정보를 관리(Account Management)등을 수행한다.</para>
@@ -22,12 +22,10 @@
 			<imagedata fileref="../image/logmanager/pdf/logmanager001.jpg" format="JPG" align="center"/>
 		</imageobject>
 		<caption>S/W Architecture Diagram</caption>
-	</mediaobject> 
-</chapter>
-<chapter id="logmanager_technology_diagram">
-	<title>기술 구조도</title>
-	<para>본 기술 구조도는 Log Manager의 각 모듈의 설치 및 구동에 필요한 배경 기술에 대한 정보를 제공하고 있다.</para>
-	<para>주요 배경 기술에는 JDK 1.5, servlet 2.3, log4j, mongo-db 등이 있다.</para>
+	</mediaobject>
+	
+	<para>1.5.0 버전부터 Log Agent Service를 제공함에 따라 원격지에 존재하는 다수의 어플리케이션의 로그를 한 곳에서 관리하는 것이 가능하게 되었다.</para>
+	
 	<mediaobject>
 		<imageobject role="html">
 			<imagedata fileref="../image/logmanager/logmanager002.jpg" format="JPG" align="center"/>
@@ -35,6 +33,20 @@
 		<imageobject role="fo">
 			<imagedata fileref="../image/logmanager/pdf/logmanager002.jpg" format="JPG" align="center"/>
 		</imageobject>
-		<caption>Technology Diagram</caption>
+		<caption>Multi-Server Senario</caption>
+	</mediaobject>  
+</chapter>
+<chapter id="logmanager_technology_diagram">
+	<title>기술 구조도</title>
+	<para>본 기술 구조도는 Log Manager의 각 모듈의 설치 및 구동에 필요한 배경 기술에 대한 정보를 제공하고 있다.</para>
+	<para>주요 배경 기술에는 JDK 1.5, servlet 2.3, log4j, MongoDB 등이 있다.</para>
+	<mediaobject>
+		<imageobject role="html">
+			<imagedata fileref="../image/logmanager/logmanager003.jpg" format="JPG" align="center"/>
+		</imageobject>
+		<imageobject role="fo">
+			<imagedata fileref="../image/logmanager/pdf/logmanager003.jpg" format="JPG" align="center"/>
+		</imageobject>
+		<caption>Technology Stack Diagram</caption>
 	</mediaobject>
 </chapter>

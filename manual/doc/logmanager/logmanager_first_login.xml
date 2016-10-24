@@ -11,10 +11,10 @@
 	</para>
 	<mediaobject>
 		<imageobject role="html">
-			<imagedata fileref="../image/logmanager/logmanager015.jpg" format="JPG" align="center"/>
+			<imagedata fileref="../image/logmanager/logmanager009.jpg" format="JPG" align="center"/>
 		</imageobject>
 		<imageobject role="fo">
-			<imagedata fileref="../image/logmanager/pdf/logmanager015.jpg" format="JPG" align="center"/>
+			<imagedata fileref="../image/logmanager/pdf/logmanager009.jpg" format="JPG" align="center"/>
 		</imageobject>
 		<caption>최초 접속 시 로그인 화면</caption>
 	</mediaobject>
@@ -27,10 +27,10 @@
 	</para>
 	<mediaobject>
 		<imageobject role="html">
-			<imagedata fileref="../image/logmanager/logmanager016.jpg" format="JPG" align="center"/>
+			<imagedata fileref="../image/logmanager/logmanager010.jpg" format="JPG" align="center"/>
 		</imageobject>
 		<imageobject role="fo">
-			<imagedata fileref="../image/logmanager/pdf/logmanager016.jpg" format="JPG" align="center"/>
+			<imagedata fileref="../image/logmanager/pdf/logmanager010.jpg" format="JPG" align="center"/>
 		</imageobject>
 		<caption>최초 사용자 등록 팝업</caption>
 	</mediaobject>
@@ -43,10 +43,10 @@
 	</para>
 	<mediaobject>
 		<imageobject role="html">
-			<imagedata fileref="../image/logmanager/logmanager017.jpg" format="JPG" align="center"/>
+			<imagedata fileref="../image/logmanager/logmanager011.jpg" format="JPG" align="center"/>
 		</imageobject>
 		<imageobject role="fo">
-			<imagedata fileref="../image/logmanager/pdf/logmanager017.jpg" format="JPG" align="center"/>
+			<imagedata fileref="../image/logmanager/pdf/logmanager011.jpg" format="JPG" align="center"/>
 		</imageobject>
 		<caption>최초 사용자 정보 입력</caption>
 	</mediaobject>
@@ -59,10 +59,10 @@
 	</para>
 	<mediaobject>
 		<imageobject role="html">
-			<imagedata fileref="../image/logmanager/logmanager018.jpg" format="JPG" align="center"/>
+			<imagedata fileref="../image/logmanager/logmanager012.jpg" format="JPG" align="center"/>
 		</imageobject>
 		<imageobject role="fo">
-			<imagedata fileref="../image/logmanager/pdf/logmanager018.jpg" format="JPG" align="center"/>
+			<imagedata fileref="../image/logmanager/pdf/logmanager012.jpg" format="JPG" align="center"/>
 		</imageobject>
 		<caption>사용자 등록 후 최초 로그인</caption>
 	</mediaobject>

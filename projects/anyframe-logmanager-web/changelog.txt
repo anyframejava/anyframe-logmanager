@@ -1,0 +1,71 @@
+﻿Anyframe Log Manager CHANGELOG
+==========================
+http://www.anyframejava.org
+
+Changes in version 1.5.0 (2012-06-15)
+-------------------------------------
+* 주요 변경 내역
+  - Spring 및 Spring MVC 3.1 적용
+  - Log Manager Web 모듈에 Jetty 7.5.4 버전 embedded packaging
+  - Log Agent Service 모듈 제공
+  - Log Application 관리 기능 개선
+  - 로그 정책 편집기 제공
+  - 프로젝트 구조 변경 : 공통 모듈을 anyframe-logmanager-common 으로 분리하여 공유
+
+* 참조 라이브러리 변경 내역
+  - anyframe-logmanager-common-1.5.0.jar에 대한 참조 추가
+  - gson-1.7.1.jar에 대한 참조 추가
+  - hessian-3.1.6.jar에 대한 참조 추가
+  - jcl-over-slf4j-1.6.4.jar에 대한 참조 추가
+  - anyframe-core-1.0.3.jar를 anyframe-core-1.0.4.jar파일로 버전 변경
+  - jackson-core-asl-1.5.6.jar를 jackson-core-asl-1.9.7.jar파일로 버전 변경
+  - jackson-mapper-asl-1.5.6.jar를 jackson-mapper-asl-1.9.7.jar파일로 버전 변경
+  - junit-4.7.jar를 junit-4.9.jar파일로 버전 변경
+  - mongo-java-driver-2.7.0-rc1.jar를 mongo-java-driver-2.7.2.jar파일로 버전 변경
+  - slf4j-api-1.6.1.jar를 slf4j-api-1.6.4.jar파일로 버전 변경
+  - slf4j-log4j12-1.6.1.jar를 slf4j-log4j12-1.6.4.jar파일로 버전 변경
+  - spring-aop-3.0.5.RELEASE.jar를 spring-aop-3.1.1.RELEASE.jar파일로 버전 변경
+  - spring-asm-3.0.5.RELEASE.jar를 spring-asm-3.1.1.RELEASE.jar파일로 버전 변경
+  - spring-beans-3.0.5.RELEASE.jar를 spring-beans-3.1.1.RELEASE.jar파일로 버전 변경
+  - spring-context-3.0.5.RELEASE.jar를 spring-context-3.1.1.RELEASE.jar파일로 버전 변경
+  - spring-core-3.0.5.RELEASE.jar를 spring-core-3.1.1.RELEASE.jar파일로 버전 변경
+  - spring-data-commons-core-1.2.0.RC1.jar를 spring-data-commons-core-1.2.0.RELEASE.jar파일로 버전 변경
+  - spring-data-mongodb-1.0.0.RC1.jar를 spring-data-mongodb-1.0.1.RELEASE.jar파일로 버전 변경
+  - spring-expression-3.0.5.RELEASE.jar를 spring-expression-3.1.1.RELEASE.jar파일로 버전 변경
+  - spring-jdbc-3.0.5.RELEASE.jar를 spring-jdbc-3.1.1.RELEASE.jar파일로 버전 변경
+  - spring-test-3.0.5.RELEASE.jar를 spring-test-3.1.1.RELEASE.jar파일로 버전 변경
+  - spring-tx-3.0.5.RELEASE.jar를 spring-tx-3.1.1.RELEASE.jar파일로 버전 변경
+  - spring-web-3.0.5.RELEASE.jar를 spring-web-3.1.1.RELEASE.jar파일로 버전 변경
+  - spring-webmvc-3.0.5.RELEASE.jar를 spring-webmvc-3.1.1.RELEASE.jar파일로 버전 변경
+  - anyframe-query-1.1.2.jar에 대한 참조 제거
+  - avalon-framework-4.0.jar에 대한 참조 제거
+  - cglib-nodep-2.2.jar에 대한 참조 제거
+  - commons-fileupload-1.2.jar에 대한 참조 제거
+  - commons-logging-1.1.1.jar에 대한 참조 제거
+  - commons-vfs-1.0.jar에 대한 참조 제거
+  - ehcache-1.6.2.jar에 대한 참조 제거
+  - hamcrest-all-1.1.jar에 대한 참조 제거
+  - hibernate-jpa-2.0-api-1.0.0.Final.jar에 대한 참조 제거
+  - hsqldb-2.0.0.jar에 대한 참조 제거
+  - jmock-2.4.0.jar에 대한 참조 제거
+  - joda-time-1.6.jar에 대한 참조 제거
+  - jsch-0.1.44-1.jar에 대한 참조 제거
+  - log4jdbc3-1.2alpha2.jar에 대한 참조 제거
+
+
+* 해결된 이슈 목록
+  [LA-6] 로그관리툴 개선(1.5.0)
+    - [LA-7] WAS Embedded Packaing
+    - [LA-8] MongoDB 라이브러리 업데이트
+    - [LA-9] Log Agent 개발
+    - [LA-10] Log Manager Web 기능 고도화
+    - [LA-11] 통합테스트 수행 및 결과 반영
+
+* 상세 변경 내역
+  - 미사용 소스 및 폴더 정리
+  - Java 7 이슈 해결 : felix.jar 최신버전으로 교체(4.0.2)
+  - Felix 기반 Agent Core Bundle 제공
+  - Localized Error Message 처리 적용
+  - 화면전환시 검색조건 표시 오류 수정
+  - slf4j logger 적용
+  - 페이지 로딩시 로그인 아이디 항목에 focus 추가

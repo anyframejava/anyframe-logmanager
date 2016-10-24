@@ -1,0 +1,11 @@
+﻿Anyframe Log Manager 프로젝트 내에 사용된 외부 오픈 소스의 경우 원 오픈 소스의 라이센스 정책을 따른다. 아래는 각 외부 오픈 소스의 정보(라이센스, 소스 코드 및 라이브러리 다운로드 등)를 얻을 수 있는 사이트 URL이므로 참고하도록 한다.
+
+1. Anyframe LogManager Repo Libraries
+1) Apache Felix : http://felix.apache.org/site/index.html, Apache Software License 2.0
+2) Hessian Binary web service protocol 3.1.6 : http://hessian.caucho.com/#Java, Apache Software License 2.0
+3) Mongo Java Driver 2.7.2 : http://www.mongodb.org/, Apache Software License 2.0
+4) Anyframe Logmanager common 1.5.0 : http://anyframejava.org/, Apache Software License 2.0
+5) Javax Servlet API 2.5 : http://java.sun.com/products/servlet/LICENSE, Sun Microsystems, Inc.  Binary Code License
+6) Eclipse osgi : http://www.eclipse.org/osgi/, Eclipse Public License
+7) Eclipse equinox : http://eclipse.org/equinox/, Eclipse Public License
+8) Java Transaction API (JTA) 1.1 : http://java.sun.com/javaee/technologies/jta/index.jsp, JTA 1.0.1

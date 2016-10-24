@@ -2,13 +2,13 @@
 	<para>
 		<itemizedlist>
 			<listitem>
-				<para><ulink url="http://www.mongodb.org/display/DOCS/Java+Tutorial">http://www.mongodb.org/display/DOCS/Java+Tutorial</ulink> - MongoDB Java Tutorial</para>
+				<para><ulink url="http://www.MongoDB.org/display/DOCS/Java+Tutorial">http://www.MongoDB.org/display/DOCS/Java+Tutorial</ulink> - MongoDB Java Tutorial</para>
 			</listitem>
 			<listitem>
 				<para><ulink url="http://static.springsource.org/spring-data/data-document/docs/current/reference/html/">http://static.springsource.org/spring-data/data-document/docs/current/reference/html/</ulink> - Spring MongoDB Reference Document</para>
 			</listitem>
 			<listitem>
-				<para><ulink url="http://www.springsource.org/spring-data/mongodb">http://www.springsource.org/spring-data/mongodb</ulink> - Spring Data MongoDB</para>
+				<para><ulink url="http://www.springsource.org/spring-data/MongoDB">http://www.springsource.org/spring-data/MongoDB</ulink> - Spring Data MongoDB</para>
 			</listitem>
 			<listitem>
 				<para><ulink url="http://jqueryui.com/">http://jqueryui.com/</ulink> - jQuery UI Component</para>

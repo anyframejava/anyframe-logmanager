@@ -9,7 +9,7 @@
 				<para>원격에서 Legacy Application의 로그 정책을 변경 및 관리할 수 있는 도구를 제공</para>
 			</listitem>
 			<listitem>
-				<para>최근에 이슈가 되고 있는 경량의 no-sql db 중 하나인 mongo-db를 log repository로 활용</para>
+				<para>최근에 이슈가 되고 있는 경량의 NoSQL db 중 하나인 MongoDB를 log repository로 활용</para>
 			</listitem>			
 		</itemizedlist>
 	</para>

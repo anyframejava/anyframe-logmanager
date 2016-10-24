@@ -1,0 +1,82 @@
+<project name="anyframe-logmanager-bundle" default="all-local" basedir=".">
+	<property name="bundle.name" value="anyframe-logmanager-bundle" />
+	<property name="version" value="1.5.0"/>
+	
+	<property name="service.src" location="${basedir}/src/main/java"/>
+	<property name="service.build" location="${basedir}/build"/>		
+		
+	<target name="clean" description="clean up">
+		<delete dir="${dist}"/>
+		<delete dir="${service.build}"/>
+	</target>
+	
+	<target name="init" depends="clean">
+		<tstamp/>
+		<mkdir dir="${service.build}"/>
+		<mkdir dir="${dist}"/>
+		<mkdir dir="${dist}/anyframe-logmanager-agent-${version}"/>
+	</target>
+	
+	<target name="compile.service" depends="init">
+		<condition property="dbg" value="off">
+			<not><isset property="dbg"/></not>
+		</condition>
+		<javac srcdir="${service.src}" destdir="${service.build}"
+			debug="${dbg}" debuglevel="lines,vars,source">
+			<classpath>
+				<fileset dir="${basedir}/bundle"/>
+			</classpath>
+		</javac>
+	</target>
+		
+	<target name="dist.bundle" depends="compile.service">
+		<jar destfile="${basedir}/bin/anyframe-logmanager-bundle-${version}.jar" basedir="${service.build}" 
+			manifest="${basedir}/META-INF/MANIFEST.MF" />
+	</target>
+	
+	<target name="dist.src.bundle">
+		<antcall target="compile.service"/>
+		<copy todir="${service.build}/src">
+			<fileset dir="${basedir}/src/main/java" includes="**/*" excludes="**/*.svn"/>
+		</copy>
+		<jar destfile="${dist}/anyframe-logmanager-bundle-${version}.jar" basedir="${service.build}" 
+			manifest="${basedir}/META-INF/MANIFEST.MF" />
+	</target>
+	
+	<target name="all-local-src">
+		<property name="bundle.loc" value="../anyframe-logmanager-bundle/bundle"/>
+		<property name="dist" location="${basedir}/dist"/>
+		<antcall target="dist.src.bundle"/>
+	</target>
+	
+	<target name="all-local">
+		<property name="bundle.loc" value="../anyframe-logmanager-bundle/bundle"/>
+		<property name="dist" location="${basedir}/dist"/>
+		<antcall target="dist.bundle"/>
+		<ant antfile="../anyframe-logmanager-bundle-core/build.xml" inheritall="false"/>
+		<copy todir="${dist}/anyframe-logmanager-agent-${version}">
+			<fileset dir="${basedir}" includes="bin/*"/>
+			<fileset dir="${basedir}" includes="bundle/*"/>
+			<fileset dir="${basedir}" includes="conf/*"/>
+			<fileset dir="${basedir}" includes="licenses/*"/>
+			<fileset dir="${basedir}" includes="license.txt"/>
+			<fileset dir="${basedir}" includes="*log.txt"/>
+			<fileset dir="${basedir}" includes="readme.txt"/>
+		</copy>
+		<!-- zip -->
+		<zip destfile="${dist}/anyframe-logmanager-agent-${version}.zip" basedir="${dist}"/>
+		<delete dir="${service.build}"/>
+	</target>
+	
+	<target name="all.dbg">
+		<property name="dbg" value="on"/>
+		<antcall target="all-local"/>
+	</target>
+	
+	<target name="all">
+		<property name="dist" location="${artifactsDir}"/>
+		<antcall target="dist.bundle"/>
+	</target>
+	
+	<target name="default" depends="all-local"/>
+</project>
