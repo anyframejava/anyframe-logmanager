@@ -1,9 +1,11 @@
 @charset "utf-8";
 
 /* Reset Default Browser Setting */
-body, div, dl, dt, dd, ul, ol, li, h1, h2, h3, h4, h5, h6, pre, code, fieldset, legend, input, button, textarea, select, p, blockquote ,th ,td, a {margin:0; padding:0; font-family:Arial; color:#555555; font-size:99%;}
+
+body, div, dl, dt, dd, ul, ol, li, h1, h2, h3, h4, h5, h6, pre, code, fieldset, legend, input, button, textarea, select, p, blockquote ,th ,td, a {margin:0; padding:0; color:#555555;font-size:99%;}
 body		{font-size:0.75em;}
-	body #ie6fix	{font-size:12px;}
+body #ie6fix	{font-size:12px;}
+
 form	{margin:0; padding:0;}
 table	{border-collapse:collapse; border-spacing:0;}
 hr		{display:none;}
@@ -40,13 +42,13 @@ body {/*background-color:#29264d;*/}
 #footer_wrap {/*background:#29264d url(../images/bg_bottom.jpg) repeat-x left top;*/ width:100%; height:40px;}
 #header {background:url(../images/bg_top.jpg) repeat-x left top;}
 #container	{min-height:550px; padding:10px 0 10px 0; background:#FFF url(../images/bg_leftspace.gif) repeat-y 10px top; overflow:auto;}
-	.ie6fix #container {height:650px;}
-	#leftspace {float:left; width:130px; margin:-10px 0 0 10px; overflow:auto;}
-		.ie6fix #leftspace {margin-left:5px;}
-	#contents {float:left; width:840px; margin-left:10px;}
-		.ie6fix #contents {position:absolute; left:140px; top:10px;}
+.ie6fix #container {height:650px;}
+#leftspace {float:left; width:130px; margin:-10px 0 0 10px; overflow:auto;}
+.ie6fix #leftspace {margin-left:5px;}
+#contents {float:left; width:840px; margin-left:10px;}
+.ie6fix #contents {position:absolute; left:140px; top:10px;}
 #container_login {min-height:550px; padding:10px 0 10px 0; margin-top:50px;}
-	.ie6fix #container_login {height:650px;}
+.ie6fix #container_login {height:650px;}
 
 
 
@@ -74,7 +76,7 @@ h1 {float:left; margin:20px 0 0 10px;}
 /* Contents */
 #leftspace a {text-decoration:none;}
 #leftspace ul li {border-bottom:1px dotted #BBB; padding:12px 0 11px 5px; background:url(../images/blit_titlebar_off.gif) no-repeat 5px 50%; padding-left:15px;}
-#leftspace ul li a {display:block; width:90px;}
+#leftspace ul li a {display:block; width:90px; font-size : 98%;}
 h2 {border-bottom:1px solid #bbbbbb; background:url(../images/blit_h2.gif) no-repeat 0 2px; padding:0 0 5px 18px; margin:7px 0 10px 0; font-weight:bold; color:#333; font-size:14px;}
 
 .poplayer {position:relative; width:400px;}
@@ -164,14 +166,15 @@ h2 {border-bottom:1px solid #bbbbbb; background:url(../images/blit_h2.gif) no-re
 	.view_center {margin:0 auto;}
 .search_area table {width:100%;}
 .search_area table th {height:26px; background:url(../images/bg_dotline.gif) repeat-x left bottom; background-color:#f0eef9; color:#333; padding:0 10px 0 20px !important;}
-.search_area table td {background:url(../images/bg_dotline.gif) repeat-x left bottom; background-color:#FFF; padding:0 10px; line-height:130%;}
+.search_area table td {height:26px; background:url(../images/bg_dotline.gif) repeat-x left bottom; background-color:#FFF; padding:0 10px; line-height:130%;}
 .search_area table td img {vertical-align:middle;}
 	.ie6fix .search_area table td span, .ie7fix .search_area table td span {margin: 2px 4px 1px 1px;}
 .search_area table .topline th, .search_area table .topline td, .search_area table .topline {border-top:2px solid #b3ace3;}
 .search_area table .bottomline th, .search_area table .bottomline td, .search_area table .bottomline {border-bottom:1px solid #b3ace3; background:none;}
 .search_area table .bottomline th, .search_area table th.bottomline {background-color:#f0eef9;}
 .search_area table .bottomline td {background-color:#FFF;}
-.search_area input, .view select {border:1px solid #aaa; margin:3px 2px 4px 0;}
+.search_area input, .view select {margin:3px 2px 4px 0;}
+.search_area input[type=text], .view select {border:1px solid #aaa;} 
 
 
 

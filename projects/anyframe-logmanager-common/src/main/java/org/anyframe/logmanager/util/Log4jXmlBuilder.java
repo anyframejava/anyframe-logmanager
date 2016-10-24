@@ -246,7 +246,7 @@ public class Log4jXmlBuilder {
 
 			NodeList appenderChild = node.getChildNodes();
 			List<Param> paramList = new ArrayList<Param>();
-			Layout layout = new Layout();
+			Layout layout = null;
 			for (int j = 0; j < appenderChild.getLength(); j++) {
 				Node child = appenderChild.item(j);
 				if (child.getNodeName().equals(PARAM)) {
@@ -255,9 +255,10 @@ public class Log4jXmlBuilder {
 					param.setName(paramAttr.getNamedItem(NAME).getNodeValue());
 					param.setValue(paramAttr.getNamedItem(VALUE).getNodeValue());
 					paramList.add(param);
-				} else if (child.getNodeName().equals("layout")) {
+				} else if (child.getNodeName().equals(LAYOUT)) {
+					layout = new Layout();
 					NamedNodeMap paramAttr = child.getAttributes();
-					layout.setLayoutClass(paramAttr.getNamedItem("class").getNodeValue());
+					layout.setLayoutClass(paramAttr.getNamedItem(CLASS).getNodeValue());
 					NodeList layoutChild = child.getChildNodes();
 					for (int k = 0; k < layoutChild.getLength(); k++) {
 						Node paramNode = layoutChild.item(k);
@@ -269,12 +270,10 @@ public class Log4jXmlBuilder {
 							layout.setParam(param);
 						}
 					}
-					
 				}
 			}
-
 			appender.setName(appenderAttr.getNamedItem(NAME).getNodeValue());
-			appender.setAppenderClass(appenderAttr.getNamedItem("class").getNodeValue());
+			appender.setAppenderClass(appenderAttr.getNamedItem(CLASS).getNodeValue());
 			appender.setParams(paramList);
 			appender.setLayout(layout);
 
@@ -346,7 +345,9 @@ public class Log4jXmlBuilder {
 			}
 		}
 		removeNodes(tempNode, LAYOUT);
-		tempNode.appendChild(convertLayout2Node(appender.getLayout()));
+		if(appender.getLayout() != null) {
+			tempNode.appendChild(convertLayout2Node(appender.getLayout()));
+		}
 		
 		for(int i=0;i<tempNode.getChildNodes().getLength();i++) {
 			if(Node.TEXT_NODE == tempNode.getChildNodes().item(i).getNodeType()) {
@@ -375,7 +376,9 @@ public class Log4jXmlBuilder {
 			Param param = (Param) appender.getParams().get(i);
 			el.appendChild(convertParam2Node(param));
 		}
-		el.appendChild(convertLayout2Node(appender.getLayout()));
+		if(appender.getLayout() != null) {
+			el.appendChild(convertLayout2Node(appender.getLayout()));	
+		}
 		return el;
 	}
 
@@ -388,8 +391,8 @@ public class Log4jXmlBuilder {
 	 */
 	private Node convertLayout2Node(Layout layout) throws Exception {
 		Node node = null;
-		node = log4jXmlDoc.createElement("layout");
-		((Element)node).setAttribute("class", layout.getLayoutClass());
+		node = log4jXmlDoc.createElement(LAYOUT);
+		((Element)node).setAttribute(CLASS, layout.getLayoutClass());
 		List<Param> params = layout.getParams();
 		int paramLength = params.size();
 		for (int i = 0; i < paramLength; i++) {
@@ -404,8 +407,8 @@ public class Log4jXmlBuilder {
 	 * @return
 	 * @throws Exception
 	 */
-	private ArrayList<Logger> getLoggerNodeList() throws Exception {
-		ArrayList<Logger> result = new ArrayList<Logger>();
+	private List<Logger> getLoggerNodeList() throws Exception {
+		List<Logger> result = new ArrayList<Logger>();
 		NodeList list = log4jXmlDoc.getElementsByTagName(LOGGER);
 		for (int i = 0; i < list.getLength(); i++) {
 			Logger logger = new Logger();
@@ -420,7 +423,7 @@ public class Log4jXmlBuilder {
 				if (child.getNodeName().equals(LEVEL)) {
 					logger.setLevel(paramAttr.getNamedItem(VALUE).getNodeValue());
 				} else if (child.getNodeName().equals(APPENDER_REF)) {
-					appenders.add(paramAttr.getNamedItem("ref").getNodeValue());
+					appenders.add(paramAttr.getNamedItem(REF).getNodeValue());
 				}
 			}
 			logger.setAppenderRefs(appenders);

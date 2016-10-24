@@ -59,10 +59,10 @@
 	</para>
 	<mediaobject>
 		<imageobject role="html">
-			<imagedata fileref="../image/logmanager/logmanager012.jpg" format="JPG" align="center"/>
+			<imagedata fileref="../image/logmanager/LM151-004.JPG" format="JPG" align="center"/>
 		</imageobject>
 		<imageobject role="fo">
-			<imagedata fileref="../image/logmanager/pdf/logmanager012.jpg" format="JPG" align="center"/>
+			<imagedata fileref="../image/logmanager/pdf/LM151-004.JPG" format="JPG" align="center"/>
 		</imageobject>
 		<caption>사용자 등록 후 최초 로그인</caption>
 	</mediaobject>

@@ -28,7 +28,8 @@ public class LogApplication {
 	@Id
 	private String id;
 	private String appName;
-	private String log4jXmlPath;
+	private String loggingPolicyFilePath;
+	private String loggingFramework;
 	private int status;
 	private String statusMessage;
 	private List<Logger> loggers;
@@ -36,6 +37,20 @@ public class LogApplication {
 	private Root root;
 	private String agentId;
 	
+	/**
+	 * @return the loggingFramework
+	 */
+	public String getLoggingFramework() {
+		return loggingFramework;
+	}
+
+	/**
+	 * @param loggingFramework the loggingFramework to set
+	 */
+	public void setLoggingFramework(String loggingFramework) {
+		this.loggingFramework = loggingFramework;
+	}
+
 	/**
 	 * @return
 	 */
@@ -106,20 +121,22 @@ public class LogApplication {
 		this.appName = appName;
 	}
 	
-	/**
-	 * @return the log4jXmlPath
-	 */
-	public String getLog4jXmlPath() {
-		return log4jXmlPath;
-	}
+	
 	
 	/**
-	 * @param log4jXmlPath the log4jXmlPath to set
+	 * @return the loggingPolicyFilePath
 	 */
-	public void setLog4jXmlPath(String log4jXmlPath) {
-		this.log4jXmlPath = log4jXmlPath;
+	public String getLoggingPolicyFilePath() {
+		return loggingPolicyFilePath;
 	}
-	
+
+	/**
+	 * @param loggingPolicyFilePath the loggingPolicyFilePath to set
+	 */
+	public void setLoggingPolicyFilePath(String loggingPolicyFilePath) {
+		this.loggingPolicyFilePath = loggingPolicyFilePath;
+	}
+
 	/**
 	 * @return the status
 	 */
@@ -167,7 +184,7 @@ public class LogApplication {
 	 */
 	@Override
 	public String toString() {
-		return "LogApplication [id=" + id + ", appName=" + appName + ", log4jXmlPath=" + log4jXmlPath 
+		return "LogApplication [id=" + id + ", appName=" + appName + ", loggingPolicyFilePath=" + loggingPolicyFilePath 
 		+ ", status=" + status + ", statusMessage=" + statusMessage 
 		+ ", root=" + (root == null ? "" : root.toString())
 		+ ", loggers=" + (loggers == null ? "" : loggers.toString()) + ", appenders=" + (appenders == null ? "" : appenders.toString()) + "]";

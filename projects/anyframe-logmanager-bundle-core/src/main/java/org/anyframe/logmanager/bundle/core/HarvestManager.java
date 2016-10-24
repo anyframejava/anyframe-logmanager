@@ -28,6 +28,7 @@ import org.anyframe.logmanager.domain.Appender;
 import org.anyframe.logmanager.domain.Layout;
 import org.anyframe.logmanager.domain.Param;
 import org.anyframe.logmanager.util.Log4jXmlBuilder;
+import org.anyframe.logmanager.util.LogbackXmlBuilder;
 import org.osgi.framework.BundleContext;
 
 import com.mongodb.BasicDBObject;
@@ -151,12 +152,18 @@ public class HarvestManager {
 			while (i.hasNext()) {
 				DBObject appObject = (DBObject) i.next();
 				String appName = appCursor.next().get("appName").toString();
+				String loggingFramework = appObject.get("loggingFramework").toString();
 				System.out.println("Application name is " + appName);
 
 				DBCursor appenderCursor = logAppender.find(new BasicDBObject("appName", appName).append("agentId", agentId).append("status", LogManagerConstant.APPENDER_STATUS_ACTIVE).append("fileAppender", true));
-				
-				Log4jXmlBuilder log4jXml = new Log4jXmlBuilder(appObject.get("log4jXmlPath").toString());
-				List<Appender> appenders = log4jXml.getLog4jAppender();
+				List<Appender> appenders = null;
+				if(LogManagerConstant.LOGGING_FRAMEWORKS[0].equals(loggingFramework)) {
+					Log4jXmlBuilder builder = new Log4jXmlBuilder(appObject.get("loggingPolicyFilePath").toString());
+					appenders = builder.getLog4jAppender();	
+				}else{
+					LogbackXmlBuilder builder = new LogbackXmlBuilder(appObject.get("loggingPolicyFilePath").toString());
+					appenders = builder.getLogbackAppender();
+				}
 				
 				while (appenderCursor.hasNext()) {
 					setTimerTask(appenderCursor.next(), appenders, appName);

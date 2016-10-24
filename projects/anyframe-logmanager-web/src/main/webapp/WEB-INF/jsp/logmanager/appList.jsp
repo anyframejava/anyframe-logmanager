@@ -20,6 +20,25 @@
 <script type="text/javascript" src="<c:url value='/jquery/jquery/jquery-ui/jquery-ui-1.8.16.custom.min.js'/>"></script>
 <link id='uiTheme' href="<c:url value='/jquery/jquery/jquery-ui/themes/cape/jquery-ui-1.8.16.custom.css'/>" rel="stylesheet" type="text/css" />
 
+<!-- ACE Editor -->
+<script src="<c:url value='/ace-0.2.0/src/ace-uncompressed.js'/>" type="text/javascript" charset="utf-8"></script>
+<script src="<c:url value='/ace-0.2.0/src/theme-eclipse.js'/>" type="text/javascript" charset="utf-8"></script>
+<script src="<c:url value='/ace-0.2.0/src/theme-twilight.js'/>" type="text/javascript" charset="utf-8"></script>
+<script src="<c:url value='/ace-0.2.0/src/mode-xml.js'/>" type="text/javascript" charset="utf-8"></script>
+<script src="<c:url value='/ace-0.2.0/src/mode-javascript.js'/>" type="text/javascript" charset="utf-8"></script>
+
+<style>
+	div.divEditor {
+		position:absolute;
+		display:inline; 
+		top:100px;
+		left:100px;
+		width:600px; 
+		height:400px; 
+		background-color:#ffffff;
+	}
+</style>
+
 <script type="text/javascript" src="<c:url value='/logmanager/javascript/InputCalendar.js'/>"></script>
 <script type="text/javascript" src="<c:url value='/logmanager/javascript/logmanager.js'/>"></script>
 <script type="text/javascript">
@@ -34,6 +53,8 @@ function fncLogout(){
     }
 }
 
+var editor = null;
+
 var MONITOR_LEVEL_ADMIN_ONLY = <%=LogManagerConstant.MONITOR_LEVEL_ADMIN_ONLY%>;
 var MONITOR_LEVEL_DEV_VISIBLE = <%=LogManagerConstant.MONITOR_LEVEL_DEV_VISIBLE%>;
 
@@ -47,15 +68,15 @@ var currentAppName = null;
 var CONSOLE_APPENDER_CLASS = 'org.apache.log4j.ConsoleAppender';
 var DAILY_ROLLING_APPENDER_CLASS = 'org.apache.log4j.DailyRollingFileAppender';
 var ROLLING_APPENDER_CLASS = 'org.apache.log4j.RollingFileAppender';
-var MONGODB_APPENDER_CLASS = 'org.anyframe.logmanager.log4mongo.MongoDbPatternLayoutAppender';
+var MONGODB_APPENDER_CLASS = 'org.anyframe.logmanager.log4j.MongoDbAppender';
 
 var DEFAULT_CONVERSIONPATTERN = '[%-5p] %d{yyyy-MM-dd HH:mm:ss} %c %n%m%n';
-var MONGODB_CONVERSIONPATTERN = 'level:%p,thread:%t,message:%m,className:%C,methodName:%M,lineNumber:%L,userId:%X{userId},userName:%X{userName},clientIp:%X{clientIp},serverId:%X{serverId},appName:%X{appName},category:%c';
+//var MONGODB_CONVERSIONPATTERN = 'level:%p,thread:%t,message:%m,className:%C,methodName:%M,lineNumber:%L,userId:%X{userId},userName:%X{userName},clientIp:%X{clientIp},serverId:%X{serverId},appName:%X{appName},category:%c';
 var LOGMANGER_CONVERSIONPATTERN = '[%-5p] [%d] [%X{clientIp}/%X{serverId}:%X{appName}] [%X{userId}/%X{userName}] [%c.%M()(:%L;%t)]: %n%m%n';
 var JSON_CONVERSIONPATTERN = 'level:%1,clientIp:%3,serverId:%4,appName:%5,userId:%6,userName:%7,className:%8,methodName:%9,lineNumber:%.10,thread:%.11,message:%.12';
 
 var PATTERN_LAYOUT_CLASS = 'org.apache.log4j.PatternLayout';
-var MONGODB_PATTERN_LAYOUT_CLASS = 'org.anyframe.logmanager.log4mongo.MongoDbPatternLayout';
+//var MONGODB_PATTERN_LAYOUT_CLASS = 'org.anyframe.logmanager.log4mongo.MongoDbPatternLayout';
 var LOGMANGER_PATTERN_LAYOUT_CLASS = 'org.anyframe.logmanager.log4j.PatternLayout'
 
 REQUEST_CONTEXT = '<%=request.getContextPath()%>';
@@ -96,18 +117,23 @@ function save() {
 						'fileAppenders' : fileAppenderArray,
 						'collectionNames' : collectionNameArray,
 						'status' : statusArray,
-						'log4jXmlPath' : $.trim($('#txtLog4jXmlPath').val())}, 
+						'loggingFramework' : $('#selectLoggingFramework').val(),
+						'loggingPolicyFilePath' : $.trim($('#txtLoggingPolicyFilePath').val())}, 
 						function(data) {
-							alert('save success');
+							alert('save is successful');
 							loadingClose($('#app-detail-form'));
 							$( "#app-detail-form" ).dialog('close');
 							self.location.reload(true);
+						}).error(function(jqXHR, textStatus, errorThrown) {
+					        alert("Error: " + textStatus + " " + errorThrown);
+					        loadingClose($('#app-detail-form'));
 						});
+				
 			}
 		});
 	}else{ 
 		loading($('#app-detail-form'));
-		$.post('<c:url value="/logManager.do?method=saveLogApplication"/>', 
+		$.post('<c:url value="/logManager.do?method=saveLogApplication"/>',
 				{'id' : $('#hiddenId').val(),
 				'appenders[]' : appendersArray, 
 				'agentId' : agentId,
@@ -115,12 +141,18 @@ function save() {
 				'pollingTimes' : pollingTimesArray,
 				'monitorLevels' : monitorLevelsArray,
 				'fileAppenders' : fileAppenderArray,
-				'log4jXmlPath' : $.trim($('#txtLog4jXmlPath').val())}, 
-				function(data) {
-					alert('save success');
+				'collectionNames' : collectionNameArray,
+				'status' : statusArray,
+				'loggingFramework' : $('#selectLoggingFramework').val(),
+				'loggingPolicyFilePath' : $.trim($('#txtLoggingPolicyFilePath').val())}, 
+			function(data) {
+					alert('save is successful');
 					loadingClose($('#app-detail-form'));
 					$( "#app-detail-form" ).dialog('close');
 					self.location.reload(true);
+				}).error(function(jqXHR, textStatus, errorThrown) {
+			        alert("Error: " + textStatus + " " + errorThrown);
+			        loadingClose($('#app-detail-form'));
 				});
 	}
 
@@ -241,7 +273,7 @@ function generateAppender(appender, id) {
 	}
 	html += '</table>\n';
 
-	if(typeof(appender.layout) != "undefined") {
+	if(appender.layout && typeof(appender.layout) != "undefined") {
 		html += '<table id="tbl_layout_' + id + '">\n';
 		html += '<colgroup>\n';
 		html += '<col style="width:25%;" />\n';
@@ -251,9 +283,11 @@ function generateAppender(appender, id) {
 		html += '</colgroup>\n';
 		html += '<tr type="Layout" parentType="Appender" parentId="' + id + '"><td colspan="4" class="layout">Layout</td></tr>\n';
 		html += '<tr type="class" parentType="Layout" parentId="' + id + '"><th class="topline">Class</th><td class="topline class">' + appender.layout.layoutClass + '</td><td class="topline icon"><img src="<c:url value="/logmanager/images/btn_edit_i.gif"/>" alt="Edit" title="Edit" class="editBtn"></td><td class="topline icon">&nbsp;</td></tr>\n';
-		for(var i=0;i<appender.layout.params.length;i++) {
-			var param = appender.layout.params[i];
-			html += '<tr type="param" parentType="Layout" parentId="' + id + '"><th>' + param.name + '</th><td class="value">' + param.value + '</td><td class="icon"><img src="<c:url value="/logmanager/images/btn_edit_i.gif"/>" alt="Edit" title="Edit" class="editBtn"></td><td class="icon"><img src="<c:url value="/logmanager/images/btn_x_i.gif"/>" alt="Remove" title="Remove" class="removeBtn"></td></tr>\n';
+		if(appender.layout.params && typeof(appender.layout.params) != "undefined") {
+			for(var i=0;i<appender.layout.params.length;i++) {
+				var param = appender.layout.params[i];
+				html += '<tr type="param" parentType="Layout" parentId="' + id + '"><th>' + param.name + '</th><td class="value">' + param.value + '</td><td class="icon"><img src="<c:url value="/logmanager/images/btn_edit_i.gif"/>" alt="Edit" title="Edit" class="editBtn"></td><td class="icon"><img src="<c:url value="/logmanager/images/btn_x_i.gif"/>" alt="Remove" title="Remove" class="removeBtn"></td></tr>\n';
+			}
 		}
 		html += '</table>\n';
 	}
@@ -264,9 +298,13 @@ function generateAppender(appender, id) {
 	html += '<span class="button tablein small">\n';
 	html += '<button id="btnParamAdd_' + id + '" parentId="' + id + '">Add Param</button>\n';
 	html += '</span>\n';
-	html += '<span class="button tablein small">\n';
-	html += '<button id="btnLayoutParamAdd_' + id + '" parentId="' + id + '">Add Layout Param</button>\n';
-	html += '</span>\n';
+	
+	if(appender.appenderClass != MONGODB_APPENDER_CLASS) {
+		html += '<span class="button tablein small">\n';
+		html += '<button id="btnLayoutParamAdd_' + id + '" parentId="' + id + '">Add Layout Param</button>\n';
+		html += '</span>\n';
+	}
+	
 	html += '</div>\n';
 	html += '</div>\n';
 	html += '</div>';
@@ -293,7 +331,7 @@ function checkError(data) {
  */
 function editFormClose() {
 	$('#gui-edit-form').dialog('close');
-	$('#text-edit-form').dialog('close');
+	$('#text-edit-form').editorDialog('close');
 }
 
 /**
@@ -694,6 +732,10 @@ function addAppender() {
 		} 
 	};
 	
+	if(appender.appenderClass == MONGODB_APPENDER_CLASS) {
+		appender.layout = null;
+	}
+	
 	var html = '';
 	
 	if(!APPENDERs.get(id)) { 
@@ -710,13 +752,15 @@ function addAppender() {
 			paramAddForm('Appender', $(e.target).attr('parentId'));
 		});
 		
-		/** 
-		 * btnLayoutParamAdd_ParamXX click handler
-		 **/
-		$('#btnLayoutParamAdd_' + id).click(function(e) {
-			paramAddForm('Layout', $(e.target).attr('parentId'));
-		});
-
+		if(appender.appenderClass != MONGODB_APPENDER_CLASS) {
+			/** 
+			 * btnLayoutParamAdd_ParamXX click handler
+			 **/
+			$('#btnLayoutParamAdd_' + id).click(function(e) {
+				paramAddForm('Layout', $(e.target).attr('parentId'));
+			});
+		}
+		
 		/**
 		 * btnAppenderDelete_XXX click event handler
 		 **/
@@ -848,13 +892,14 @@ $(document).ready(function() {
 		});
 		$('#txtAppName').removeAttr('disabled');
 		$('#txtAppName').val('');
-		$('#txtLog4jXmlPath').val('');
+		$('#txtLoggingPolicyFilePath').val('');
 		$('#tblAppender tbody tr').remove();
 		$('#hiddenId').val('');
 
 		$('#btnSave').show();
-		$('#txtLog4jXmlPath').removeAttr('disabled');
-		$('#btnLog4jXmlLoad').removeAttr('disabled');
+		$('#txtLoggingPolicyFilePath').removeAttr('disabled');
+		$('#btnLoggingPolicyFileLoad').removeAttr('disabled');
+		$('#selectLoggingFramework').removeAttr('disabled');
 		$('#spanOffline').hide();
 		
 		getActiveAgentList('', function() {
@@ -889,6 +934,9 @@ $(document).ready(function() {
 		$.get('<c:url value="/logManager.do?method=reloadApplication"/>&agentId=' + agentId + '&status=' + status + '&appName=' + appName, function(data) {
 			loadingClose($('body'));
 			self.location.reload(true);
+		}).error(function(jqXHR, textStatus, errorThrown) {
+	        alert("Error: " + textStatus + " " + errorThrown);
+	        loadingClose($('body'));
 		});
 	});
 
@@ -901,35 +949,43 @@ $(document).ready(function() {
 
 		var appName = $(e.target).attr('appName');
 		var agentId = $(e.target).attr('agentId');
-		var log4jXmlPath = $(e.target).attr('log4jXmlPath');
+		var loggingFramework = $(e.target).attr('loggingFramework');
+		var loggingPolicyFilePath = $(e.target).attr('loggingPolicyFilePath');
 
 		$('#gui').attr('appName', appName);
 		$('#gui').attr('agentId', agentId);
-		$('#gui').attr('log4jXmlPath', log4jXmlPath);
+		$('#gui').attr('loggingFramework', loggingFramework);
+		$('#gui').attr('loggingPolicyFilePath', loggingPolicyFilePath);
 
 		$('#text').attr('appName', appName);
 		$('#text').attr('agentId', agentId);
-		$('#text').attr('log4jXmlPath', log4jXmlPath);
+		$('#text').attr('loggingFramework', loggingFramework);
+		$('#text').attr('loggingPolicyFilePath', loggingPolicyFilePath);
+		if(loggingFramework == '<%=LogManagerConstant.LOGGING_FRAMEWORKS[0]%>') {
+			$("#editor-select-form").dialog('open');	
+		}else{
+			$('#text').trigger('click');
+		}
 		
-		$("#editor-select-form").dialog('open');
 	});
 
 	/**
 	 * 'Text' button click event handler
-	 * open text type policy(log4j.xml) edit form
+	 * open text type policy(logging policy file) edit form
 	 */
 	$('#text').click(function(e){
 		$("#editor-select-form").dialog('close');
 		
 		var appName = $(e.target).attr('appName');
 		var agentId = $(e.target).attr('agentId');
-		var log4jXmlPath = $(e.target).attr('log4jXmlPath');
+		var loggingFramework = $(e.target).attr('loggingFramework');
+		var loggingPolicyFilePath = $(e.target).attr('loggingPolicyFilePath');
 
 		currentAppName = appName;
 		currentAgentId = agentId;
 
 		loading($('body'));
-		$.get('<c:url value="/logManager.do?method=loadLog4jXml"/>&agentId=' + agentId + '&log4jXmlPath=' + log4jXmlPath, function(data){
+		$.get('<c:url value="/logManager.do?method=loadLoggingPolicyFile"/>&agentId=' + agentId + '&loggingPolicyFilePath=' + loggingPolicyFilePath + '&loggingFramework=' + loggingFramework, function(data){
 			if(checkError(data)) {
 				loadingClose($('body'));
 				return;
@@ -938,16 +994,74 @@ $(document).ready(function() {
 			var xmlString = data.xmlString;
 			var html = '';
 
-			$('#textEdit textarea').val(xmlString);
+			$('#text-edit-form').editorDialog('open');
 			
-			$('#text-edit-form').dialog('open');
-			$('#text-edit-form').dialog({position:['center', 100]});
+			$('#xmlEditor textarea').remove();
+			
+			if($.browser.msie) { // IE case
+				$('#xmlEditor').append('<textarea id="taXmlEditor"></textarea>');
+				
+				editor = {
+					getSession : function(){
+						return {
+							setValue : function(xml) {
+								$('#taXmlEditor').val(xml);
+							},
+							getValue : function() {
+								return $('#taXmlEditor').val();
+							}
+						};
+					}	
+				};
+				editor.getSession().setValue(xmlString);
+				
+				$("#text-edit-form").resizable({
+					'stop': function(event, ui) {
+						var w = ui.size.width;
+						var h = ui.size.height;
+						// text area resize
+						$('#xmlEditor').width(w-4);
+						$('#xmlEditor').height(h-75);
+					} 
+				});
+			}else{
+				editor = ace.edit("xmlEditor");
+			    editor.setTheme("ace/theme/eclipse");
+			    
+			    var XmlMode = require("ace/mode/xml").Mode;
+			    editor.getSession().setMode(new XmlMode());
+				editor.getSession().setValue(xmlString);
+				editor.getSession().setUseWrapMode(false);
+				
+				$("#text-edit-form").resizable({
+					'stop': function(event, ui) {
+						var w = ui.size.width;
+						var h = ui.size.height;
+						$('#xmlEditor').width(w-4);
+						$('#xmlEditor').height(h-75);
+						editor.resize();
+					} 
+				});
+			}
+			 
+			/* $('#checkboxUseWrapMode').attr('checked', 'checked');
+			
+			$('#checkboxUseWrapMode').click(function(event){
+				if($('#checkboxUseWrapMode').attr('checked')) {
+					editor.getSession().setUseWrapMode(true);
+				}else{
+					editor.getSession().setUseWrapMode(false);
+				}
+			}); */
+		}).error(function(jqXHR, textStatus, errorThrown) {
+	        alert("Error: " + textStatus + " " + errorThrown);
+	        loadingClose($('body'));
 		});
 	});
 
 	/**
 	 * 'GUI' button click event handler
-	 * open gui type policy(log4j.xml) edit form
+	 * open gui type policy(logging policy file) edit form
 	 */
 	$('#gui').click(function(e){
 
@@ -955,13 +1069,14 @@ $(document).ready(function() {
 		
 		var appName = $(e.target).attr('appName');
 		var agentId = $(e.target).attr('agentId');
-		var log4jXmlPath = $(e.target).attr('log4jXmlPath');
+		var loggingFramework = $(e.target).attr('loggingFramework');
+		var loggingPolicyFilePath = $(e.target).attr('loggingPolicyFilePath');
 
 		currentAppName = appName;
 		currentAgentId = agentId;
 
 		loading($('body'));
-		$.get('<c:url value="/logManager.do?method=loadLog4jXml"/>&agentId=' + agentId + '&log4jXmlPath=' + log4jXmlPath, function(data){
+		$.get('<c:url value="/logManager.do?method=loadLoggingPolicyFile"/>&agentId=' + agentId + '&loggingPolicyFilePath=' + loggingPolicyFilePath + '&loggingFramework=' + loggingFramework, function(data){
 
 			if(checkError(data)) {
 				loadingClose($('body'));
@@ -1064,7 +1179,9 @@ $(document).ready(function() {
 			
 			accordionRefresh('accordionLoggers');
 			accordionRefresh('accordion');
-
+		}).error(function(jqXHR, textStatus, errorThrown) {
+	        alert("Error: " + textStatus + " " + errorThrown);
+	        loadingClose($('body'));
 		});
 	});
 
@@ -1092,8 +1209,9 @@ $(document).ready(function() {
 			
 			$('#txtAppName').val(app.appName);
 			$('#txtAppName').attr('disabled', 'disabled');
-			$('#txtLog4jXmlPath').val(app.log4jXmlPath);
-
+			$('#txtLoggingPolicyFilePath').val(app.loggingPolicyFilePath);
+			$('#selectLoggingFramework').val(app.loggingFramework);
+			$('#selectLoggingFramework').attr('disabled', 'disabled');
 			$('#hiddenId').val(app.id);
 
 			$('#tblAppender tbody tr').remove();
@@ -1103,7 +1221,170 @@ $(document).ready(function() {
 					var html = '<tr><td>';
 					var id = (appenders[i].name).replace(/\./g, '_');
 					
-		            html += appenders[i].name + '</td>';
+					if($('#selectLoggingFramework').val() == '<%=LogManagerConstant.LOGGING_FRAMEWORKS[0]%>' 
+						|| appenders[i].appenderClass == '<%=LogManagerConstant.APPENDER_CLASS_LOGBACK%>') {
+						html += appenders[i].name + '</td>';
+			            html += '<td>' + appenders[i].appenderClass + '</td>';
+			            html += '<td class="align_center"><input type="checkbox" id="checkbox_' + id + '" class="harvest" value="' + id + '"/></td>';
+			            html += '<td><nobr><input type="text" id="txtPollingTime_' + id + '" size="4" value="1"/>&nbsp;';
+			            html += '<select class="unit" id="selectUnit_' + id + '"><option value="s">Sec</option><option value="m">Min</option><option value="h" selected>Hr</option><option value="d">Day</option></select></nobr></td>';
+			            html += '<td><select class="monitor-level" id="selectMonitorLevel_' + id + '">';
+			            html += '<option value="' + MONITOR_LEVEL_ADMIN_ONLY + '">Admin Only</option>';
+			            html += '<option value="' + MONITOR_LEVEL_DEV_VISIBLE + '">Developer Visible</option>';
+			            html += '</select></td>';
+			            html += '<td><input type="text" id="txtCollectionName_' + id + '" value="' + appenders[i].name + '"/>'
+			            html += '</td></tr>';
+
+			            $('#tblAppender tbody').append(html);
+
+			            // mongodb appender case
+			            if(appenders[i].appenderClass == '<%=LogManagerConstant.APPENDER_CLASS_LOG4J_PATTERNLAYOUT%>'
+							|| appenders[i].appenderClass == '<%=LogManagerConstant.APPENDER_CLASS_LOG4J%>'
+							|| appenders[i].appenderClass == '<%=LogManagerConstant.APPENDER_CLASS_LOGBACK%>') {
+				            $('#checkbox_' + id).attr('checked', 'checked');
+				            $('#checkbox_' + id).attr('disabled', 'disabled');
+				            $('#txt_' + id).val(0);
+				            $('#txt_' + id).attr('disabled', 'disabled');
+				            $('#select_' + id).attr('disabled', 'disabled');
+				            $('#txtPollingTime_' + id).attr('disabled', 'disabled');
+				            $('#selectUnit_' + id).attr('disabled', 'disabled');
+				            $('#txtCollectionName_' + id).attr('disabled', 'disabled');
+				            /* for(var j=0;j<appenders[i].params.length;j++) {
+					            if(appenders[i].params[j].name == 'collectionName') {
+				            		$('#txtCollectionName_' + id).val(appenders[i].params[j].value);
+					            }    
+				            } */
+						}
+						
+			            if(appenders[i].params.length > 0) {
+				            var isMonitorLevel = false;
+				            for(var j=0;j<appenders[i].params.length;j++) {
+					            var param = appenders[i].params[j];
+					            if(param.name == 'monitorLevel') {
+					            	$('#' + id).val(param.name);
+					            	isMonitorLevel = true;
+					            	break;
+					            }
+				            }
+				            if(!isMonitorLevel) {
+				            	$('#' + id).val(MONITOR_LEVEL_ADMIN_ONLY);
+				            }
+			            }
+
+			            /**
+			             * integer check event handler
+			             **/
+			            $('#txt_' + id).keyup(function(e) {
+				            try{
+					            var n = parseInt($(e.target).val().replace(/[^0-9]/g, ''));
+					            if(isNaN(n)) n = 1;
+			            		$(e.target).val(n);
+				            }catch(e) {
+				            	$(e.target).val(1);
+				            }
+				        });
+					}
+				}
+
+				for(var i=0;i<currAppenders.length;i++) {
+					var id = currAppenders[i].appenderName.replace(/\./g, '_');
+					if(currAppenders[i].status == 1) {
+						$('#checkbox_' + id).attr('checked', 'checked');
+					}
+					var pollingTime = currAppenders[i].pollingTime;
+					var unit = pollingTime.substring(pollingTime.length -1);
+					var time = pollingTime.substring(0, pollingTime.length -1);
+					$('#txtPollingTime_' + id).val(time);
+					$('#selectUnit_' + id).val(unit);
+					$('#selectMonitorLevel_' + id).val(currAppenders[i].monitorLevel);
+					$('#txtCollectionName_' + id).val(currAppenders[i].collectionName);
+				}
+				$('#btnSave').show();
+				$('#txtLoggingPolicyFilePath').removeAttr('disabled');
+				$('#btnLoggingPolicyFileLoad').removeAttr('disabled');
+				$('#selectAgentId').removeAttr('disabled');
+				$('#spanOffline').hide();
+				getActiveAgentList(currentAgentid);
+				
+			}else{
+				
+				for(var i=0;i<currAppenders.length;i++) {
+					var html = '<tr><td>';
+					var id = (currAppenders[i].appenderName).replace(/\./g, '_');
+					
+		            html += currAppenders[i].appenderName + '</td>';
+		            html += '<td class="align_center">&nbsp;-&nbsp;</td>';
+		            var checked = '';
+		            if(currAppenders[i].fileAppender) {
+			            checked = 'checked';
+		            }
+		            html += '<td class="align_center"><input type="checkbox" id="checkbox_' + id + '" class="harvest" value="' + id + '" disabled ' + checked + ' /></td>';
+		            html += '<td><nobr><input type="text" id="txtPollingTime_' + id + '" size="4" value="1"/>&nbsp;';
+		            html += '<select class="unit" id="selectUnit_' + id + '" disabled><option value="s">Sec</option><option value="m">Min</option><option value="h" selected>Hr</option><option value="d">Day</option></select></nobr></td>';
+		            html += '<td><select class="monitor-level" id="selectMonitorLevel_' + id + '" disabled>';
+		            html += '<option value="' + MONITOR_LEVEL_ADMIN_ONLY + '">Admin Only</option>';
+		            html += '<option value="' + MONITOR_LEVEL_DEV_VISIBLE + '">Developer Visible</option>';
+		            html += '</select></td>';
+		            html += '<td><input type="text" id="txtCollectionName_' + id + '" value="' + currAppenders[i].name + '"/>'
+		            html += '</td></tr>';
+
+		            $('#tblAppender tbody').append(html);
+				}
+
+				for(var i=0;i<currAppenders.length;i++) {
+					var id = currAppenders[i].appenderName.replace(/\./g, '_');
+					var pollingTime = currAppenders[i].pollingTime;
+					var unit = pollingTime.substring(pollingTime.length -1);
+					var time = pollingTime.substring(0, pollingTime.length -1);
+					$('#txtPollingTime_' + id).val(time);
+					$('#selectUnit_' + id).val(unit);
+					$('#selectMonitorLevel_' + id).val(currAppenders[i].monitorLevel);
+				}
+				
+				$('#btnSave').hide();
+				$('#txtLoggingPolicyFilePath').attr('disabled', 'disabled');
+				$('#btnLoggingPolicyFileLoad').attr('disabled', 'disabled');
+				$('#selectAgentId').attr('disabled', 'disabled');
+				$('#spanOffline').show();
+				$('#selectAgentId').html('<option value="' + currentAgentid + '">' + currentAgentid + '</option>');
+			}
+			
+			$('#app-detail-form').dialog('open');
+			$('#app-detail-form').dialog({width:$('#tblAppender').width() + 70});
+			$('#app-detail-form').dialog({position:['center', 100]});
+		}).error(function(jqXHR, textStatus, errorThrown) {
+	        alert("Error: " + textStatus + " " + errorThrown);
+	        loadingClose($('body'));
+		});
+	});
+
+	/**
+	 * 'Load' button click event handler
+	 * logging policy file load & parser
+	 */
+	$('#btnLoggingPolicyFileLoad').click(function(e){
+		if($('#txtLoggingPolicyFilePath').val() == '') return false;
+		loading($('#app-detail-form'));
+		$.get('<c:url value="/logManager.do?method=loadLoggingPolicyFile"/>&agentId=' + $('#selectAgentId').val() + '&loggingPolicyFilePath=' + $('#txtLoggingPolicyFilePath').val() + '&loggingFramework=' + $('#selectLoggingFramework').val(), function(data){
+
+			if(checkError(data)) {
+				loadingClose($('#app-detail-form'));
+				return;
+			}
+			loadingClose($('#app-detail-form'));
+			//alert(data.app.appenders.length + '|' + data.app.loggers.length);
+			var loggers = data.logApplication.loggers;
+			var appenders = data.logApplication.appenders;
+
+			$('#tblAppender tbody tr').remove();
+			
+			for(var i=0;i<appenders.length;i++) {
+				var html = '<tr><td>';
+				var id = (appenders[i].name).replace(/\./g, '_');
+				
+				if($('#selectLoggingFramework').val() == '<%=LogManagerConstant.LOGGING_FRAMEWORKS[0]%>' 
+						|| appenders[i].appenderClass == '<%=LogManagerConstant.APPENDER_CLASS_LOGBACK%>') {
+					html += appenders[i].name + '</td>';
 		            html += '<td>' + appenders[i].appenderClass + '</td>';
 		            html += '<td class="align_center"><input type="checkbox" id="checkbox_' + id + '" class="harvest" value="' + id + '"/></td>';
 		            html += '<td><nobr><input type="text" id="txtPollingTime_' + id + '" size="4" value="1"/>&nbsp;';
@@ -1111,21 +1392,24 @@ $(document).ready(function() {
 		            html += '<td><select class="monitor-level" id="selectMonitorLevel_' + id + '">';
 		            html += '<option value="' + MONITOR_LEVEL_ADMIN_ONLY + '">Admin Only</option>';
 		            html += '<option value="' + MONITOR_LEVEL_DEV_VISIBLE + '">Developer Visible</option>';
-		            html += '</select><input type="hidden" id="txtCollectionName_' + id + '" value="' + appenders[i].name + '"/>';
+		            html += '</select></td>';
+		            html += '<td><input type="text" id="txtCollectionName_' + id + '" value="' + appenders[i].name + '"/>'
 		            html += '</td></tr>';
 
 		            $('#tblAppender tbody').append(html);
 
 		            // mongodb appender case
-		            if(appenders[i].appenderClass == '<%=LogManagerConstant.APPENDER_CLASS%>') {
+		            if(appenders[i].appenderClass == '<%=LogManagerConstant.APPENDER_CLASS_LOG4J_PATTERNLAYOUT%>' 
+		            		|| appenders[i].appenderClass == '<%=LogManagerConstant.APPENDER_CLASS_LOG4J%>'
+		            		|| appenders[i].appenderClass == '<%=LogManagerConstant.APPENDER_CLASS_LOGBACK%>') {
 			            $('#checkbox_' + id).attr('checked', 'checked');
-			            $('#checkbox_' + id).attr('disabled', 'disabled');
+			            $('#checkbox_' + id).attr('disabled', 'true');
 			            $('#txt_' + id).val(0);
-			            $('#txt_' + id).attr('disabled', 'disabled');
-			            $('#select_' + id).attr('disabled', 'disabled');
+			            $('#txt_' + id).attr('disabled', 'true');
+			            $('#select_' + id).attr('disabled', 'true');
 			            $('#txtPollingTime_' + id).attr('disabled', 'disabled');
 			            $('#selectUnit_' + id).attr('disabled', 'disabled');
-			            
+			            $('#txtCollectionName_' + id).attr('disabled', 'disabled');
 			            for(var j=0;j<appenders[i].params.length;j++) {
 				            if(appenders[i].params[j].name == 'collectionName') {
 			            		$('#txtCollectionName_' + id).val(appenders[i].params[j].value);
@@ -1161,155 +1445,6 @@ $(document).ready(function() {
 			            }
 			        });
 				}
-
-				for(var i=0;i<currAppenders.length;i++) {
-					var id = currAppenders[i].appenderName.replace(/\./g, '_');
-					if(currAppenders[i].status == 1) {
-						$('#checkbox_' + id).attr('checked', 'checked');
-					}
-					var pollingTime = currAppenders[i].pollingTime;
-					var unit = pollingTime.substring(pollingTime.length -1);
-					var time = pollingTime.substring(0, pollingTime.length -1);
-					$('#txtPollingTime_' + id).val(time);
-					$('#selectUnit_' + id).val(unit);
-					$('#selectMonitorLevel_' + id).val(currAppenders[i].monitorLevel);
-				}
-				$('#btnSave').show();
-				$('#txtLog4jXmlPath').removeAttr('disabled');
-				$('#btnLog4jXmlLoad').removeAttr('disabled');
-				$('#selectAgentId').removeAttr('disabled');
-				$('#spanOffline').hide();
-				getActiveAgentList(currentAgentid);
-				
-			}else{
-				
-				for(var i=0;i<currAppenders.length;i++) {
-					var html = '<tr><td>';
-					var id = (currAppenders[i].appenderName).replace(/\./g, '_');
-					
-		            html += currAppenders[i].appenderName + '</td>';
-		            html += '<td class="align_center">&nbsp;-&nbsp;</td>';
-		            var checked = '';
-		            if(currAppenders[i].fileAppender) {
-			            checked = 'checked';
-		            }
-		            html += '<td class="align_center"><input type="checkbox" id="checkbox_' + id + '" class="harvest" value="' + id + '" disabled ' + checked + ' /></td>';
-		            html += '<td><nobr><input type="text" id="txtPollingTime_' + id + '" size="4" value="1"/>&nbsp;';
-		            html += '<select class="unit" id="selectUnit_' + id + '" disabled><option value="s">Sec</option><option value="m">Min</option><option value="h" selected>Hr</option><option value="d">Day</option></select></nobr></td>';
-		            html += '<td><select class="monitor-level" id="selectMonitorLevel_' + id + '" disabled>';
-		            html += '<option value="' + MONITOR_LEVEL_ADMIN_ONLY + '">Admin Only</option>';
-		            html += '<option value="' + MONITOR_LEVEL_DEV_VISIBLE + '">Developer Visible</option>';
-		            html += '</select><input type="hidden" id="txtCollectionName_' + id + '" value="' + currAppenders[i].name + '"/>';
-		            html += '</td></tr>';
-
-		            $('#tblAppender tbody').append(html);
-				}
-
-				for(var i=0;i<currAppenders.length;i++) {
-					var id = currAppenders[i].appenderName.replace(/\./g, '_');
-					var pollingTime = currAppenders[i].pollingTime;
-					var unit = pollingTime.substring(pollingTime.length -1);
-					var time = pollingTime.substring(0, pollingTime.length -1);
-					$('#txtPollingTime_' + id).val(time);
-					$('#selectUnit_' + id).val(unit);
-					$('#selectMonitorLevel_' + id).val(currAppenders[i].monitorLevel);
-				}
-				
-				$('#btnSave').hide();
-				$('#txtLog4jXmlPath').attr('disabled', 'disabled');
-				$('#btnLog4jXmlLoad').attr('disabled', 'disabled');
-				$('#selectAgentId').attr('disabled', 'disabled');
-				$('#spanOffline').show();
-				$('#selectAgentId').html('<option value="' + currentAgentid + '">' + currentAgentid + '</option>');
-			}
-			
-			$('#app-detail-form').dialog('open');
-			$('#app-detail-form').dialog({width:$('#tblAppender').width() + 70});
-			$('#app-detail-form').dialog({position:['center', 100]});
-		});
-	});
-
-	/**
-	 * 'Load' button click event handler
-	 * log4j.xml load & parser
-	 */
-	$('#btnLog4jXmlLoad').click(function(e){
-		if($('#txtLog4jXmlPath').val() == '') return false;
-		loading($('#app-detail-form'));
-		$.get('<c:url value="/logManager.do?method=loadLog4jXml"/>&agentId=' + $('#selectAgentId').val() + '&log4jXmlPath=' + $('#txtLog4jXmlPath').val(), function(data){
-
-			if(checkError(data)) {
-				loadingClose($('#app-detail-form'));
-				return;
-			}
-			loadingClose($('#app-detail-form'));
-			//alert(data.app.appenders.length + '|' + data.app.loggers.length);
-			var loggers = data.logApplication.loggers;
-			var appenders = data.logApplication.appenders;
-
-			$('#tblAppender tbody tr').remove();
-			
-			for(var i=0;i<appenders.length;i++) {
-				var html = '<tr><td>';
-				var id = (appenders[i].name).replace(/\./g, '_');
-				
-	            html += appenders[i].name + '</td>';
-	            html += '<td>' + appenders[i].appenderClass + '</td>';
-	            html += '<td class="align_center"><input type="checkbox" id="checkbox_' + id + '" class="harvest" value="' + id + '"/></td>';
-	            html += '<td><nobr><input type="text" id="txtPollingTime_' + id + '" size="4" value="1"/>&nbsp;';
-	            html += '<select class="unit" id="selectUnit_' + id + '"><option value="s">Sec</option><option value="m">Min</option><option value="h" selected>Hr</option><option value="d">Day</option></select></nobr></td>';
-	            html += '<td><select class="monitor-level" id="selectMonitorLevel_' + id + '">';
-	            html += '<option value="' + MONITOR_LEVEL_ADMIN_ONLY + '">Admin Only</option>';
-	            html += '<option value="' + MONITOR_LEVEL_DEV_VISIBLE + '">Developer Visible</option>';
-	            html += '</select><input type="hidden" id="txtCollectionName_' + id + '" value="' + appenders[i].name + '"/>';
-	            html += '</td></tr>';
-
-	            $('#tblAppender tbody').append(html);
-
-	            // mongodb appender case
-	            if(appenders[i].appenderClass == '<%=LogManagerConstant.APPENDER_CLASS%>') {
-		            $('#checkbox_' + id).attr('checked', 'checked');
-		            $('#checkbox_' + id).attr('disabled', 'true');
-		            $('#txt_' + id).val(0);
-		            $('#txt_' + id).attr('disabled', 'true');
-		            $('#select_' + id).attr('disabled', 'true');
-		            $('#txtPollingTime_' + id).attr('disabled', 'disabled');
-		            $('#selectUnit_' + id).attr('disabled', 'disabled');
-		            
-		            for(var j=0;j<appenders[i].params.length;j++) {
-			            if(appenders[i].params[j].name == 'collectionName') {
-		            		$('#txtCollectionName_' + id).val(appenders[i].params[j].value);
-			            }    
-		            }
-				}
-				
-	            if(appenders[i].params.length > 0) {
-		            var isMonitorLevel = false;
-		            for(var j=0;j<appenders[i].params.length;j++) {
-			            var param = appenders[i].params[j];
-			            if(param.name == 'monitorLevel') {
-			            	$('#' + id).val(param.name);
-			            	isMonitorLevel = true;
-			            	break;
-			            }
-		            }
-		            if(!isMonitorLevel) {
-		            	$('#' + id).val(MONITOR_LEVEL_ADMIN_ONLY);
-		            }
-	            }
-
-	            /**
-	             * integer check event handler
-	             **/
-	            $('#txt_' + id).keyup(function(e) {
-		            try{
-			            var n = parseInt($(e.target).val().replace(/[^0-9]/g, ''));
-			            if(isNaN(n)) n = 1;
-	            		$(e.target).val(n);
-		            }catch(e) {
-		            	$(e.target).val(1);
-		            }
-		        });
 			}
 			$('#btnSave').show();
 			$('#app-detail-form').dialog({width:$('#tblAppender').width() + 70});
@@ -1319,7 +1454,7 @@ $(document).ready(function() {
 
 	/**
 	 * 'Save' button click event handler
-	 * db save and log4j.xml apply
+	 * db save and logging policy file apply
 	 */
 	$('#btnSave').click(function(e) {
 
@@ -1334,9 +1469,9 @@ $(document).ready(function() {
 			return;
 		}
 
-		if($('#txtLog4jXmlPath').val() == '') {
-			alert('check value of log4j.xml path');
-			$('#txtLog4jXmlPath').select();
+		if($('#txtLoggingPolicyFilePath').val() == '') {
+			alert('check value of logging policy file path');
+			$('#txtLoggingPolicyFilePath').select();
 			return;
 		}
 		
@@ -1352,7 +1487,10 @@ $(document).ready(function() {
 					loadingClose($('#app-detail-form'));
 					save();
 				}
-			});
+			}).error(function(jqXHR, textStatus, errorThrown) {
+		        alert("Error: " + textStatus + " " + errorThrown);
+		        loadingClose($('#app-detail-form'));
+		    });
 		}else{
 			save();
 		}
@@ -1364,21 +1502,21 @@ $(document).ready(function() {
 	 * ui tool edit result save handler
 	 **/
 	$('#btnGuiSave').click(function(e){
-		var url = '<c:url value="/logManager.do?method=saveLog4jXml"/>';
+		var url = '<c:url value="/logManager.do?method=saveLoggingPolicyFile"/>';
 		var log4j = {
 			'appenders' : APPENDERs.values(),
 			'loggers' : LOGGERs.values(),
 			'root' : ROOT	
 		}; 
 
-		var log4jXmlJson = JSON.stringify(log4j);
+		var loggingPolicyFileJson = JSON.stringify(log4j);
 		loading($('#gui-edit-form'));
-		$.post(url, {'agentId' : currentAgentId, 'appName' : currentAppName, 'log4jXmlJson' : log4jXmlJson}, function(data){
+		$.post(url, {'agentId' : currentAgentId, 'appName' : currentAppName, 'loggingPolicyFileJson' : loggingPolicyFileJson}, function(data){
 			if(checkError(data)) {
 				loadingClose($('#gui-edit-form'));
 				return;
 			}else{
-				alert('save is success.');
+				alert('save is successful.');
 				loadingClose($('#gui-edit-form'));
 				editFormClose();
 			}
@@ -1396,14 +1534,15 @@ $(document).ready(function() {
 	 * text edit result save handler
 	 **/
 	$('#btnTextSave').click(function(e){
-		var url = '<c:url value="/logManager.do?method=saveLog4jXmlText"/>';
+		var url = '<c:url value="/logManager.do?method=saveLoggingPolicyFileText"/>';
 		loading($('#text-edit-form'));
-		$.post(url, { agentId: currentAgentId, appName: currentAppName, log4jXmlText : $('#textEdit textarea').val()}, function(data){
+		var loggingPolicyFileText = editor.getSession().getValue();
+		$.post(url, { 'agentId': currentAgentId, 'appName': currentAppName, 'loggingPolicyFileText': loggingPolicyFileText}, function(data){
 			if(checkError(data)) {
 				loadingClose($('#text-edit-form'));
 				return;
 			}else{
-				alert('save is success.');
+				alert('save is successful.');
 				loadingClose($('#text-edit-form'));
 				editFormClose();
 			}
@@ -1435,6 +1574,7 @@ $(document).ready(function() {
 		$('#txtAppenderName').select();
 		$('#selectAppenderClass').val(CONSOLE_APPENDER_CLASS).trigger('change');
 		$('#selectLayoutClass').val(PATTERN_LAYOUT_CLASS).trigger('change');
+		$('#tblLayoutAdd').show();
 		$('#appender-create-form').dialog('open');
 	});
 
@@ -1462,7 +1602,7 @@ $(document).ready(function() {
 			html += '<option value="MI">-- To manually input --</option>';
 			$('#selectLayoutClass').append(html);
 			$('#selectLayoutClass').val(PATTERN_LAYOUT_CLASS).trigger('change');
-			
+			$('#tblLayoutAdd').show();
 		}else if(self.val() == CONSOLE_APPENDER_CLASS) {
 
 			$('#selectLayoutClass').css('display', 'inline');
@@ -1479,7 +1619,7 @@ $(document).ready(function() {
 			html += '<option value="MI">-- To manually input --</option>';
 			$('#selectLayoutClass').append(html);
 			$('#selectLayoutClass').val(PATTERN_LAYOUT_CLASS).trigger('change');
-			
+			$('#tblLayoutAdd').show();
 		}else if(self.val() == DAILY_ROLLING_APPENDER_CLASS) {
 
 			$('#selectLayoutClass').css('display', 'inline');
@@ -1505,6 +1645,7 @@ $(document).ready(function() {
 			html += '<option value="MI">-- To manually input --</option>';
 			$('#selectLayoutClass').append(html);
 			$('#selectLayoutClass').val(PATTERN_LAYOUT_CLASS).trigger('change');
+			$('#tblLayoutAdd').show();
 		}else if(self.val() == ROLLING_APPENDER_CLASS) {
 			$('#selectLayoutClass').css('display', 'inline');
 			$('#txtLayoutClass').css('display', 'none');
@@ -1530,13 +1671,11 @@ $(document).ready(function() {
 			html += '<option value="MI">-- To manually input --</option>';
 			$('#selectLayoutClass').append(html);
 			$('#selectLayoutClass').val(PATTERN_LAYOUT_CLASS).trigger('change');
+			$('#tblLayoutAdd').show();
 		}else if(self.val() == MONGODB_APPENDER_CLASS) {
-
-			$('#selectLayoutClass').css('display', 'inline');
-			$('#txtLayoutClass').css('display', 'none');
-			$('#layoutClassCancel').css('display', 'none');
+			$('#tblLayoutAdd').hide();
 			
-			$('#txtConversionPattern').val(MONGODB_CONVERSIONPATTERN);
+			//$('#txtConversionPattern').val(MONGODB_CONVERSIONPATTERN);
 
 			$('#tblAppenderAdd tr.mongodb').remove();
 			$('#tblAppenderAdd tr.rolling').remove();
@@ -1547,7 +1686,7 @@ $(document).ready(function() {
 			html += '<tr class="mongodb"><th>userName</th><td><input type="text" id="userName" value="" style="width:100%;"/></td></tr>\n';
 			html += '<tr class="mongodb"><th>password</th><td><input type="text" id="password" value="" style="width:100%;"/></td></tr>\n';
 			html += '<tr class="mongodb"><th>databaseName</th><td><input type="text" id="databaseName" value="logs" style="width:100%;"/></td></tr>\n';
-			html += '<tr class="mongodb"><th>collectionName</th><td><input type="text" id="collectionName" value="logevents" style="width:100%;"/></td></tr>\n';
+			html += '<tr class="mongodb"><th>collectionName</th><td><input type="text" id="collectionName" value="log4jlogs" style="width:100%;"/></td></tr>\n';
 
 			$('#tblAppenderAdd th.bottomline').removeClass('bottomline');
 			$('#tblAppenderAdd td.bottomline').removeClass('bottomline');
@@ -1555,10 +1694,10 @@ $(document).ready(function() {
 			$('#tblAppenderAdd tr:last > th').addClass('bottomline');
 			$('#tblAppenderAdd tr:last > td').addClass('bottomline');
 
-			$('#selectLayoutClass > option').remove();
-			html = '<option value="org.anyframe.logmanager.log4mongo.MongoDbPatternLayout">MongoDbPatternLayout</option>';
-			$('#selectLayoutClass').append(html);
-			$('#selectLayoutClass').val(MONGODB_PATTERN_LAYOUT_CLASS).trigger('change');
+			//$('#selectLayoutClass > option').remove();
+			//html = '<option value="org.anyframe.logmanager.log4mongo.MongoDbPatternLayout">MongoDbPatternLayout</option>';
+			//$('#selectLayoutClass').append(html);
+			//$('#selectLayoutClass').val(MONGODB_PATTERN_LAYOUT_CLASS).trigger('change');
 		}
 
 	});
@@ -1598,13 +1737,13 @@ $(document).ready(function() {
 			
 			$('#tblLayoutAdd tr:last > th').addClass('bottomline');
 			$('#tblLayoutAdd tr:last > td').addClass('bottomline');
-		}else if(self.val() == MONGODB_PATTERN_LAYOUT_CLASS) {
+//		}else if(self.val() == MONGODB_PATTERN_LAYOUT_CLASS) {
 			
-			$('#txtConversionPattern').val(MONGODB_CONVERSIONPATTERN);
-			$('#tblLayoutAdd tr.logmanager').remove();
+//			$('#txtConversionPattern').val(MONGODB_CONVERSIONPATTERN);
+//			$('#tblLayoutAdd tr.logmanager').remove();
 			
-			$('#tblLayoutAdd tr:last > th').addClass('bottomline');
-			$('#tblLayoutAdd tr:last > td').addClass('bottomline');
+//			$('#tblLayoutAdd tr:last > th').addClass('bottomline');
+//			$('#tblLayoutAdd tr:last > td').addClass('bottomline');
 			
 		}else if(self.val() == LOGMANGER_PATTERN_LAYOUT_CLASS) {
 
@@ -1686,19 +1825,26 @@ $(document).ready(function() {
 	/**
 	 * text type edit form dialog define
 	 */
-	$( "#text-edit-form" ).dialog({
-		autoOpen: false,
-		width: 600,
-		height: "auto",
-		modal: true,
-		resizable:true,
-		close : function(e, ui) {
-			$('#textEdit textarea').val('');
+	$( "#text-edit-form" ).editorDialog({
+		width: 800,
+		height: 575,
+		position:['center', 100],
+		open : function() {
+			loading($('body'), {image : false, caption : ''});
+		},
+		close : function() {
+			loadingClose($('body'));
+			$('#xmlEditor').html('');
 			currentAppName = null;
 			currentAgentid = null;
 		}
-	});
-
+	 }).resizable({
+        minWidth: 600,
+        minHeight: 575
+    }).draggable({
+    	handle : '#text-edit-title' 
+    });
+	
 	$("#appender-create-form").dialog({
 		autoOpen: false,
 		width: 600,
@@ -1807,21 +1953,21 @@ $(document).ready(function() {
 				<h2>Log Application Management</h2>
                 <div id="innercontents">
                 	<div class="list">
-                        <table summary="App Name, log4j.xml, file_config, Status List">
+                        <table summary="App Name, logging policy file, file_config, Status List">
                             
-                            <caption>App Name, log4j.xml, file-config, Status List</caption><colgroup>
+                            <caption>App Name, logging policy file, file-config, Status List</caption><colgroup>
                                 <col style="width:20%;"/>
                                 <col style="width:13%;"/>
                                 <col style="width:32%;"/>
                                 <col style="width:5%;"/>
-                                <col style="width:10%;"/>
-                                <col style="width:20%;"/>
+                                <col style="width:8%;"/>
+                                <col style="width:22%;"/>
                             </colgroup>
                             <thead>
                                 <tr>
                                     <th>App Name</th>
                                     <th>Agent ID</th>
-                                    <th colspan="2">log4j.xml</th>
+                                    <th colspan="2">Logging Policy File Path</th>
                                     <th>Status</th>
                                     <th>Actions</th>
                                 </tr>
@@ -1831,12 +1977,12 @@ $(document).ready(function() {
                                 <tr>
                                     <td><a href="#" id="${app.id}" class="app-name">${app.appName}</a></td>
                                     <td>${app.agentId}</td>
-                                    <td>${app.log4jXmlPath}</td>
+                                    <td style="overflow:hidden; text-overflow:ellipsis; white-space:nowrap;max-width:300px;" title="${app.loggingPolicyFilePath}">${app.loggingPolicyFilePath}</td>
                                     <td class="align_center">
-                                    	<img src="<c:url value="/logmanager/images/btn_provisioning_i.gif"/>" title="Edit" alt="Edit" class="editor-select" agentId="${app.agentId}" log4jXmlPath="${app.log4jXmlPath}" appName="${app.appName}"/>
+                                    	<img src="<c:url value="/logmanager/images/btn_provisioning_i.gif"/>" title="Edit" alt="Edit" class="editor-select" agentId="${app.agentId}" loggingPolicyFilePath="${app.loggingPolicyFilePath}" appName="${app.appName}" loggingFramework="${app.loggingFramework}"/>
                                     </td>
                                     <td class="align_center">${app.statusMessage}</td>
-                                    <td class="align_center">
+                                    <td class="align_center" style="white-space:nowrap;">
 	                                    <span class="button tablein small">
 	                                        <button class="reload-button" agentId="${app.agentId}" appName="${app.appName}" status="${app.status}">
 	                                        <c:if test="${app.status == 0}">Inactive</c:if>
@@ -1859,6 +2005,9 @@ $(document).ready(function() {
                             <a href="#" id="btnAdd">Add</a>
                         </span>
                     </div>
+                    
+                    
+                    
 				</div>
 			</div>
 		</div>
@@ -1874,11 +2023,12 @@ $(document).ready(function() {
 
 <div id="app-detail-form" title="Log Application Edit Form">
 	<div class="view poplayer margin_top10">
+		<form:form name="appDetailForm" id="formAppDetail" modelAttribute="logApplication" onsubmit="return false;">
 		<table summary="">
 		    <caption>Log Application Edit Form</caption>
 		    <colgroup>
-		        <col style="width:30%;" />
-		        <col style="width:60%;" />
+		        <col style="width:28%;" />
+		        <col style="width:62%;" />
 		    </colgroup>
 		    <tr>
 		        <th class="topline">App. Name</th>
@@ -1891,24 +2041,29 @@ $(document).ready(function() {
 		        </td>
 		    </tr>
 		    <tr>
-		        <th>log4j.xml Path</th>
+		    	<th>Framework</th>
+		    	<td><form:select id="selectLoggingFramework" path="loggingFramework" items="${loggingFrameworks}"/></td>
+		    </tr>
+		    <tr>
+		        <th>Policy Path</th>
 		        <td>
-		        	<label for="txtLog4jXmlPath"></label><input type="text" id="txtLog4jXmlPath" />&nbsp;
-		        	<span class="button tablein small"><button id="btnLog4jXmlLoad">Load</button></span>
+		        	<label for="txtLoggingPolicyFilePath"></label><input type="text" id="txtLoggingPolicyFilePath" />&nbsp;
+		        	<span class="button tablein small"><button id="btnLoggingPolicyFileLoad">Load</button></span>
 	            </td>
 		    </tr>
 		</table>
-		
+		</form:form>
 	</div>
 	<div class="list">
-	    <table id="tblAppender" summary="App Name, log4j.xml, file_config, Status List">
+	    <table id="tblAppender" summary="App Name, logging policy file, file_config, Status List">
 	        <caption>Appender Name, Appender Class, Harvest, Polling Time, View Level</caption>
 	        <colgroup>
-	            <col style="width:15%;" />
-	            <col style="width:30%;" />
+	            <col style="width:17%;" />
+	            <col style="width:28%;" />
 	            <col style="width:10%;" />
-	            <col style="width:25%;" />
 	            <col style="width:20%;" />
+	            <col style="width:15%;" />
+	            <col style="width:10%;" />
 	        </colgroup>
 	        <thead>
 	            <tr>
@@ -1917,6 +2072,7 @@ $(document).ready(function() {
 	                <th>Harvest</th>
 	                <th>Polling Time</th>
 	                <th>Monitor Level</th>
+	                <th>Collection Name</th>
 	            </tr>
 	        </thead>
 	        <tbody></tbody>
@@ -1932,7 +2088,7 @@ $(document).ready(function() {
 	</div>
 </div>
 
-<div id="gui-edit-form" title="log4j.xml Edit Form">
+<div id="gui-edit-form" title="Logging Policy Edit Form">
 	<div id="accordion"></div>
 	<div class="btncontainer_right margin_top5">
 	    <span class="button tableout small">
@@ -1950,19 +2106,24 @@ $(document).ready(function() {
 	</div>
 </div>
 
-<div id="text-edit-form" title="log4j.xml Edit Form">
-	<div id="textEdit">
-		<textarea class="textEditor"></textarea>
+<div id="text-edit-form" title="Logging Policy Edit Form" style="padding:2px;">
+	<div id="text-edit-title" class="ui-dialog-titlebar ui-widget-header ui-corner-all ui-helper-clearfix" style="padding: 5px 13px;margin-bottom:4px;">
+		<span class="ui-dialog-title" id="ui-dialog-title-editor-select-form">Logging Policy Edit Form</span>
 	</div>
-	<div class="btncontainer_right margin_top5">
+	<div id="xmlEditor" style="position:relative;height:500px;width:798px;"></div>
+	<div class="btncontainer_right margin_top5" style="padding : 5px 10px 0 0;">
+		<!--
+		<span><input type="checkbox" id="checkboxUseWrapMode" checked="checked"/><label for="checkboxUseWrapMode">Use Wrap Mode</label></span> 
+		 -->
 	    <span class="button tableout large">
 	        <button id="btnTextSave">Save</button>
 	    </span>
 	    <span class="button tableout large">
 	        <button id="btnTextCancel">Cancel</button>
 	    </span>
-	</div>
+	</div> 
 </div>
+
 
 <div id="logger-create-form" title="Logger Create Form">
 	<div class="view poplayer margin_top10">
@@ -2016,7 +2177,7 @@ $(document).ready(function() {
 		        		<option value="org.apache.log4j.ConsoleAppender">ConsoleAppender</option>
 		        		<option value="org.apache.log4j.DailyRollingFileAppender">DailyRollingFileAppender</option>
 		        		<option value="org.apache.log4j.RollingFileAppender">RollingFileAppender</option>
-		        		<option value="org.anyframe.logmanager.log4mongo.MongoDbPatternLayoutAppender">MongoDbAppender</option>
+		        		<option value="org.anyframe.logmanager.log4j.MongoDbAppender">MongoDbAppender</option>
 		        		<option value="MI">-- To manually input --</option>
 		        	</select>
 		        	<input type="text" id="txtAppenderClass" style="width:90%;display:none;"/><img src="<c:url value="/logmanager/images/btn_x_i.gif"/>" alt="Cancel" title="Cancel" id="appenderClassCancel" style="cursor:pointer;padding-left:10px;display:none;"/>

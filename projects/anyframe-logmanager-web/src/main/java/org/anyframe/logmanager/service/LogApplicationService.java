@@ -48,12 +48,12 @@ public interface LogApplicationService {
 	
 	/**
 	 * load log4j.xml file
-	 * 
+	 * @deprecated instead use LogAgentService.getLoggingPolicyFileInfo(String agentId, String loggingPolicyFilePath, String loggingFramework)
 	 * @param param
 	 * @return
 	 * @throws Exception
 	 */
-	public LogApplication loadLog4jXml(LogApplication param) throws Exception;
+	public LogApplication loadLoggingPolicyFile(LogApplication param) throws Exception;
 
 	/**
 	 * get log application info

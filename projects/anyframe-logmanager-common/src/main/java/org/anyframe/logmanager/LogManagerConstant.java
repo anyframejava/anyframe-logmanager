@@ -33,6 +33,8 @@ public class LogManagerConstant {
 	public final static int LEVEL_FATAL = 0;
 	public final static int LEVEL_OFF = 5;
 	
+	public final static String[] LEVELS_SEARCH = {"FATAL", "ERROR", "WARN", "INFO", "DEBUG"};
+	
 	public final static int LEVEL_THIS_ONLY = 0;
 	public final static int LEVEL_INCLUDE_SUB = 1;
 	public final static int LEVEL_INCLUDE_HIGH = 2;
@@ -53,7 +55,9 @@ public class LogManagerConstant {
 	public static final int APPENDER_STATUS_INACTIVE = 0;
 	public static final int APPENDER_STATUS_ACTIVE = 1;
 	
-	public final static String APPENDER_CLASS = "org.anyframe.logmanager.log4mongo.MongoDbPatternLayoutAppender";
+	public final static String APPENDER_CLASS_LOG4J_PATTERNLAYOUT = "org.anyframe.logmanager.log4mongo.MongoDbPatternLayoutAppender";
+	public final static String APPENDER_CLASS_LOG4J = "org.anyframe.logmanager.log4j.MongoDbAppender";
+	public final static String APPENDER_CLASS_LOGBACK = "org.anyframe.logmanager.logback.MongoDbAppender";
 	public final static String MONITOR_LEVEL = "monitorLevel";
 	public final static int MONITOR_LEVEL_ADMIN_ONLY = 0;
 	public final static int MONITOR_LEVEL_DEV_VISIBLE = 1;
@@ -66,6 +70,8 @@ public class LogManagerConstant {
 	public final static int POLLING_DURATION_SECOND = 5;
 	
 	public static final String COLLECTION_BASED = "<<Collection Based>>";
+	
+	public final static String[] LOGGING_FRAMEWORKS = {"Log4j", "Logback"};
 	
 	public static final List<String> HOURS = new ArrayList<String>(){
 		private static final long serialVersionUID = 974522437319548558L;

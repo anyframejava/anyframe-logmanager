@@ -68,31 +68,31 @@ public interface LogAgentService {
 	public void restartLogAgent(String agentId) throws Exception;
 	
 	/**
-	 * @param log4jXmlPath
+	 * @param loggingPolicyFilePath
 	 * @return
 	 * @throws Exception
 	 */
-	public LogApplication getLog4jXmlInfo(String agentId, String log4jXmlPath) throws Exception;
+	public LogApplication getLoggingPolicyFileInfo(String agentId, String loggingPolicyFilePath, String loggingFramework) throws Exception;
 	
 	/**
 	 * @param agentId
-	 * @param log4jXmlPath
+	 * @param loggingPolicyFilePath
 	 * @return
 	 * @throws Exception
 	 */
-	public String getLog4jXmlInfoString(String agentId, String log4jXmlPath) throws Exception;
+	public String getLoggingPolicyFileInfoString(String agentId, String loggingPolicyFilePath, String loggingFramework) throws Exception;
 
 	/**
 	 * @param param
-	 * @param log4jXmlText
+	 * @param loggingPolicyFileText
 	 * @throws Exception
 	 */
-	public void saveLog4jXml(LogApplication param, String log4jXmlText) throws Exception;
+	public void saveLoggingPolicyFileText(LogApplication param, String loggingPolicyFileText) throws Exception;
 
 	/**
 	 * @param param
 	 * @throws Exception
 	 */
-	public void saveLog4jXml(LogApplication param) throws Exception;
-	
+	public void saveLoggingPolicyFile(LogApplication param) throws Exception;
+
 }

@@ -1,7 +1,7 @@
 #!/bin/sh
 
 Log=console.log
-VERSION=1.5.0
+VERSION=1.5.1
 ID=logmanagerweb
 
 echo "Anyframe Log Manager Web $VERSION stopping..."

@@ -28,6 +28,7 @@ import org.anyframe.logmanager.domain.LogAppender;
 import org.anyframe.logmanager.domain.LogApplication;
 import org.anyframe.logmanager.service.LogApplicationService;
 import org.anyframe.logmanager.util.Log4jXmlBuilder;
+import org.anyframe.logmanager.util.LogbackXmlBuilder;
 import org.springframework.stereotype.Service;
 
 /**
@@ -95,23 +96,34 @@ public class LogApplicationServiceImpl implements LogApplicationService {
 	/* (non-Javadoc)
 	 * @see org.anyframe.logmanager.service.LogApplicationService#loadLog4jXml(org.anyframe.logmanager.domain.LogApplication)
 	 */
-	public LogApplication loadLog4jXml(LogApplication param) throws Exception {
-		if((new File(param.getLog4jXmlPath())).exists()) {
-			Log4jXmlBuilder log4jxml = new Log4jXmlBuilder(param.getLog4jXmlPath());
+	public LogApplication loadLoggingPolicyFile(LogApplication param) throws Exception {
+		if((new File(param.getLoggingPolicyFilePath())).exists()) {
 			
-			List<Appender> appenders = log4jxml.getLog4jAppender();
-			List<Appender> filteredAppenders = new ArrayList<Appender>();
-			if(appenders != null) {
-				for(int i=0;i<appenders.size();i++){
-					Appender appender = (Appender)appenders.get(i);
-					if(LogManagerConstant.APPENDER_CLASS.equals(appender.getAppenderClass())) {
-						filteredAppenders.add(appender);
+			List<Appender> appenders = null;
+			
+			if(LogManagerConstant.LOGGING_FRAMEWORKS[0].equals(param.getLoggingFramework())) { // log4j
+				Log4jXmlBuilder builder = new Log4jXmlBuilder(param.getLoggingPolicyFilePath());
+				appenders = builder.getLog4jAppender();
+				List<Appender> filteredAppenders = new ArrayList<Appender>();
+				if(appenders != null) {
+					for(int i=0;i<appenders.size();i++){
+						Appender appender = (Appender)appenders.get(i);
+						if(LogManagerConstant.APPENDER_CLASS_LOG4J.equals(appender.getAppenderClass())) {
+							filteredAppenders.add(appender);
+						}
 					}
 				}
+				param.setAppenders(filteredAppenders);
+				param.setLoggers(builder.getLog4jLogger());
+				param.setRoot(builder.getLog4jRoot());
+			}else{ // logback
+				LogbackXmlBuilder builder = new LogbackXmlBuilder(param.getLoggingPolicyFilePath());
+				// TODO dsfdsfdfsdfsdf
 			}
-			param.setAppenders(filteredAppenders);
-			param.setLoggers(log4jxml.getLog4jLogger());
-			param.setRoot(log4jxml.getLog4jRoot());
+			
+			
+			
+			
 		}else {
 			return null;
 		}
@@ -206,6 +218,7 @@ public class LogApplicationServiceImpl implements LogApplicationService {
 	 */
 	public void saveLogApplication(LogApplication param, String[] appenders, String[] pollingTimes, int[] monitorLevels, boolean[] fileAppenders, String[] collectionNames, int[] status) throws Exception {
 		param.setStatus(LogManagerConstant.APP_STATUS_ACTIVE);
+		
 		dao.saveLogApplication(param);
 		
 		LogAppender logAppender = new LogAppender();
@@ -214,19 +227,22 @@ public class LogApplicationServiceImpl implements LogApplicationService {
 		
 		dao.inactivateAllLogAppender(logAppender);
 		
-		for(int i=0;i<appenders.length;i++) {
-			logAppender.setAppenderName(appenders[i]);
-			logAppender.setMonitorLevel(monitorLevels[i]);
-			logAppender.setPollingTime(pollingTimes[i]);
-			logAppender.setFileAppender(fileAppenders[i]);
-			logAppender.setCollectionName(collectionNames[i]);
-			logAppender.setStatus(status[i]);	
-			if(dao.checkLogAppender(logAppender) > 0) {
-				dao.updateLogAppender(logAppender);
-			}else{
-				dao.saveLogAppender(logAppender);	
+		if(appenders != null) {
+			for(int i=0;i<appenders.length;i++) {
+				logAppender.setAppenderName(appenders[i]);
+				logAppender.setMonitorLevel(monitorLevels[i]);
+				logAppender.setPollingTime(pollingTimes[i]);
+				logAppender.setFileAppender(fileAppenders[i]);
+				logAppender.setCollectionName(collectionNames[i]);
+				logAppender.setStatus(status[i]);	
+				if(dao.checkLogAppender(logAppender) > 0) {
+					dao.updateLogAppender(logAppender);
+				}else{
+					dao.saveLogAppender(logAppender);	
+				}
 			}
 		}
+		
 	}
 	
 	/* (non-Javadoc)

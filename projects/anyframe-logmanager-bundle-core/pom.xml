@@ -4,7 +4,7 @@
     <groupId>org.anyframe</groupId>
     <artifactId>anyframe-logmanager-bundle-core</artifactId>
     <packaging>jar</packaging>
-    <version>1.5.0</version>
+    <version>1.5.1</version>
     <name>anyframe-logmanager-bundle-core</name>
     <dependencies>
     </dependencies>

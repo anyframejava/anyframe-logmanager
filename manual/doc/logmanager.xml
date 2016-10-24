@@ -9,17 +9,19 @@
 <!ENTITY logagent_install SYSTEM "logmanager/logagent_install.xml">
 <!ENTITY configuration_install SYSTEM "logmanager/configulation_install.xml">
 <!ENTITY reference_link SYSTEM "logmanager/reference_link.xml">
+<!ENTITY mongodb_install SYSTEM "logmanager/mongodb_install.xml">
+<!ENTITY logmanagerweb_install SYSTEM "logmanager/logmanagerweb_install.xml">
+<!ENTITY logmanager_first_login SYSTEM "logmanager/logmanager_first_login.xml">
+<!ENTITY review_log_agent_management SYSTEM "logmanager/review/log_agent_management.xml">
 <!ENTITY review_menu_intro SYSTEM "logmanager/review/menu_intro.xml">
 <!ENTITY review_accunt_management SYSTEM "logmanager/review/account_management.xml">
 <!ENTITY review_log_analysis SYSTEM "logmanager/review/log_analysis.xml">
 <!ENTITY review_log_app_management SYSTEM "logmanager/review/log_app_management.xml">
 <!ENTITY review_login_logout SYSTEM "logmanager/review/login_logout.xml">
-<!ENTITY MongoDB_install SYSTEM "logmanager/MongoDB_install.xml">
-<!ENTITY logmanagerweb_install SYSTEM "logmanager/logmanagerweb_install.xml">
-<!ENTITY logmanager_first_login SYSTEM "logmanager/logmanager_first_login.xml">
-<!ENTITY review_log_agent_management SYSTEM "logmanager/review/log_agent_management.xml">
 ]
 >
+<!-- 
+ -->
 <!--
 		Licensed to the Apache Software Foundation (ASF) under one or more
 		contributor license agreements. See the NOTICE file distributed with
@@ -44,7 +46,7 @@
 			<year>2007-2012</year>
 			<holder>삼성SDS</holder>
 		</copyright>
-		<releaseinfo>Version 1.5.0</releaseinfo>
+		<releaseinfo>Version 1.5.1</releaseinfo>
 
 		<productname>Anyframe Log Manager</productname>
 		
@@ -82,7 +84,7 @@
 		<title>S/W 아키텍쳐 구성도 및 기술 구조</title>
 		<partintro>
 			<para>이번 장에서는 Log Manager의 소프트웨어 구성과 기술 구조에 대하여 다이어그램을 통하여 설명한다.</para>
-			<para>Log Manager는 Log Agent, Log Repository, Log Manager(web)으로 구성되며, Log Agent는 Anyframe Java Plugin과 osgi 기반 서버, Repository는 MongoDB, Log Manager는 Anyframe Java 기반 웹 어플리케이션으로 각각 구현되어 있다.</para>
+			<para>Log Manager는 Log Agent Service, Log Repository, Log Manager Web (Console)으로 구성되며, Log Agent Service는 Anyframe Java Plugin과 osgi 기반 서버, Log Repository는 MongoDB, Log Manager Web은 Anyframe Java 기반 웹 어플리케이션으로 각각 구현되어 있다.</para>
 			
 		</partintro>
 		&diagram;
@@ -94,7 +96,7 @@
 			<para>이번 장에서는 Log Manager의 각 구현체에 대한 설치와 설정 방법에 대한 내용을 설명한다.</para>
 		</partintro>
 		&logagent_install;
-		&MongoDB_install;
+		&mongodb_install;
 		&logmanagerweb_install;
 		&configuration_install;
 		&logmanager_first_login;

@@ -7,9 +7,9 @@ Bundle-Activator: org.anyframe.logmanager.bundle.core.Activator
 Bundle-Vendor: Samsung SDS
 Bundle-RequiredExecutionEnvironment: J2SE-1.5
 Bundle-ClassPath: .,
- bundle.lib/anyframe-logmanager-common-1.5.0.jar,
- bundle.lib/mongo-java-driver-2.7.2.jar,
- bundle.lib/hessian-3.1.6.jar
+ bundle.lib/anyframe-logmanager-common-1.5.1.jar,
+ bundle.lib/hessian-3.1.6.jar,
+ bundle.lib/mongo-java-driver-2.8.0.jar
 Import-Package: com.caucho.burlap.io,
  com.caucho.burlap.server,
  javax.management,

@@ -12,10 +12,10 @@
 		</itemizedlist>
 		<mediaobject>
 			<imageobject role="html">
-				<imagedata fileref="../image/logmanager/logmanager041.jpg" align="center" />
+				<imagedata fileref="../image/logmanager/LM151-031.JPG" align="center" />
 			</imageobject>
 			<imageobject role="fo">
-				<imagedata fileref="../image/logmanager/pdf/logmanager041.jpg" format="JPG" align="center"/>
+				<imagedata fileref="../image/logmanager/pdf/LM151-031.JPG" format="JPG" align="center"/>
 			</imageobject>
 			<caption>Account Management List</caption>
 		</mediaobject>
@@ -30,10 +30,10 @@
 		</itemizedlist>
 		<mediaobject>
 			<imageobject role="html">
-				<imagedata fileref="../image/logmanager/logmanager040.jpg" align="center" />
+				<imagedata fileref="../image/logmanager/LM151-032.JPG" align="center" />
 			</imageobject>
 			<imageobject role="fo">
-				<imagedata fileref="../image/logmanager/pdf/logmanager040.jpg" format="JPG" align="center"/>
+				<imagedata fileref="../image/logmanager/pdf/LM151-032.JPG" format="JPG" align="center"/>
 			</imageobject>
 			<caption>Account Management Regist/Update</caption>
 		</mediaobject>
@@ -43,7 +43,7 @@
 		<para>Log Manager에서는 Account Type에 따라 로그에 대한 조회권한 및 로그 정책 및 사용자 관리 등의 기능에 대한 권한을 제한하고 있다.</para>
 		<itemizedlist>
 			<listitem><para>Administrator - 해당 시스템의 운영자 또는 개발 책임자에게 부여되는 타입으로 Log Manager의 모든 기능을 사용가능</para></listitem>
-			<listitem><para>Developer - 일반 개발자 또는 단위 시스템 운영담당자에게 부여되는 타입으로 Log Analysis 기능만 사용가능하며, Administrator가 볼 수 있도록 허락한 Log만 접근이 가능하다.</para></listitem>
+			<listitem><para>Developer - 일반 개발자 또는 단위 시스템 운영담당자에게 부여되는 타입으로 Log Analysis 기능만 사용가능하며, Administrator가 볼 수 있도록 허락한 Log 데이타에만 접근이 가능하다.</para></listitem>
 		</itemizedlist>
 	</note>
 </chapter>

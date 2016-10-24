@@ -13,6 +13,9 @@
 			<listitem>
 				<para><ulink url="http://jqueryui.com/">http://jqueryui.com/</ulink> - jQuery UI Component</para>
 			</listitem>
+			<listitem>
+				<para><ulink url="http://ace.ajax.org/">http://ace.ajax.org/</ulink> - ACE Editor</para>
+			</listitem>
 		</itemizedlist>
 	</para>
 </partintro>

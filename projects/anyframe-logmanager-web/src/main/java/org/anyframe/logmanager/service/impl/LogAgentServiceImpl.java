@@ -28,6 +28,7 @@ import org.anyframe.logmanager.domain.LogAgent;
 import org.anyframe.logmanager.domain.LogApplication;
 import org.anyframe.logmanager.service.LogAgentService;
 import org.anyframe.logmanager.util.Log4jXmlBuilder;
+import org.anyframe.logmanager.util.LogbackXmlBuilder;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
@@ -133,70 +134,86 @@ public class LogAgentServiceImpl implements LogAgentService {
 	}
 
 	/* (non-Javadoc)
-	 * @see org.anyframe.logmanager.service.LogAgentService#getLog4jXmlInfo(java.lang.String)
+	 * @see org.anyframe.logmanager.service.LogAgentService#getLoggingPolicyFileInfo(java.lang.String)
 	 */
-	public LogApplication getLog4jXmlInfo(String agentId, String log4jXmlPath) throws Exception {
+	public LogApplication getLoggingPolicyFileInfo(String agentId, String loggingPolicyFilePath, String loggingFramework) throws Exception {
 		LogAgentBundleService service = (LogAgentBundleService) proxyfactory.create(
 				Class.forName(LogAgentBundleService.class.getName()), 
 				"http://" + agentId + "/LogAgentService",
 				this.getClass().getClassLoader());
-		InputStream is = service.getLog4jXmlInfo(log4jXmlPath);
-		
-		Log4jXmlBuilder builder = new Log4jXmlBuilder(is);
-		
-//		String xml = builder.getXmlString();
+		InputStream is = service.getLoggingPolicyFileInfo(loggingPolicyFilePath);
 		
 		LogApplication logApplication = new LogApplication();
-		logApplication.setAppenders(builder.getLog4jAppender());
-		logApplication.setLoggers(builder.getLog4jLogger());
-		logApplication.setRoot(builder.getLog4jRoot());
+		
+		if(LogManagerConstant.LOGGING_FRAMEWORKS[0].equals(loggingFramework)) { // log4j
+			Log4jXmlBuilder builder = new Log4jXmlBuilder(is);
+			logApplication.setAppenders(builder.getLog4jAppender());
+			logApplication.setLoggers(builder.getLog4jLogger());
+			logApplication.setRoot(builder.getLog4jRoot());
+		}else{
+			LogbackXmlBuilder builder = new LogbackXmlBuilder(is);
+			logApplication.setAppenders(builder.getLogbackAppender());
+			logApplication.setLoggers(builder.getLogbackLogger());
+			logApplication.setRoot(builder.getLogbackRoot());
+		}
+		
 		return logApplication;
 	}
-
+	
 	/* (non-Javadoc)
-	 * @see org.anyframe.logmanager.service.LogAgentService#getLog4jXmlInfoString(java.lang.String, java.lang.String)
+	 * @see org.anyframe.logmanager.service.LogAgentService#getLoggingPolicyFileInfoString(java.lang.String, java.lang.String)
 	 */
-	public String getLog4jXmlInfoString(String agentId, String log4jXmlPath) throws Exception {
+	public String getLoggingPolicyFileInfoString(String agentId, String loggingPolicyFilePath, String loggingFramework) throws Exception {
 		LogAgentBundleService service = (LogAgentBundleService) proxyfactory.create(
 				Class.forName(LogAgentBundleService.class.getName()), 
 				"http://" + agentId + "/LogAgentService",
 				this.getClass().getClassLoader());
-		InputStream is = service.getLog4jXmlInfo(log4jXmlPath);
+		InputStream is = service.getLoggingPolicyFileInfo(loggingPolicyFilePath);
 		
-		Log4jXmlBuilder builder = new Log4jXmlBuilder(is);
-		
-		return builder.getXmlString();
+		if(LogManagerConstant.LOGGING_FRAMEWORKS[0].equals(loggingFramework)) { // log4j
+			Log4jXmlBuilder builder = new Log4jXmlBuilder(is);
+			return builder.getXmlString();
+		}else{
+			LogbackXmlBuilder builder = new LogbackXmlBuilder(is);
+			return builder.getXmlString();
+		}
 	}
 
 	/* (non-Javadoc)
-	 * @see org.anyframe.logmanager.service.LogAgentService#saveLog4jXml(org.anyframe.logmanager.domain.LogApplication, java.lang.String)
+	 * @see org.anyframe.logmanager.service.LogAgentService#saveLoggingPolicyFile(org.anyframe.logmanager.domain.LogApplication, java.lang.String)
 	 */
-	public void saveLog4jXml(LogApplication param, String log4jXmlText) throws Exception {
+	public void saveLoggingPolicyFileText(LogApplication param, String loggingPolicyFileText) throws Exception {
 		LogAgentBundleService service = (LogAgentBundleService) proxyfactory.create(
 				Class.forName(LogAgentBundleService.class.getName()), 
 				"http://" + param.getAgentId() + "/LogAgentService",
 				this.getClass().getClassLoader());
 		
-		service.saveLog4jXmlInfo(param.getLog4jXmlPath(), log4jXmlText);
+		service.saveLoggingPolicyFileInfo(param.getLoggingPolicyFilePath(), loggingPolicyFileText);
 	}
 
 	/* (non-Javadoc)
-	 * @see org.anyframe.logmanager.service.LogAgentService#saveLog4jXml(org.anyframe.logmanager.domain.LogApplication)
+	 * @see org.anyframe.logmanager.service.LogAgentService#saveLoggingPolicyFile(org.anyframe.logmanager.domain.LogApplication)
 	 */
-	public void saveLog4jXml(LogApplication param) throws Exception {
+	public void saveLoggingPolicyFile(LogApplication param) throws Exception {
 		// TODO Auto-generated method stub
 		LogAgentBundleService service = (LogAgentBundleService) proxyfactory.create(
 				Class.forName(LogAgentBundleService.class.getName()), 
 				"http://" + param.getAgentId() + "/LogAgentService",
 				this.getClass().getClassLoader());
-		Log4jXmlBuilder builder = new Log4jXmlBuilder(service.getLog4jXmlInfo(param.getLog4jXmlPath()));
 		
-		builder.setAppenderNodeList(param.getAppenders());
-		builder.setLoggerNodeList(param.getLoggers());
-		builder.setRootNode(param.getRoot());
+		if(LogManagerConstant.LOGGING_FRAMEWORKS[0].equals(param.getLoggingFramework())) { // log4j
+			Log4jXmlBuilder builder = new Log4jXmlBuilder(service.getLoggingPolicyFileInfo(param.getLoggingPolicyFilePath()));
+			builder.setAppenderNodeList(param.getAppenders());
+			builder.setLoggerNodeList(param.getLoggers());
+			builder.setRootNode(param.getRoot());
+			String loggingPolicyFileText = builder.getXmlString();
+			service.saveLoggingPolicyFileInfo(param.getLoggingPolicyFilePath(), loggingPolicyFileText);
+		}else{
+			LogbackXmlBuilder builder = new LogbackXmlBuilder(service.getLoggingPolicyFileInfo(param.getLoggingPolicyFilePath()));
+			
+			// TODO : blah~ blah 
+		}
 		
-		String log4jXmlText = builder.getXmlString();
-		service.saveLog4jXmlInfo(param.getLog4jXmlPath(), log4jXmlText);
 	}
 
 }

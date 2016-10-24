@@ -115,8 +115,8 @@ function drawLogData(i, log) {
 	var html = '<tr class="log-row"><td class="number-cell">' + (1 + i) + '</td><td class="log-cell" id="' + log._id + '">';
 	html += '<pre><span class="level ' + log.level + ' NEW">[' + log.level + ']&nbsp;</span><span class="timestamp ' + log.level + ' NEW">[' 
 		+ log.timestampString + ']&nbsp;</span><span class="client-ip ' + log.level + ' NEW">[' 
-		+ log.clientIp + ']&nbsp;</span><span class="user-id ' + log.level + ' NEW">[' 
-		+ log.userId + ']&nbsp;</span><span class="class-name ' + log.level + ' NEW">[' 
+		+ log.mdc.clientIp + ']&nbsp;</span><span class="user-id ' + log.level + ' NEW">[' 
+		+ log.mdc.userId + ']&nbsp;</span><span class="class-name ' + log.level + ' NEW">[' 
 		+ log.className + '.</span><span class="method-name ' + log.level + ' NEW">' 
 		+ log.methodName + '()]&nbsp;</span><span class="line-number ' + log.level + ' NEW">[line ' 
 		+ log.lineNumber + ']&nbsp;</span><span class="thread ' + log.level + ' NEW">[' 

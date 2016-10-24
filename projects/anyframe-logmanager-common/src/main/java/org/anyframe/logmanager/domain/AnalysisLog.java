@@ -16,23 +16,68 @@
 package org.anyframe.logmanager.domain;
 
 import java.text.SimpleDateFormat;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * @author Jaehyoung Eum
- *
  */
 public class AnalysisLog extends BaseLog {
+	private String serverId;
 	private String agentId;
 	private String appName;
-	private String clientIp;
-	private String userId;
 	private String className;
 	private String methodName;
-	private String category;
+	private String logger;
+	
+	private Map<String, String> mdc;
 	
 	@SuppressWarnings("unused")
 	private String timestampString;
 	
+	/**
+	 * @return the serverId
+	 */
+	public String getServerId() {
+		return serverId;
+	}
+
+	/**
+	 * @param serverId the serverId to set
+	 */
+	public void setServerId(String serverId) {
+		this.serverId = serverId;
+	}
+
+	/**
+	 * @return the logger
+	 */
+	public String getLogger() {
+		return logger;
+	}
+
+	/**
+	 * @param logger the logger to set
+	 */
+	public void setLogger(String logger) {
+		this.logger = logger;
+	}
+
+	/**
+	 * @return the mdc
+	 */
+	public Map<String, String> getMdc() {
+		return mdc;
+	}
+
+	/**
+	 * @param mdc the mdc to set
+	 */
+	public void setMdc(Map<String, String> mdc) {
+		this.mdc = mdc;
+	}
+
 	/**
 	 * @return the timestampString
 	 */
@@ -47,19 +92,6 @@ public class AnalysisLog extends BaseLog {
 		this.timestampString = timestampString;
 	}
 
-	/**
-	 * @return the category
-	 */
-	public String getCategory() {
-		return category;
-	}
-	
-	/**
-	 * @param category the category to set
-	 */
-	public void setCategory(String category) {
-		this.category = category;
-	}
 	
 	/**
 	 * @return the className
@@ -119,40 +151,24 @@ public class AnalysisLog extends BaseLog {
 		this.appName = appName;
 	}
 	
-	/**
-	 * @return the clientIp
-	 */
-	public String getClientIp() {
-		return clientIp;
-	}
-	
-	/**
-	 * @param clientIp the clientIp to set
-	 */
-	public void setClientIp(String clientIp) {
-		this.clientIp = clientIp;
-	}
-	
-	/**
-	 * @return the userId
-	 */
-	public String getUserId() {
-		return userId;
-	}
-	
-	/**
-	 * @param userId the userId to set
-	 */
-	public void setUserId(String userId) {
-		this.userId = userId;
-	}
-	
 	/* (non-Javadoc)
 	 * @see org.anyframe.logmanager.domain.BaseLog#toString()
 	 */
 	@Override
 	public String toString() {
-		return super.toString() + "\nAnalysisLog [agentId=" + agentId + ", appName=" + appName + ", clientIp=" + clientIp
-		+ ", userId=" + userId + ", className=" + className + ", methodName=" + methodName + "]";
+		Set<String> keySet = null;
+		StringBuffer sb = new StringBuffer();
+		if(mdc != null) {
+			keySet = mdc.keySet();
+			sb.append(", mdc=[");
+			Iterator<String> i = keySet.iterator();
+			while(i.hasNext()) {
+				String key = i.next();
+				sb.append(", ").append(key).append("=").append(mdc.get(key));
+			}
+			sb.append("]");
+		}
+		
+		return super.toString() + "\nAnalysisLog [serverId=" + serverId + ", agentId=" + agentId + ", appName=" + appName + ", className=" + className + ", methodName=" + methodName + sb.toString() + "]" ;
 	}
 }

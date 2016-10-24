@@ -58,23 +58,23 @@ public class LogAgentBundleServiceImpl implements LogAgentBundleService {
 
 
 	/* (non-Javadoc)
-	 * @see org.anyframe.logmanager.bundle.service.LogAgentBundleService#getLog4jXmlInfo(java.lang.String)
+	 * @see org.anyframe.logmanager.bundle.service.LogAgentBundleService#getLoggingPolicyFileInfo(java.lang.String)
 	 */
-	public InputStream getLog4jXmlInfo(String log4jXmlPath) throws Exception {
+	public InputStream getLoggingPolicyFileInfo(String loggingPolicyFilePath) throws Exception {
 		
-		File f = new File(log4jXmlPath);
-		if(!f.exists()) throw new Exception(log4jXmlPath + " does not exist.");
+		File f = new File(loggingPolicyFilePath);
+		if(!f.exists()) throw new Exception(loggingPolicyFilePath + " does not exist.");
 		
 		return new FileInputStream(f);
 	}
 
 	/* (non-Javadoc)
-	 * @see org.anyframe.logmanager.bundle.service.LogAgentBundleService#saveLog4jXmlInfo(java.lang.String)
+	 * @see org.anyframe.logmanager.bundle.service.LogAgentBundleService#saveLoggingPolicyFileInfo(java.lang.String)
 	 */
-	public void saveLog4jXmlInfo(String log4jXmlPath, String log4jXmlText) throws Exception {
+	public void saveLoggingPolicyFileInfo(String loggingPolicyFilePath, String loggingPolicyFileText) throws Exception {
 		
-		FileOutputStream fos = new FileOutputStream(log4jXmlPath);
-		fos.write(log4jXmlText.getBytes("utf-8"));
+		FileOutputStream fos = new FileOutputStream(loggingPolicyFilePath);
+		fos.write(loggingPolicyFileText.getBytes("utf-8"));
 		fos.close();
 		
 	}

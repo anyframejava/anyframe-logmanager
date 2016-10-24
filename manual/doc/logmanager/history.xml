@@ -13,6 +13,11 @@
 			</listitem>
 			<listitem>
 				<para>2012년 6월 18일 'Anyframe Log Manager 1.5.0' launching</para>
+				<para> - Log Agent Service 지원 시작</para>
+			</listitem>
+			<listitem>
+				<para>2012년 11월 9일 'Anyframe Log Manager 1.5.1' launching</para>
+				<para> - Logback 일부 기능 지원 시작</para>
 			</listitem>
 		</itemizedlist>
 	</para>

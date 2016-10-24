@@ -228,6 +228,7 @@ public class LogApplicationDao {
 		_set.set("pollingTime", param.getPollingTime());
 		_set.set("status", param.getStatus());
 		_set.set("monitorLevel", param.getMonitorLevel());
+		_set.set("collectionName", param.getCollectionName());
 		mongoOperations.updateFirst(query(where("agentId").is(param.getAgentId()).and("appName").is(param.getAppName()).and("appenderName").is(param.getAppenderName())), _set, appenderCollection);
 	}
 	

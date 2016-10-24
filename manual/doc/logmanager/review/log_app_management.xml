@@ -3,6 +3,7 @@
 	<para>Log Application 이라함은 로그를 관리할 대상 웹 어플리케이션을 의미한다.</para>
 	<para>Log Manager 1.5.0 버전부터 Log Application 은 별도의 Log Agent를 기반으로 관리되므로 'Log Application Management' 역시 많은 기능이 변경되었다.</para>
 	<para>Log Manager 1.5.0 버전부터 'Log Application Management'에서는 좀 더 강력한 Log 정책 관리 기능을 제공한다. 이는 <link linkend="log_policy_editor">'로그 정책 관리'</link>라는 항목으로 별도 설명한다.</para>
+	<para>Log Manager 1.5.1 버전부터는 최근에 주목받고 있는 Logging Framework 중 하나인 <ulink url="http://logback.qos.ch/">Logback</ulink> 에 대한 지원이 추가되었다. 따라서 로그 어플리케이션 등록 시에 Logging Framework 를 선택할 수 있게 되었으며, Logback을 위한 별도의 Log Appender 또한 제공하고 있다.</para>
 	<para>로그 어플리케이션의 주요 기능은 다음과 같다.</para>
 	<itemizedlist>
 		<listitem><para>로그 어플리케이션의 등록/수정/삭제</para></listitem>
@@ -23,10 +24,10 @@
 		</itemizedlist>
 		<mediaobject>
 			<imageobject role="html">
-				<imagedata fileref="../image/logmanager/logmanager019.jpg" align="center" />
+				<imagedata fileref="../image/logmanager/LM151-018.JPG" align="center" />
 			</imageobject>
 			<imageobject role="fo">
-				<imagedata fileref="../image/logmanager/pdf/logmanager019.jpg" align="center" />
+				<imagedata fileref="../image/logmanager/pdf/LM151-018.JPG" align="center" />
 			</imageobject>
 			<caption>Log Application List</caption>
 		</mediaobject>
@@ -42,64 +43,34 @@
 		<para>다음은 로그 어플리케이션의 등록 방법에 대한 설명이다.</para>
 		<itemizedlist>
 			<listitem><para>로그 어플리케이션의 아이디 입력(웹 어플리케이션의 Context Name과 동일해야 함)</para></listitem>
-			<listitem><para>담당 Agent를 선택 후 로그 어플리케이션의 log4j.xml 경로 입력(접근 가능한 UNC 경로만 입력가능, 상대경로 불가)</para></listitem>
-			<listitem><para>'Load' 버튼을 통한 어플리케이션 로그 정책 정보 Loading(그림 Log Application Regist Form 2 참조)</para></listitem>
-			<listitem><para>Agent 를 통해 해당 어플리케이션의 log4j.xml 정보를 분석하여 그림과 같이 관리 가능한 Appender 목록이 표시된다.</para></listitem>
+			<listitem><para>담당 Agent를 선택 후 로그 어플리케이션의 Logging Policy File(log4j.xml 등) 경로 입력(접근 가능한 UNC 경로만 입력가능, 상대경로 불가)</para></listitem>
+			<listitem><para>Log4j와 Logback 중에서 적절한 Logging Framework을 선택</para></listitem>
+			<listitem><para>Agent 를 통해 해당 어플리케이션의  Logging Policy File(log4j.xml 등) 정보를 분석하여 그림과 같이 관리 가능한 Appender 목록이 표시된다.</para></listitem>
 			<listitem><para>'MongoDBPatternLayoutAppender'을 통하여 직접 MongoDB에 로그를 저장하는 경우는 'Harvest'항목이 체크 상태에서 disabled 되어 표시된다. 이 상태에서는 Polling Time 설정이 불가능하며, Monitor Level 만 설정할 수 있다.</para></listitem>
 			<listitem><para>Monitor Level을 설정하면 'Log Analysis' 화면 상에서 로그데이타를 조회할 수 있는 권한을 제한할 수 있다.</para></listitem>
 			<listitem><para>Log Agent를 통해 로그를 수집하는 경우에는 Harvest 항목을 체크하고 로그데이타를 수집할 주기(polling time) 을 설정한다. 단, 해당 Appender가 파일 형태로 로그를 출력하는 경우에만 로그데이타 수집이 가능하다.</para></listitem>
+			<listitem><para>MongoDbAppender을 제외하고 나머지 Appender들은 Colleciton Name 변경을 통해 MongoDB에 저장할 Connection을 설정할 수 있다.</para></listitem>
 			<listitem><para>'Save' 버튼을 클릭하여 Log Application을 등록한다.</para></listitem>
 		</itemizedlist>
 		<para><mediaobject>
 			<imageobject role="html">
-				<imagedata fileref="../image/logmanager/logmanager021.jpg" align="center" />
+				<imagedata fileref="../image/logmanager/LM151-019.JPG" align="center" />
 			</imageobject>
 			<imageobject role="fo">
-				<imagedata fileref="../image/logmanager/pdf/logmanager021.jpg" align="center" />
+				<imagedata fileref="../image/logmanager/pdf/LM151-019.JPG" align="center" />
 			</imageobject>
 			<caption>Log Application Regist Form 1</caption>
-		</mediaobject></para>
-		<para><mediaobject>
-			<imageobject role="html">
-				<imagedata fileref="../image/logmanager/logmanager022.jpg" align="center" />
-			</imageobject>
-			<imageobject role="fo">
-				<imagedata fileref="../image/logmanager/pdf/logmanager022.jpg" align="center" />
-			</imageobject>
-			<caption>Log Application Regist Form 2</caption>
 		</mediaobject></para>
 		<note>
 			<title>Log Application 수정</title>
 			<para>수정 및 상세 조회의 경우 어플리케이션 아이디 변경만 불가능하고 나머지 기능은 동일하다</para>
-			<para>또한 해당 어플리케이션의 Agent가 Offline(=Inactive) 상태인 경우 수정은 불가능하며 조회만 가능하다. 그리고 화면상에 해당 Agent가 'Offline' 임을 표시해 준다.(그림 Log Application Update Form(Offline) 참조)</para>
-			<para>
-				<mediaobject>
-					<imageobject role="html">
-						<imagedata fileref="../image/logmanager/logmanager020.jpg" align="center" />
-					</imageobject>
-					<imageobject role="fo">
-						<imagedata fileref="../image/logmanager/pdf/logmanager020.jpg" align="center" />
-					</imageobject>
-					<caption>Log Application Update Form(Online)</caption>
-				</mediaobject>
-			</para>
-			<para>
-				<mediaobject>
-					<imageobject role="html">
-						<imagedata fileref="../image/logmanager/logmanager023.jpg" align="center" />
-					</imageobject>
-					<imageobject role="fo">
-						<imagedata fileref="../image/logmanager/pdf/logmanager023.jpg" align="center" />
-					</imageobject>
-					<caption>Log Application Update Form(Offline)</caption>
-				</mediaobject>
-			</para>
+			<para>또한 해당 어플리케이션의 Agent가 Offline(=Inactive) 상태인 경우 수정은 불가능하며 조회만 가능하다. 그리고 화면상에 해당 Agent가 'Offline' 임을 표시해 준다.</para>
 		</note>
 	</section>
 	<section id="log_policy_editor">
-		<title>Log Application 로그 정책(log4j.xml) 관리</title>
+		<title>Log Application Logging Policy File(log4j.xml 등) 관리</title>
 		<para>Log Manager 1.5.0 부터는 Log Application의 등록/수정과 해당 어플리케이션의 로그 정책관리 기능이 분리되었다. </para>
-		<para>어플리케이션의 로그 정책을 관리하기 위해서 'log4j.xml' 항목의 우측 아이콘을 클릭한다.
+		<para>어플리케이션의 로그 정책을 관리하기 위해서 'Logging Policy File' 항목의 우측 아이콘을 클릭한다.
 			<mediaobject>
 				<imageobject role="html">
 					<imagedata fileref="../image/logmanager/logmanager024.jpg" align="center" />
@@ -112,10 +83,10 @@
 		<para>Text Editor 기반의 로그 정책 관리를 수행할 지 GUI 기반의 로그 정책관리를 수행할지 선택할 수 있다. 단, 이 때 해당 어플리케이션의 Log Agent가 Active(=Online) 상태이어야 한다.
 			<mediaobject>
 				<imageobject role="html">
-					<imagedata fileref="../image/logmanager/logmanager025.jpg" align="center" />
+					<imagedata fileref="../image/logmanager/LM151-020.JPG" align="center" />
 				</imageobject>
 				<imageobject role="fo">
-					<imagedata fileref="../image/logmanager/pdf/logmanager025.jpg" align="center" />
+					<imagedata fileref="../image/logmanager/pdf/LM151-020.JPG" align="center" />
 				</imageobject>
 			</mediaobject>
 		</para>
@@ -130,10 +101,10 @@
 	      		<para>appender-ref는 현재 화면 상에 등록된 appender를 기준으로 select box 형태로 표시되며, 이미 참조된 appender는 선택이 불가능하도록 되어있다.</para>
 	      		<mediaobject>
 					<imageobject role="html">
-						<imagedata fileref="../image/logmanager/logmanager027.jpg" align="center" />
+						<imagedata fileref="../image/logmanager/LM151-021.JPG" align="center" />
 					</imageobject>
 					<imageobject role="fo">
-						<imagedata fileref="../image/logmanager/pdf/logmanager027.jpg" align="center" />
+						<imagedata fileref="../image/logmanager/pdf/LM151-021.JPG" align="center" />
 					</imageobject>
 					<caption>Root Logger Info. Section</caption>
 				</mediaobject>
@@ -145,10 +116,10 @@
 	      		<para>
 	      			<mediaobject>
 						<imageobject role="html">
-							<imagedata fileref="../image/logmanager/logmanager031.jpg" align="center" />
+							<imagedata fileref="../image/logmanager/LM151-022.JPG" align="center" />
 						</imageobject>
 						<imageobject role="fo">
-							<imagedata fileref="../image/logmanager/pdf/logmanager031.jpg" align="center" />
+							<imagedata fileref="../image/logmanager/pdf/LM151-022.JPG" align="center" />
 						</imageobject>
 						<caption>Appender Info. Section</caption>
 					</mediaobject>
@@ -156,10 +127,10 @@
 	      		<para>
 	      			<mediaobject>
 						<imageobject role="html">
-							<imagedata fileref="../image/logmanager/logmanager028.jpg" align="center" />
+							<imagedata fileref="../image/logmanager/LM151-028.JPG" align="center" />
 						</imageobject>
 						<imageobject role="fo">
-							<imagedata fileref="../image/logmanager/pdf/logmanager028.jpg" align="center" />
+							<imagedata fileref="../image/logmanager/pdf/LM151-028.JPG" align="center" />
 						</imageobject>
 						<caption>Appender Regist Form</caption>
 					</mediaobject>
@@ -168,40 +139,40 @@
 					<listitem><para>ConsoleAppender : 가장 기본적으로 제공되는 Console 화면에 로그를 출력하는 Appender, Root Logger의 Appeneder로 많이 사용된다.
 						<mediaobject>
 							<imageobject role="html">
-								<imagedata fileref="../image/logmanager/logmanager034.jpg" align="center" />
+								<imagedata fileref="../image/logmanager/LM151-024.JPG" align="center" />
 							</imageobject>
 							<imageobject role="fo">
-								<imagedata fileref="../image/logmanager/pdf/logmanager034.jpg" align="center" />
+								<imagedata fileref="../image/logmanager/pdf/LM151-024.JPG" align="center" />
 							</imageobject>
 						</mediaobject>
 					</para></listitem>
 					<listitem><para>DaillyRollingFileAppender : 정해진 DatePattern에 따라 log file을 rolling 하는 appender, file로 로그를 남기는 file appender이므로 Log Manager Patternlayout을 사용가능함.
 						<mediaobject>
 							<imageobject role="html">
-								<imagedata fileref="../image/logmanager/logmanager035.jpg" align="center" />
+								<imagedata fileref="../image/logmanager/LM151-025.JPG" align="center" />
 							</imageobject>
 							<imageobject role="fo">
-								<imagedata fileref="../image/logmanager/pdf/logmanager035.jpg" align="center" />
+								<imagedata fileref="../image/logmanager/pdf/LM151-025.JPG" align="center" />
 							</imageobject>
 						</mediaobject>
 					</para></listitem>
 					<listitem><para>RollingFileAppender : 정해진 file size에 따라 log file을 rolling 하는 appender, file appender이므로 역시 Log Manager Patternlayout을 사용가능함.
 						<mediaobject>
 							<imageobject role="html">
-								<imagedata fileref="../image/logmanager/logmanager036.jpg" align="center" />
+								<imagedata fileref="../image/logmanager/LM151-026.JPG" align="center" />
 							</imageobject>
 							<imageobject role="fo">
-								<imagedata fileref="../image/logmanager/pdf/logmanager036.jpg" align="center" />
+								<imagedata fileref="../image/logmanager/pdf/LM151-026.JPG" align="center" />
 							</imageobject>
 						</mediaobject>
 					</para></listitem>
 					<listitem><para>MongoDBAppender : Anyframe 에서 제공하는 appender로서 Anyframe Log Manager Plugin을 설치하면 사용가능하다. MongoDB에 직접 로그데이타를 저장하므로 db정로를 설정하여야 하며, conversion pattern은 MongoDB에서 사용하는 BSON(Binary JSON) 형식으로 작성하여야 한다.
 						<mediaobject>
 							<imageobject role="html">
-								<imagedata fileref="../image/logmanager/logmanager037.jpg" align="center" />
+								<imagedata fileref="../image/logmanager/LM151-027.JPG" align="center" />
 							</imageobject>
 							<imageobject role="fo">
-								<imagedata fileref="../image/logmanager/pdf/logmanager037.jpg" align="center" />
+								<imagedata fileref="../image/logmanager/pdf/LM151-027.JPG" align="center" />
 							</imageobject>
 						</mediaobject>
 					</para></listitem>
@@ -235,10 +206,10 @@
 	      		<para>
 	      			<mediaobject>
 						<imageobject role="html">
-							<imagedata fileref="../image/logmanager/logmanager030.jpg" align="center" />
+							<imagedata fileref="../image/logmanager/LM151-023.JPG" align="center" />
 						</imageobject>
 						<imageobject role="fo">
-							<imagedata fileref="../image/logmanager/pdf/logmanager030.jpg" align="center" />
+							<imagedata fileref="../image/logmanager/pdf/LM151-023.JPG" align="center" />
 						</imageobject>
 						<caption>Logger Info Section</caption>
 					</mediaobject>
@@ -247,53 +218,57 @@
 	      		<para>
 	      			<mediaobject>
 						<imageobject role="html">
-							<imagedata fileref="../image/logmanager/logmanager029.jpg" align="center" />
+							<imagedata fileref="../image/logmanager/LM151-029.JPG" align="center" />
 						</imageobject>
 						<imageobject role="fo">
-							<imagedata fileref="../image/logmanager/pdf/logmanager029.jpg" align="center" />
+							<imagedata fileref="../image/logmanager/pdf/LM151-029.JPG" align="center" />
 						</imageobject>
 						<caption>Logger Regist Form</caption>
 					</mediaobject>
 				</para>
 			</section>
+			<note>
+				<title>Logback에 대한 GUI 에디터 미지원 관련</title>
+				<para>Logback은 Logging Policy File(logback.xml) 자체에 Programmable한 특징을 가지고 있어서 가변적이기 때문에 GUI 형식의 Editor를 제공하지 않는다. </para>
+				<para>따라서 Editor를 선택하는 popup이 뜨지 않고 바로 text editor로 연결되어 진다.</para>
+			</note>
 		</section>
 		<section>
 			<title>Text 기반의 정책관리</title>
 			<para>
 				<mediaobject>
 					<imageobject role="html">
-						<imagedata fileref="../image/logmanager/logmanager026.jpg" align="center" />
+						<imagedata fileref="../image/logmanager/LM151-030.JPG" align="center" />
 					</imageobject>
 					<imageobject role="fo">
-						<imagedata fileref="../image/logmanager/pdf/logmanager026.jpg" align="center" />
+						<imagedata fileref="../image/logmanager/pdf/LM151-030.JPG" align="center" />
 					</imageobject>
 				</mediaobject>
 			</para>
-			<para>사용자가 Log4j Framework 및 log4j.xml에 대하여 기본적인 지식을 가지고 있으며, 원격지의 어플리케이션에 대하여 GUI 기반 정책관리에서 할 수 없는 보다 상세한 작업을 수행하려고 할 경우 
+			<para>사용자가 Logging Framework 및 Logging Policy File(log4j.xml 등)에 대하여 기본적인 지식을 가지고 있으며, 원격지의 어플리케이션에 대하여 GUI 기반 정책관리에서 할 수 없는 보다 상세한 작업을 수행하려고 할 경우 
 Text 기반의 로그정책관리를 수행할 수 있다.</para>
 			<para>로그정책을 직접 수정하고 'Save' 버튼을 클릭하면 Log Agent Service에 의하여 수정한 내용이 그대로 저장된다.</para>
 			<para>만약 해당 어플리케이션이 실시간으로 로그 정책을 변경가능하다면, 수정한 내용을 저장한 즉시 반영될 것이다. 그렇지 않다면, 어플리케이션 재시작 등의 방법을 통하여 변경된 로그정책을 반영할 수 있다.</para>
+			<para>1.5.1 부터는 기존의 text area 대신에 오픈소스인 <ulink url="http://ace.ajax.org">ACE Editor</ulink>를 적용하여 로깅 정책을 용이하게 편집할 수 있도록 하고 있다. 다만, ACE Editor가 Internet Explorer(IE)를 지원하지 않는 관계로 IE에서는 종전처러 ㅁtext area로 표시하고 있다.</para>
 		</section>
 	</section>
 	<warning>
 		<title>Log Agent 상태에 따른 어플리케이션 관리기능의 제한</title>
 		<para>Log Application 을 등록/수정하기 위해서는 해당 어플리케이션을 관리해줄 Log Agent Service가 Online(=Active) 상태여야 한다.</para>
 		<para>따라서 Log Agent Service가 Online 상태가 아닌 경우에는 로그정책관리 등의 Application 관리기능의 상당부분이 제한된다.</para>
-		<para>
-			<mediaobject>
-				<imageobject role="html">
-					<imagedata fileref="../image/logmanager/logmanager039.jpg" align="center" />
-				</imageobject>
-				<imageobject role="fo">
-					<imagedata fileref="../image/logmanager/pdf/logmanager039.jpg" align="center" />
-				</imageobject>
-			</mediaobject>
-		</para>
 	</warning>
+	<mediaobject>
+		<imageobject role="html">
+			<imagedata fileref="../image/logmanager/logmanager039.jpg" align="center" />
+		</imageobject>
+		<imageobject role="fo">
+			<imagedata fileref="../image/logmanager/pdf/logmanager039.jpg" align="center" />
+		</imageobject>
+	</mediaobject>
 	<note>
 		<title>로그 정책 변경 시 실시간 반영</title>
 		<para>Anyframe Log Manager Plugin을 설치하게 되면 해당 로그에 대한 정책설정을 주기적으로 watch 하도록 Application 설정이 변경된다.</para>
-		<para>또한 Log Manager Web 모듈에서 로그 정책을 수정하게 되면 실제로 해당 로그 어플리케이션의 log4j.xml이 변경되며, 결과적으로 변경된 로그 정책이 실시간으로 반영되게 된다.</para>
+		<para>또한 Log Manager Web 모듈에서 로그 정책을 수정하게 되면 실제로 해당 로그 어플리케이션의 Logging Policy File이 변경되며, 결과적으로 변경된 로그 정책이 실시간으로 반영되게 된다.</para>
 	</note>
 	<note>
 		<title>Text UI의 활용</title>

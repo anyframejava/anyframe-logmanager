@@ -62,6 +62,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -78,7 +79,12 @@ import com.google.gson.Gson;
 public class LogManagerController {
 
 	private static Logger logger = LoggerFactory.getLogger(LogManagerController.class);
-
+	
+	@ModelAttribute("loggingFrameworks")
+	public String[] getLoggingFrameworks() throws Exception{
+		return  LogManagerConstant.LOGGING_FRAMEWORKS;
+	}
+	
 	@Inject
 	@Named("logSearchService")
 	private LogSearchService service;
@@ -90,7 +96,7 @@ public class LogManagerController {
 	@Inject
 	@Named("logAgentService")
 	private LogAgentService agentService;
-
+	
 	/**
 	 * Log Application Save method 
 	 * Reference to Array binding...
@@ -99,7 +105,7 @@ public class LogManagerController {
 	 * @param loggers
 	 * @param appenders
 	 * @param appName
-	 * @param log4jXmlPath
+	 * @param loggingPolicyFilePath
 	 * @param model
 	 * @param request
 	 * @return
@@ -115,7 +121,8 @@ public class LogManagerController {
 			@RequestParam(value = "status[]", required = false) int[] status,
 			@RequestParam(value = "appName") String appName, 
 			@RequestParam(value = "agentId") String agentId,
-			@RequestParam(value = "log4jXmlPath") String log4jXmlPath,
+			@RequestParam(value = "loggingPolicyFilePath") String loggingPolicyFilePath,
+			@RequestParam(value = "loggingFramework") String loggingFramework,
 			Model model, HttpServletRequest request) throws Exception {
 		
 		LogApplication param = new LogApplication();
@@ -125,7 +132,8 @@ public class LogManagerController {
 			param.setId(id);
 		}
 		param.setAppName(appName);
-		param.setLog4jXmlPath(log4jXmlPath);
+		param.setLoggingPolicyFilePath(loggingPolicyFilePath);
+		param.setLoggingFramework(loggingFramework);
 		param.setAgentId(agentId);
 		param.setStatus(LogManagerConstant.APP_STATUS_INACTIVE);
 
@@ -246,21 +254,24 @@ public class LogManagerController {
 	 * @return
 	 * @throws Exception
 	 */
-	@RequestMapping(params = "method=loadLog4jXml")
-	public String loadLog4jXml(@RequestParam(value="agentId") String agentId, 
-			@RequestParam(value="log4jXmlPath") String log4jXmlPath, 
+	@RequestMapping(params = "method=loadLoggingPolicyFile")
+	public String loadLoggingPolicyFile(@RequestParam(value="agentId") String agentId, 
+			@RequestParam(value="loggingPolicyFilePath") String loggingPolicyFilePath,
+			@RequestParam(value="loggingFramework") String loggingFramework,
 			Model model, HttpServletRequest request) throws Exception {
 		
+		LogApplication logApplication = null;
+		String loggingPolicyXml = null;
 //		LogApplication app = null;
-//		app = appService.loadLog4jXml(param);
+//		app = appService.loadLoggingPolicyFile(param);
 //		model.addAttribute("app", app);
 		try{
-			LogApplication logApplication = agentService.getLog4jXmlInfo(agentId, log4jXmlPath);
-			String log4jxml = agentService.getLog4jXmlInfoString(agentId, log4jXmlPath);
-			if(logApplication == null) throw new Exception(log4jXmlPath + " info is null.");
+			logApplication = agentService.getLoggingPolicyFileInfo(agentId, loggingPolicyFilePath, loggingFramework);
+			loggingPolicyXml = agentService.getLoggingPolicyFileInfoString(agentId, loggingPolicyFilePath, loggingFramework);
+			if(logApplication == null) throw new Exception(loggingPolicyFilePath + " info is not valid."); 
 			
 			model.addAttribute("logApplication", logApplication);
-			model.addAttribute("xmlString", log4jxml);
+			model.addAttribute("xmlString", loggingPolicyXml);
 		}catch(LogManagerException e){
 			model.addAttribute("isFail", true);
 			model.addAttribute("failMessage", e.getLocalizedMessage());
@@ -287,7 +298,7 @@ public class LogManagerController {
 		Account loginAccount = (Account)session.getAttribute("loginAccount");
 		app = appService.getLogApplicationById(param);
 		try{
-			LogApplication r = agentService.getLog4jXmlInfo(app.getAgentId(), app.getLog4jXmlPath());
+			LogApplication r = agentService.getLoggingPolicyFileInfo(app.getAgentId(), app.getLoggingPolicyFilePath(), app.getLoggingFramework());
 			app.setAppenders(r.getAppenders());
 			model.addAttribute("isConnect", true);
 		}catch(LogManagerException e) {
@@ -456,7 +467,7 @@ public class LogManagerController {
 		
 		model.addAttribute("pollingTerm", LogManagerConstant.POLLING_DURATION_SECOND);
 		model.addAttribute("appNameList", appNameList);
-		model.addAttribute("levels", LogManagerConstant.LEVELS);
+		model.addAttribute("levels", LogManagerConstant.LEVELS_SEARCH);
 		model.addAttribute("hours", LogManagerConstant.HOURS);
 		model.addAttribute("minutes", LogManagerConstant.MINUTES);
 		model.addAttribute("searchCondition", searchCondition);
@@ -512,7 +523,7 @@ public class LogManagerController {
 		searchCondition.setPageSize(10);
 		
 		model.addAttribute("appNameList", appNameList);
-		model.addAttribute("levels", LogManagerConstant.LEVELS);
+		model.addAttribute("levels", LogManagerConstant.LEVELS_SEARCH);
 		model.addAttribute("hours", LogManagerConstant.HOURS);
 		model.addAttribute("minutes", LogManagerConstant.MINUTES);
 		model.addAttribute("searchCondition", searchCondition);
@@ -722,6 +733,12 @@ public class LogManagerController {
 	    				cell.setCellStyle(messageStyle);
 	    				cell.setCellType(HSSFCell.CELL_TYPE_STRING);
 	    				cell.setCellValue(richValue);
+	    			}else if("clientIp".equals(fieldName[j])) {
+	    				cell.setCellValue(log.getMdc().get("clientIp"));
+	    				cell.setCellStyle(style);
+	    			}else if("userId".equals(fieldName[j])) {
+	    				cell.setCellValue(log.getMdc().get("userId"));
+	    				cell.setCellStyle(style);
 	    			}else{
 	    				cell.setCellValue(BeanUtils.getProperty(log, fieldName[j]));
 	    				cell.setCellStyle(style);
@@ -802,15 +819,15 @@ public class LogManagerController {
 	
 	/**
 	 * @param param
-	 * @param log4jXmlText
+	 * @param loggingPolicyFileText
 	 * @return
 	 * @throws Exception
 	 */
-	@RequestMapping(params = "method=saveLog4jXmlText")
-	public String saveLog4jXmlText(LogApplication param, @RequestParam(value="log4jXmlText") String log4jXmlText, Model model) throws Exception {
+	@RequestMapping(params = "method=saveLoggingPolicyFileText")
+	public String saveLoggingPolicyFileText(LogApplication param, @RequestParam(value="loggingPolicyFileText") String loggingPolicyFileText, Model model) throws Exception {
 		try{
 			LogApplication logApp = appService.getLogApplication(param);
-			agentService.saveLog4jXml(logApp, log4jXmlText);
+			agentService.saveLoggingPolicyFileText(logApp, loggingPolicyFileText);
 		}catch(LogManagerException e){
 			model.addAttribute("isFail", true);
 			model.addAttribute("failMessage", e.getLocalizedMessage());
@@ -818,17 +835,17 @@ public class LogManagerController {
 		return "jsonView";
 	}
 	
-	@RequestMapping(params = "method=saveLog4jXml")
-	public String saveLog4jXml(LogApplication param, @RequestParam(value="log4jXmlJson") String log4jXmlJson, Model model) throws Exception {
+	@RequestMapping(params = "method=saveLoggingPolicyFile")
+	public String saveLoggingPolicyFile(LogApplication param, @RequestParam(value="loggingPolicyFileJson") String loggingPolicyFileJson, Model model) throws Exception {
 		try{
 			LogApplication logApp = appService.getLogApplication(param);
 			Gson gson = new Gson();
-			LogApplication log4j = gson.fromJson(log4jXmlJson, LogApplication.class);
+			LogApplication log4j = gson.fromJson(loggingPolicyFileJson, LogApplication.class);
 			//System.out.println(log4j.toString());
 			logApp.setRoot(log4j.getRoot());
 			logApp.setAppenders(log4j.getAppenders());
 			logApp.setLoggers(log4j.getLoggers());
-			agentService.saveLog4jXml(logApp);
+			agentService.saveLoggingPolicyFile(logApp);
 		}catch(LogManagerException e){
 			model.addAttribute("isFail", true);
 			model.addAttribute("failMessage", e.getLocalizedMessage());

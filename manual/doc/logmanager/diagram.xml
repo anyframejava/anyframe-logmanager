@@ -4,7 +4,7 @@
 	<para>
 		<itemizedlist>
 			<listitem>
-				<para>Log Agent는 로그를 관리할 대상 어플리케이션(Legacy Application)에 같이 설치되어 원하는 로그 정보를 Log Repository로 저장하는 역할을 수행하는 Log Manager plugin 부분과 독립적으로 구동되어 로그데이타를 수집하고, 로그 정책정보를 관리하는 Agent Service로 나누어진다.</para>
+				<para>Log Agent는 로그를 관리할 대상 어플리케이션(Legacy Application)에 같이 설치되어 원하는 로그 정보를 Log Repository로 저장하는 역할을 수행하는 Log Manager Plugin 부분과 독립적으로 구동되어 로그데이타를 수집하고, 로그 정책정보를 관리하는 Agent Service로 나누어진다.</para>
 			</listitem>
 			<listitem>
 				<para>Log Repository는 말 그대로 로그데이타와 로그어플리케이션 정보를 저장하는 역할을 수행하며, 오픈소스 NoSQL DB 제품인 MongoDB를 활용하여 구축된다.</para>		
@@ -16,10 +16,10 @@
 	</para>
 	<mediaobject>
 		<imageobject role="html">
-			<imagedata fileref="../image/logmanager/logmanager001.jpg" format="JPG" align="center"/>
+			<imagedata fileref="../image/logmanager/LM151-033.JPG" format="JPG" align="center"/>
 		</imageobject>
 		<imageobject role="fo">
-			<imagedata fileref="../image/logmanager/pdf/logmanager001.jpg" format="JPG" align="center"/>
+			<imagedata fileref="../image/logmanager/pdf/LM151-033.JPG" format="JPG" align="center"/>
 		</imageobject>
 		<caption>S/W Architecture Diagram</caption>
 	</mediaobject>
@@ -33,20 +33,6 @@
 		<imageobject role="fo">
 			<imagedata fileref="../image/logmanager/pdf/logmanager002.jpg" format="JPG" align="center"/>
 		</imageobject>
-		<caption>Multi-Server Senario</caption>
+		<caption>Multi-Server Service Senario</caption>
 	</mediaobject>  
-</chapter>
-<chapter id="logmanager_technology_diagram">
-	<title>기술 구조도</title>
-	<para>본 기술 구조도는 Log Manager의 각 모듈의 설치 및 구동에 필요한 배경 기술에 대한 정보를 제공하고 있다.</para>
-	<para>주요 배경 기술에는 JDK 1.5, servlet 2.3, log4j, MongoDB 등이 있다.</para>
-	<mediaobject>
-		<imageobject role="html">
-			<imagedata fileref="../image/logmanager/logmanager003.jpg" format="JPG" align="center"/>
-		</imageobject>
-		<imageobject role="fo">
-			<imagedata fileref="../image/logmanager/pdf/logmanager003.jpg" format="JPG" align="center"/>
-		</imageobject>
-		<caption>Technology Stack Diagram</caption>
-	</mediaobject>
 </chapter>

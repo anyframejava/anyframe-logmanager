@@ -69,7 +69,10 @@ public class LogSearchDao {
 		
 		if(searchCondition.getPageIndex() != -1) {
 			try{
-				searchCondition.setTotalCount(mongoOperations.count(query, collectionName));
+				long count = mongoOperations.count(query, collectionName);
+				logger.debug("count=" + count);
+				searchCondition.setTotalCount(count);
+				
 			}catch(IllegalArgumentException e){
 				searchCondition.setTotalCount(0);
 				return null;
@@ -100,7 +103,7 @@ public class LogSearchDao {
 		}
 		
 		// server id
-		if(searchCondition.getAgentId() != null && !"".equals(searchCondition.getAgentId())) {
+		if(searchCondition.getServerId() != null && !"".equals(searchCondition.getServerId())) {
 			criteria = criteria.and("serverId").is(searchCondition.getAgentId());
 		}
 		
@@ -135,9 +138,9 @@ public class LogSearchDao {
 		}
 		
 		// server id
-		if(searchCondition.getAgentId() != null && !"".equals(searchCondition.getAgentId())) {
-			criteria = criteria.and("serverId").is(searchCondition.getAgentId());
-		}
+//		if(searchCondition.getServerId() != null && !"".equals(searchCondition.getServerId())) {
+//			criteria = criteria.and("serverId").is(searchCondition.getAgentId());
+//		}
 		
 		// duration
 		if(searchCondition.isUseFromDate() && searchCondition.isUseToDate()) {
@@ -150,12 +153,12 @@ public class LogSearchDao {
 		
 		// client IP
 		if(searchCondition.getClientIp() != null && !"".equals(searchCondition.getClientIp())) {
-			criteria = criteria.and("clientIp").is(searchCondition.getClientIp());
+			criteria = criteria.and("mdc.clientIp").is(searchCondition.getClientIp());
 		}
 		
 		// user id
 		if(searchCondition.getUserId() != null && !"".equals(searchCondition.getUserId())) {
-			criteria = criteria.and("userId").is(searchCondition.getUserId());
+			criteria = criteria.and("mdc.userId").is(searchCondition.getUserId());
 		}
 		
 		// Class Name

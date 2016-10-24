@@ -135,8 +135,8 @@ $(document).ready(function() {
 		colModel : [{name:'level', index:'level', width:30, align:'center', sortable:false, classes:'level',cellattr: setLogLevelStyle},
 					//{name:'timestamp', index:'timestamp', width:60, sortable:false, classes:'timestamp', formatter:'date', formatoptions: {newformat:'Y-m-d H:i:s'},cellattr: setLogLevelStyle},
 					{name:'timestampString', index:'timestampString', width:80, sortable:false, classes:'timestamp',cellattr: setLogLevelStyle},
-					{name:'clientIp', index:'clientIp', width:40, sortable:false, classes:'client-ip',cellattr: setLogLevelStyle, hidden:false},
-					{name:'userId', index:'userId', width:30, sortable:false, classes:'user-id',cellattr: setLogLevelStyle, hidden:true},
+					{name:'mdc.clientIp', index:'mdc.clientIp', width:40, sortable:false, classes:'client-ip',cellattr: setLogLevelStyle, hidden:false},
+					{name:'mdc.userId', index:'mdc.userId', width:30, sortable:false, classes:'user-id',cellattr: setLogLevelStyle, hidden:true},
 					{name:'className', index:'className', width:40, sortable:false, classes:'class-name',cellattr: setLogLevelStyle, hidden:true},
 					{name:'methodName', index:'methodName', width:40, sortable:false, classes:'method-name',cellattr: setLogLevelStyle, hidden:true},
 					{name:'lineNumber', index:'lineNumber', width:15, align:'center', sortable:false, classes:'line-number',cellattr: setLogLevelStyle, hidden:true},
@@ -216,8 +216,8 @@ $(document).ready(function() {
 			
 			$('#span-level').html(ret.level);
 			$('#span-timestamp').html(ret.timestampString);
-			$('#span-clientIp').html(ret.clientIp);
-			$('#span-userId').html(ret.userId);
+			$('#span-clientIp').html(ret['mdc.clientIp']);
+			$('#span-userId').html(ret['mdc.userId']);
 			$('#span-className').html(ret.className);
 			$('#span-methodName').html(ret.methodName);
 			$('#span-lineNumber').html(ret.lineNumber);

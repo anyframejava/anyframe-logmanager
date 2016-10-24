@@ -46,16 +46,16 @@ public interface LogAgentBundleService {
 	public void restartHarvestManager() throws Exception;
 	
 	/**
-	 * @param log4jXmlPath
+	 * @param LoggingPolicyFilePath
 	 * @return
 	 * @throws Exception
 	 */
-	public InputStream getLog4jXmlInfo(String log4jXmlPath) throws Exception;
+	public InputStream getLoggingPolicyFileInfo(String LoggingPolicyFilePath) throws Exception;
 	
 	/**
-	 * @param log4jXmlPath
+	 * @param LoggingPolicyFilePath
 	 * @throws Exception
 	 */
-	public void saveLog4jXmlInfo(String log4jXmlPath, String log4jXmlText) throws Exception;
+	public void saveLoggingPolicyFileInfo(String LoggingPolicyFilePath, String LoggingPolicyFileText) throws Exception;
 	
 }

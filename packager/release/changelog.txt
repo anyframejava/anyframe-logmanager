@@ -2,6 +2,54 @@
 ==========================
 http://www.anyframejava.org
 
+Changes in version 1.5.1 (2012-11-09)
+-------------------------------------
+* 주요 변경 내역
+  - Mongo Java Driver 2.8.0 적용
+  - Logback 지원 기능 추가
+  - ACE Editor 적용
+
+* 참조 라이브러리 변경 내역
+  - mongo-java-driver-2.7.2.jar를 mongo-java-driver-2.8.0.jar로 버젼 변경
+  - spring-data-mongodb-1.0.0.RELEASE.jar를 spring-data-mongodb-1.0.2.RELEASE.jar파일로 버전 변경
+  - anyframe-core-1.0.4.jar를 anyframe-core-1.5.0.RC1.jar파일로 버전 변경
+  
+* 해결된 이슈목록
+  [LA-12]Log Manager 1.5.1 개발
+    - [LA-13] 개선사항 분석 및 파일럿 코드 개발
+    - [LA-14] Logback 지원
+    - [LA-16] 서드파티 라이브러리 및 MongoDB 버전 현행화
+    - [LA-17] 패키징 및 매뉴얼 작성
+    - [LA-18] 1.5.1 테스트
+    - [LA-19] 1.5.1 릴리즈
+
+* 상세 변경 내역
+[LA-14] Logback 지원
+  - LogbackXmlBuilder 추가
+  - 호환성을 위한 인터페이스 및 메소드 명 정비
+  - 테스트 케이스 및 리소스 추가(logback.xml 등)
+  - log4j appender layout 처리 개선
+  - logback을 위한 MongoDbAppender 추가
+  - test case fail 방지를 위한 jcl-over 추가
+  - 저장 스키마에 appName 속성 추가
+  - 로깅 이벤트 모델 개선
+  - ACE 에디터 적용
+
+[LA-16] 서드파티 라이브러리 및 MongoDB 버전 현행화
+  - 서드파티 라이브러리 및 MongoDB 버전 현행화
+  - logback 1.0.7 적용
+
+[LA-18] 테스트
+  - 기본 배포 로그 정책 수정
+  - appender 선언이 logger보다 앞에 나와야 logback 제약을 반영
+  - Layout 이 없는 경우 null pointer exception 방지
+  - 로그 조회화면 LEVEL 옵션에서 'OFF' 제거
+  - 로그 조회화면 고급 검색 옵션에서 화면 깨짐 방지
+  - logback 적용 관련 버그 수정
+  - 로그 정책 editor에서 layout 섹션 없어지는 현상 수정
+  - GUI Editor pattern layout 표시 관련 버그 수정
+  - 메시지 어구 수정("save is successful")
+
 Changes in version 1.5.0 (2012-06-15)
 -------------------------------------
 * 주요 변경 내역
@@ -69,3 +117,16 @@ Changes in version 1.5.0 (2012-06-15)
   - 화면전환시 검색조건 표시 오류 수정
   - slf4j logger 적용
   - 페이지 로딩시 로그인 아이디 항목에 focus 추가
+  
+Changes in version 1.0.0 (2012-01-31)
+-------------------------------------
+* 기능
+  - 로그 조회
+  - 로그 정책 관리 
+  - 사용자 계정 관리 
+  
+* 해결된 이슈 목록
+  [LA-2] Log Analyzer 로그 관리 기능 개발
+  [LA-3] Log Analyzer 로그 조회 기능 개발
+  [LA-4] Log Analyzer 로그 저장 기능 개발
+  [LA-5] Log Analyzer 사용자 관리 기능 개발

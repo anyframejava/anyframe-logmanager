@@ -150,7 +150,8 @@ function loading(obj, options) {
 	if(typeof(options)=='undefined') { options = { caption:'<div style="margin-top:10px;">Loading...</div>', append:true, modal:true }; }
 	if(typeof(options.caption)=='undefined') { options.caption = '<div style="margin-top:10px;">Loading...</div>'; }
 	if(typeof(options.modal)=='undefined') { options.modal = true; }
-	obj.append('<div id="mask"></div><div class="loading"><img src="' + REQUEST_CONTEXT + '/logmanager/images/loading.gif" /><div>' + options.caption + '</div></div>');
+	if(typeof(options.image)=='undefined') { options.image = true; }
+	obj.append('<div id="mask"></div><div class="loading">' + (options.image ? '<img src="' + REQUEST_CONTEXT + '/logmanager/images/loading.gif" />' : '') + '<div>' + options.caption + '</div></div>');
 	if(options.modal) {
 		obj.attr('caller','caller');
 		$('#mask').attr('caller',obj.attr('caller'));
@@ -228,3 +229,115 @@ $(document).ready(function(e){
 		REQUEST_CONTEXT = '/anyframe-logmanager-web/';
 	}
 });
+
+// *************************************************************
+// editor dialog plugin
+// *************************************************************
+var EditorDialogs = {};
+var COMMANDs = ['options', 'open', 'close'];
+
+(function($){
+
+	/**
+	 * editor dialog plugins
+	 **/
+	$.fn.editorDialog = function(params) {
+		
+		var args = this.editorDialog.arguments;
+		var id = this.attr('id');
+		if(args.length == 1 && typeof(params) == 'string' && COMMANDs.indexOf(params) == -1) { // options attribute getter
+			var value = null;
+			try{
+				value = EditorDialogs[id].options[params];
+			}catch(e) {
+				value = null;
+			}
+			return value;
+		}else{
+			this.each(function(index) {
+				var el = $(this);
+				var id = el.attr('id');
+
+				var options = {
+					open : function() {
+					},
+					close : function() {
+					},
+					width : 600,
+					height : 500,
+					position : ['center', 120]
+				};
+
+				// parameter process
+				if(args.length == 1) {
+					if(typeof(params) == 'object') { // initialize
+						$.extend(options, params);
+
+						EditorDialogs[id] = {
+							'options' : options,
+							'body' : el
+						};
+
+						_render(EditorDialogs[id]);
+						
+						el.keydown(function(event) {
+							if(event.keyCode == 27) {
+								el.editorDialog('close');
+							}
+						});
+
+					}else if(typeof(params) == 'string') { // command execute
+						if(params == 'options') { // 'options' command
+							var s = '';
+							var opts = EditorDialogs[id].options;
+							for(a in opts) {
+								s += 'options.' + a + '=' + opts[a] + '\n';
+							}
+							alert(s);
+						}else if(params == 'open') { // 'open' command
+							EditorDialogs[id].options.open();
+							el.show();
+						}else if(params == 'close') { // 'close' command
+							EditorDialogs[id].options.close();
+							el.hide();
+						}
+					}
+				}else if(args.length == 2) { // option attribute setter
+					if(typeof(params) == 'string') {
+						EditorDialogs[id].options[params] = args[1];
+					}
+				}else {
+				}
+			});
+			
+			return this;
+		}
+	};
+
+
+})(jQuery);
+
+function _render(params) {
+	var options = params.options;
+	var el = params.body;
+	el.width(options.width);
+	el.height(options.height);
+	var left = '300px';
+	var top = '120px';
+	if(options.position[0] == 'center') {
+		left = $(window).scrollLeft() + ($(window).width() - el.width()) / 2;
+	}
+	if(options.position[1] == 'center') {
+		top = $(window).scrollTop() + ($(window).height() - el.height()) / 2;
+	}
+	el.css({
+		'position' : 'absolute', 
+		'top' : top, 
+		'left' : left, 
+		'z-index' : 1000, 
+		'display' : 'none', 
+		'border' : '1px solid #333',
+		'background-color' : '#ffffff'});
+}
+
+
