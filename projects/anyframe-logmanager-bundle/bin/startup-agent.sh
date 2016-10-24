@@ -1,7 +1,7 @@
 #!/bin/sh
 
 Log=console.log
-VERSION=1.6.0
+VERSION=1.7.0
 ID=logagent
 
 CACHE=`find .. -name "meta-agent"`

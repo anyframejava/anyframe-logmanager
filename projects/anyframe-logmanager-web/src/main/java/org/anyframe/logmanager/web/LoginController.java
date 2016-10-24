@@ -15,15 +15,21 @@
  */
 package org.anyframe.logmanager.web;
 
+
+import java.util.Locale;
+
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.anyframe.logmanager.domain.Account;
 import org.anyframe.logmanager.service.AccountService;
+import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.i18n.SessionLocaleResolver;
 
 /**
  * This LoginController class is a Controller class to provide user login
@@ -37,6 +43,9 @@ public class LoginController {
 	@Inject
 	@Named("accountService")
 	private AccountService accountService;
+	
+	@Inject
+	private MessageSource messageSource;
 
 	/**
 	 * 
@@ -47,15 +56,26 @@ public class LoginController {
 	 * @throws Exception
 	 */
 	@RequestMapping("/login.do")
-	public String login(Account account, Model model, HttpSession session) throws Exception {
+	public String login(HttpServletRequest request, Account account, Model model, HttpSession session) throws Exception {
 
+		Locale currenLocale = (Locale)session.getAttribute(SessionLocaleResolver.LOCALE_SESSION_ATTRIBUTE_NAME);
 		Account resultAccount = accountService.get(account.getUserId());
-
+		String language = request.getParameter("language");
+	      Locale locale = null;
+	         if( language.equals("ko") ){
+	             locale = Locale.KOREAN;
+	         } else if( language.equals("en") ) {
+	             locale = Locale.ENGLISH;
+	         } else {
+	             locale = Locale.KOREAN;
+	         }
+	 
 		if (resultAccount != null && resultAccount.getPassword().equals(account.getPassword())) {
 			session.setAttribute("loginAccount", resultAccount);
+			session.setAttribute(SessionLocaleResolver.LOCALE_SESSION_ATTRIBUTE_NAME, locale);
 			return "redirect:/logManager.do?method=analysis4gridForm";
 		} else {
-			model.addAttribute("rejectMessage", "Authentication failed. Try again.");
+			model.addAttribute("rejectMessage", messageSource.getMessage("logmanager.runtime.Logincontroller.login.authentication", new String[]{}, currenLocale));
 			return "forward:/welcome.do?method=view";
 		}
 	}

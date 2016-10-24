@@ -104,18 +104,19 @@ h2 {border-bottom:1px solid #bbbbbb; background:url(../images/blit_h2.gif) no-re
 
 /* Login & Register */
 #introcontainer_bgbox {width:500px; background:url(../images/bg_logincontainerbox.gif) no-repeat left top; padding:10px 0 0 0; margin:0 auto;}
-#introcontainer	{background:#FFF url(../images/bg_logincontainerbox.gif) no-repeat left bottom; padding:20px 0 30px 0;}
+#introcontainer	{background:#FFF url(../images/bg_logincontainerbox.gif) no-repeat left bottom; padding:20px 0 30px 0; height:80px;}
 	.logintitleimg {font-weight:bold; color:#005a8e; font-size:20pt; letter-spacing:-1px; padding-bottom:20px; text-align:center; margin-top:160px;}
 	.copyright {text-align:center; padding:5px 0 0 0; font-size:11px;}
 		.copyright .sitename {font-weight:bold;}
-	.login label {display:inline-block; font-weight:bold; font-size:12px; color:#333; text-align:right; width:120px; padding:0 5px 0 0;}
+	.login label {display:inline-block; font-weight:bold; font-size:12px; color:#333; text-align:right; width:145px; padding:0 0 0 0;}
 	.login p {padding:0 0 8px 0;}
 		.ie6fix .login p, .ie7fix .login p {padding:0 0 5px 0;}
-	.login fieldset input {width:205px; border:1px solid #88a7b8; vertical-align:middle; height:18px; font-size:12px;}
+	.login fieldset input {width:180px; border:1px solid #88a7b8; vertical-align:middle; height:18px; font-size:12px;margin-left:3px;}
 	.login .introbtn {float:left; margin-left:10px;}
 		.ie6fix .login .introbtn, .ie7fix .login .introbtn {margin:3px 0 0 134px;}
 	.inputbox {float:left;}
-	.inputbox_describe {text-align:right; font-weight:bold; font-family:Verdana, Arial, sans-serif; color:#ff5500;}
+	.inputbox_describe {text-align:right; font-weight:bold; padding:0 0 50px 0; font-family:Verdana, Arial, sans-serif; color:#ff5500;}
+	.login select {display:inline-block; font-weight:bold; color:#333; width:185px; margin:0;padding:0; height:23px; font-size:10pt;}
 
 
 

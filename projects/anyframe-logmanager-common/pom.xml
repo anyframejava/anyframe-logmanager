@@ -9,7 +9,7 @@
     <groupId>org.anyframe</groupId>
     <artifactId>anyframe-logmanager-common</artifactId>
     <packaging>jar</packaging>
-    <version>1.6.0</version>
+    <version>1.7.0</version>
     <name>anyframe-logmanager-common</name>
     <dependencies>
     </dependencies>

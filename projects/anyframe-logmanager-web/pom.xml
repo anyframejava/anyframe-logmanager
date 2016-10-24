@@ -9,7 +9,7 @@
     <groupId>org.anyframe</groupId>
     <artifactId>anyframe-logmanager-web</artifactId>
     <packaging>war</packaging>
-    <version>1.6.0</version>
+    <version>1.7.0</version>
     <name>anyframe-logmanager-web</name>
     <dependencies>
 		<dependency>
@@ -250,7 +250,7 @@
 		<dependency>
 			<groupId>org.anyframe</groupId>
 			<artifactId>anyframe-logmanager-common</artifactId>
-			<version>1.6.0</version>
+			<version>1.7.0</version>
 		</dependency>
     </dependencies>
     <properties>
@@ -298,7 +298,7 @@
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>anyframe-maven-plugin</artifactId>
-                <version>2.2.1</version>
+                <version>2.2.0</version>
                 <dependencies>
                     <dependency>
                         <groupId>hsqldb</groupId>

@@ -115,7 +115,7 @@
 			</textobject>
 			<caption>Log Agent Restart Complete</caption>
 		</mediaobject>
-		<note>
+		<note id="agent_service_restart">
 			<title>'Restart' 기능</title>
 			<para>'Restart' 기능은 agent service의 내부 태스크 엔진을 재구동하여 설정 관련 변경사항을
 				reload 할 수 있게 하는 기능으로. log applictaion의 정보가 변경된 경우 restart를 해주어야만

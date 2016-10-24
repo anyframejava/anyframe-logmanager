@@ -29,6 +29,7 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import javax.annotation.Resource;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.servlet.http.HttpServletRequest;
@@ -65,11 +66,14 @@ import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.ObjectFactory;
+import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.i18n.SessionLocaleResolver;
 
 import com.caucho.hessian.client.HessianRuntimeException;
 import com.google.gson.Gson;
@@ -109,6 +113,10 @@ public class LogManagerController {
 	@Inject
 	@Named("logRepositoryService")
 	private LogRepositoryService logRepositoryService;
+	
+	@Inject
+	private MessageSource messageSource;
+
 
 	/**
 	 * Log Application Save method Reference to Array binding... (for Ajax
@@ -226,12 +234,12 @@ public class LogManagerController {
 	@SuppressWarnings("unchecked")
 	@RequestMapping(params = "method=loadLoggingPolicyFile")
 	public String loadLoggingPolicyFile(@RequestParam(value = "agentId") String agentId, @RequestParam(value = "loggingPolicyFilePath") String loggingPolicyFilePath,
-			@RequestParam(value = "loggingFramework") String loggingFramework, Model model, HttpServletRequest request) {
-
+			@RequestParam(value = "loggingFramework") String loggingFramework, Model model, HttpServletRequest request, HttpSession session) {
+		Locale currenLocale = (Locale)session.getAttribute(SessionLocaleResolver.LOCALE_SESSION_ATTRIBUTE_NAME);
 		try {
 			Map<String, Object> log4j = agentService.getLog4jXml(agentId, loggingPolicyFilePath, loggingFramework);
 			if (log4j == null) {
-				throw new LogManagerException(loggingPolicyFilePath + " info is not valid.");
+				throw new LogManagerException(loggingPolicyFilePath + messageSource.getMessage("logmanager.runtime.LogManagercontroller.loadLoggingPolicyFile", new String[]{}, currenLocale));
 			}
 
 			model.addAttribute("appenders", (List<Appender>)log4j.get("appenders"));
@@ -240,7 +248,7 @@ public class LogManagerController {
 		} catch (HessianRuntimeException e){
 			logger.error(e.getMessage(), e);
 			model.addAttribute("isFail", true);
-			model.addAttribute("failMessage", "check the status of the agent.");
+			model.addAttribute("failMessage", messageSource.getMessage("logmanager.runtime.LogManagercontroller.loadLoggingPolicyFile.agentstatus", new String[]{}, currenLocale));
 		} catch (Exception e) {
 			logger.error(e.getMessage(), e);
 			model.addAttribute("isFail", true);
@@ -262,8 +270,8 @@ public class LogManagerController {
 	public String loadLoggingPolicyFileString(@RequestParam(value = "agentId") String agentId, 
 			@RequestParam(value = "loggingPolicyFilePath") String loggingPolicyFilePath,
 			@RequestParam(value = "loggingFramework") String loggingFramework, 
-			Model model, HttpServletRequest request) {
-
+			Model model, HttpServletRequest request, HttpSession session) {
+		Locale currenLocale = (Locale)session.getAttribute(SessionLocaleResolver.LOCALE_SESSION_ATTRIBUTE_NAME);
 		String loggingPolicyXml = null;
 		try {
 			loggingPolicyXml = agentService.getLoggingPolicyFileInfoString(agentId, loggingPolicyFilePath, loggingFramework);
@@ -271,7 +279,7 @@ public class LogManagerController {
 		} catch (HessianRuntimeException e){
 			logger.error(e.getMessage(), e);
 			model.addAttribute("isFail", true);
-			model.addAttribute("failMessage", "check the status of the agent.");
+			model.addAttribute("failMessage", loggingPolicyFilePath + messageSource.getMessage("logmanager.runtime.LogManagercontroller.loadLoggingPolicyFileString.agentstatus", new String[]{}, currenLocale));
 		} catch (Exception e) {
 			logger.error(e.getMessage(), e);
 			model.addAttribute("isFail", true);
@@ -401,14 +409,15 @@ public class LogManagerController {
 	 */
 	@RequestMapping(params = "method=analysisForm")
 	public String analysisForm(LogSearchCondition searchCondition, Model model, HttpServletRequest request, HttpSession session) throws Exception {
+		Locale currenLocale = (Locale)session.getAttribute(SessionLocaleResolver.LOCALE_SESSION_ATTRIBUTE_NAME);
 		
 		Account currentAccount = (Account)session.getAttribute("loginAccount");
 		
 		List<String> appNameList = new ArrayList<String>();
-		appNameList.add("== Select ==");
+		appNameList.add(messageSource.getMessage("logmanager.analysis.app.select", new String[]{}, currenLocale));
 		appNameList.addAll(service.getActiveLogApplicationNameList());
 		List<String> repositoryList = new ArrayList<String>();
-		repositoryList.add("== Select ==");
+		repositoryList.add(messageSource.getMessage("logmanager.analysis.repository.select", new String[]{}, currenLocale));
 		repositoryList.addAll(logRepositoryService.getActiveLogRepositoryNameList(currentAccount.getUserType()));
 
 		Date currentDateTime = new Date();
@@ -459,15 +468,18 @@ public class LogManagerController {
 	 */
 	@RequestMapping(params = "method=analysis4gridForm")
 	public String analysis4gridForm(LogSearchCondition searchCondition, Model model, HttpSession session) throws Exception {
+		
+		Locale currenLocale = (Locale)session.getAttribute(SessionLocaleResolver.LOCALE_SESSION_ATTRIBUTE_NAME);
+		
 		logger.debug("searchCondition4gridForm=\n{}", searchCondition.toString());
 		
 		Account currentAccount = (Account)session.getAttribute("loginAccount");
 		
 		List<String> appNameList = new ArrayList<String>();
-		appNameList.add("== Select ==");
+		appNameList.add(messageSource.getMessage("logmanager.analysis.app.select", new String[]{}, currenLocale));
 		appNameList.addAll(service.getActiveLogApplicationNameList());
 		List<String> repositoryList = new ArrayList<String>();
-		repositoryList.add("== Select ==");
+		repositoryList.add(messageSource.getMessage("logmanager.analysis.repository.select", new String[]{}, currenLocale));
 		repositoryList.addAll(logRepositoryService.getActiveLogRepositoryNameList(currentAccount.getUserType()));
 
 		Date currentDateTime = new Date();
@@ -849,14 +861,15 @@ public class LogManagerController {
 	 * @throws Exception
 	 */
 	@RequestMapping(params = "method=saveLoggingPolicyFileText")
-	public String saveLoggingPolicyFileText(LogApplication param, @RequestParam(value = "loggingPolicyFileText") String loggingPolicyFileText, Model model) {
+	public String saveLoggingPolicyFileText(LogApplication param, @RequestParam(value = "loggingPolicyFileText") String loggingPolicyFileText, Model model, HttpSession session) {
+		Locale currenLocale = (Locale)session.getAttribute(SessionLocaleResolver.LOCALE_SESSION_ATTRIBUTE_NAME);
 		try {
 			LogApplication logApp = appService.getLogApplication(param);
 			agentService.saveLoggingPolicyFileText(logApp, loggingPolicyFileText);
 		} catch (HessianRuntimeException e){
 			logger.error(e.getMessage(), e);
 			model.addAttribute("isFail", true);
-			model.addAttribute("failMessage", "check the status of the agent.");
+			model.addAttribute("failMessage", messageSource.getMessage("logmanager.runtime.LogManagercontroller.saveLoggingPolicyFileText.agentstatus", new String[]{}, currenLocale));
 		} catch (Exception e) {
 			logger.error(e.getMessage(), e);
 			model.addAttribute("isFail", true);
@@ -873,7 +886,8 @@ public class LogManagerController {
 	 * @throws Exception
 	 */
 	@RequestMapping(params = "method=saveLog4jXml")
-	public String saveLog4jXml(LogApplication param, @RequestParam(value = "loggingPolicyFileJson") String loggingPolicyFileJson, Model model) {
+	public String saveLog4jXml(LogApplication param, @RequestParam(value = "loggingPolicyFileJson") String loggingPolicyFileJson, Model model, HttpSession session) {
+		Locale currenLocale = (Locale)session.getAttribute(SessionLocaleResolver.LOCALE_SESSION_ATTRIBUTE_NAME);
 		try {
 			LogApplication logApp = appService.getLogApplication(param);
 			Gson gson = new Gson();
@@ -883,7 +897,7 @@ public class LogManagerController {
 		} catch (HessianRuntimeException e){
 			logger.error(e.getMessage(), e);
 			model.addAttribute("isFail", true);
-			model.addAttribute("failMessage", "check the status of the agent.");
+			model.addAttribute("failMessage", messageSource.getMessage("logmanager.runtime.LogManagercontroller.saveLog4jXml.agentstatus", new String[]{}, currenLocale));
 		} catch (Exception e) {
 			logger.error(e.getMessage(), e);
 			model.addAttribute("isFail", true);
@@ -990,7 +1004,8 @@ public class LogManagerController {
 	@SuppressWarnings("unchecked")
 	@RequestMapping(params = "method=checkRegularExpression")
 	public String checkRegularExpression(@RequestParam("regularExp") String regularExp, @RequestParam("logDataSample") String logDataSample, 
-			@RequestParam("isRegExp") boolean isRegExp, Model model) {
+			@RequestParam("isRegExp") boolean isRegExp, Model model, HttpSession session) {
+		Locale currenLocale = (Locale)session.getAttribute(SessionLocaleResolver.LOCALE_SESSION_ATTRIBUTE_NAME);
 		Pattern p = null;
 		Matcher m = null;
 		List<String> columnNames = new ArrayList<String>();
@@ -1025,12 +1040,12 @@ public class LogManagerController {
 				model.addAttribute("columnCount", groupCount);
 			}else{
 				model.addAttribute("isFail", true);
-				model.addAttribute("failMessage", "Don't match data pattern.");
+				model.addAttribute("failMessage", messageSource.getMessage("logmanager.runtime.LogManagercontroller.checkRegularExpression.dontpattern1", new String[]{}, currenLocale));
 			}	
 		}catch(Exception e) {
 			logger.error(e.getMessage(), e);
 			model.addAttribute("isFail", true);
-			model.addAttribute("failMessage", "Don't match data pattern.\n---------------------\n" + e.getLocalizedMessage());
+			model.addAttribute("failMessage", messageSource.getMessage("logmanager.runtime.LogManagercontroller.checkRegularExpression.dontpattern2", new String[]{}, currenLocale));
 		}
 		
 		return "jsonView";

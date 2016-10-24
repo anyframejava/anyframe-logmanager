@@ -1,0 +1,31 @@
+Anyframe 프로젝트 내에 사용된 외부 오픈 소스의 경우 원 오픈 소스의 라이센스 정책을 따른다. 
+아래는 Anyframe 프로젝트 내 파일별 오픈 소스 사용목록이므로 참고하도록 한다.
+[순번)파일명 : 사용한 오픈소스의 component명, version명, license명, usage, %, matched file명, matched file line, comment]
+
+1)/anyframe-logmanager-bundle/bundle/berkelydb-4.0.103.jar : Berkeley DB Java Edition, 4.0.103, Oracle Berkeley DB Java Edition License, Component, 100%   
+2)/anyframe-logmanager-bundle/bundle/felix.jar : Apache Felix, 4.0.2, Apache License Version 2.0, Component, 100%   
+3)/anyframe-logmanager-bundle/bundle/hessian-3.1.6.jar : Hessian Binary Web Service Protocol, 3.1.6, Apache 1.1, Component, 100%   
+4)/anyframe-logmanager-bundle/bundle/org.apache.felix.configadmin-1.2.4.jar : org.apache.felix.configadmin, 1.2.4, Apache License Version 2.0, Component, 100%   
+5)/anyframe-logmanager-bundle/bundle/org.apache.felix.eventadmin-1.0.0.jar : org.apache.felix.eventadmin, 1.0.0, Apache License Version 2.0, Component, 100%   
+6)/anyframe-logmanager-bundle/bundle/org.apache.felix.http.api-2.2.0.jar : org.apache.felix.http.api, 2.2.0, Apache License Version 2.0, Component, 100%   
+7)/anyframe-logmanager-bundle/bundle/org.apache.felix.http.base-2.2.0.jar : org.apache.felix.http.base, 2.2.0, Apache License Version 2.0, Component, 100%   
+8)/anyframe-logmanager-bundle/bundle/org.apache.felix.http.jetty-2.2.0.jar : org.apache.felix.http.jetty, 2.2.0, Apache License Version 2.0, Component, 100%   
+9)/anyframe-logmanager-bundle/bundle/org.apache.felix.log-1.0.0.jar : org.apache.felix.log, 1.0.0, Apache License Version 2.0, Component, 100%   
+10)/anyframe-logmanager-bundle/bundle/org.apache.felix.prefs-1.0.4.jar : org.apache.felix.prefs, 1.0.4, Apache License Version 2.0, Component, 100%   
+11)/anyframe-logmanager-bundle/bundle/org.apache.felix.scr-1.4.0.jar : org.apache.felix.scr, 1.4.0, Apache License Version 2.0, Component, 100%   
+12)/anyframe-logmanager-bundle/bundle/org.apache.felix.shell.remote-1.0.4.jar : org.apache.felix.shell.remote, 1.0.4, Apache License Version 2.0, Component, 100%   
+13)/anyframe-logmanager-bundle/bundle/org.apache.felix.shell.tui-1.4.1.jar : org.apache.felix.shell.tui, 1.4.1, Apache License Version 2.0, Component, 100%   
+14)/anyframe-logmanager-bundle/bundle/org.apache.felix.shell-1.4.2.jar : org.apache.felix.shell, 1.4.2, Apache License Version 2.0, Component, 100%   
+15)/anyframe-logmanager-bundle/bundle/org.json_1.0.0.jar : json-framework, 1.0.0, JSon License, Component, 100%   
+16)/anyframe-logmanager-bundle/lib/log4j-1.2.16.jar : Apache log4j, 1.2.16, Apache License Version 2.0, Component, 100%   
+17)/anyframe-logmanager-bundle/lib/slf4j-api-1.6.4.jar : slf4j, v_1.6.4, MIT License V2, Component, 100%   
+18)/anyframe-logmanager-bundle/lib/slf4j-log4j12-1.6.4.jar : slf4j, v_1.6.4, MIT License V2, Component, 100%   
+19)/anyframe-logmanager-bundle-core/bundle.lib/anyframe-logmanager-common-1.7.0.jar : FWG_Anyframe_LogManager_MON, Unspecified, Apache License Version 2.0, Original Code, 100%   
+20)/anyframe-logmanager-bundle-core/bundle.lib/felix.jar : Apache Felix, 4.0.2, Apache License Version 2.0, Component, 100%   
+21)/anyframe-logmanager-bundle-core/bundle.lib/hessian-3.1.6.jar : Hessian Binary Web Service Protocol, 3.1.6, Apache 1.1, Component, 100%   
+22)/anyframe-logmanager-bundle-core/bundle.lib/mongo-java-driver-2.10.1.jar : mongo-java-driver, 2.10.1, Apache License Version 2.0, Component, 100%   
+23)/anyframe-logmanager-bundle-core/bundle.lib/org.apache.felix.http.jetty-2.2.0.jar : Apache Felix, 4.0.2, Apache License Version 2.0, Component, 100%   
+24)/anyframe-logmanager-bundle-libs/META-INF/LICENSE : Apache License Version 2.0, Unspecified, Apache License Version 2.0, File, 100% Apache20-20061028.tar/Apache2.0/LICENSE1.txt  
+25)/anyframe-logmanager-bundle-libs/META-INF/NOTICE : Apache log4j, 1.2.15, Apache License Version 2.0, Component, 100% apache-log4j-1.2.15.tar.gz/apache-log4j-1.2.15/log4j-1.2.15.jar.---/META-INF/NOTICE  
+26)/anyframe-logmanager-bundle-libs/org/apache/log4j/xml/log4j.dtd : Apache log4j, 1.2.16, Apache License Version 2.0, File, 100%   
+

@@ -35,5 +35,7 @@
 		class="org.springframework.web.servlet.i18n.SessionLocaleResolver">
 		<property name="defaultLocale" value="en_US" />
 	</bean>
-
+	<bean id="localeContextFactory" class="org.springframework.beans.factory.config.ObjectFactoryCreatingFactoryBean">
+        <property name="targetBeanName" value="localeContext" />
+    </bean>
 </beans>

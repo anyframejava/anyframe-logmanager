@@ -10,7 +10,7 @@
   </parent>
   <groupId>org.anyframe</groupId>
   <artifactId>anyframe-logmanager-packager</artifactId>
-  <version>1.6.0</version>
+  <version>1.7.0</version>
   <packaging>jar</packaging>
 
   <name>anyframe-logmanager-packager</name>

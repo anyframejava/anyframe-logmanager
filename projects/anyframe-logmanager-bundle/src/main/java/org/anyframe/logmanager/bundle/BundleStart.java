@@ -82,7 +82,7 @@ public class BundleStart {
 	 * 
 	 */
 	private static void printWelcome() {
-        System.out.println("\n::: Welcome to Anyframe Log Manager Agent 1.6.0 :::");
+        System.out.println("\n::: Welcome to Anyframe Log Manager Agent 1.7.0 :::");
         System.out.println("===============================================\n");
 	}
 

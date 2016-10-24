@@ -2223,12 +2223,12 @@ $(document).ready(function() {
 		<div id="container">
         	<div id="leftspace">
             	<ul>
-                    <li><a href="<c:url value="/logManager.do?method=analysis4gridForm"/>">Log Analysis</a></li>
+                     <li><a href="<c:url value="/logManager.do?method=analysis4gridForm"/>"><spring:message code="logmanager.analysis.title"/></a></li>
 				<c:if test="${sessionScope.loginAccount.userType=='Administrator'}">
-                    <li><a href="<c:url value="/logManager.do?method=agentList"/>">Log Agent Management</a></li>
-                    <li><a href="<c:url value="/logManager.do?method=repositoryListForm"/>">Log Repository Management</a></li>
-                    <li><a href="<c:url value="/logManager.do?method=appList"/>">Log Application Management</a></li>
-                    <li><a href="<c:url value="/account.do?method=view"/>">Account Management</a></li>
+					<li><a href="<c:url value="/logManager.do?method=agentList"/>"><spring:message code="logmanager.agent.title"/></a></li>
+					<li><a href="<c:url value="/logManager.do?method=repositoryListForm"/>"><spring:message code="logmanager.repository.title"/></a></li>
+					<li><a href="<c:url value="/logManager.do?method=appList"/>"><spring:message code="logmanager.logapplication.title"/></a></li>
+					<li><a href="<c:url value="/account.do?method=view"/>"><spring:message code="logmanager.account.title"/></a></li>
                 </c:if>
                 </ul>
 			</div>

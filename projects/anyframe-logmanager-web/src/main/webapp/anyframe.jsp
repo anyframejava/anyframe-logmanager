@@ -1,5 +1,10 @@
+<%@ page import="org.apache.commons.logging.Log"%>
 <%@ page language="java" pageEncoding="UTF-8" contentType="text/html;charset=utf-8" %>
 <%@ include file="/common/taglibs.jsp"%>
+<% 
+	String language = request.getLocale().getLanguage();
+	//session.setAttribute(SessionLocaleResolver.LOCALE_SESSION_ATTRIBUTE_NAME, language);
+%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
@@ -67,7 +72,8 @@ $(document).ready(function() {
 				$.post('<c:url value="/welcome.do?method=save"/>', 
 						{'userId' : document.accountForm.userId.value,
 					     'userName' : document.accountForm.userName.value,
-						'password' : document.accountForm.password.value, 
+						'password' : document.accountForm.password.value,
+						'language' : document.accountForm.password.value, 
 						'userType' : $("#userType").val()}, 
 						function(data) {
 							alert('save success');
@@ -108,6 +114,12 @@ $(document).ready(function() {
 		            	<form id="loginForm" name="loginForm" method="post" action="<c:url value='/login.do'/>">
 			                <p><label for="userId">User ID :</label><input type="text" id="userId" name="userId"/></p>
 			                <p><label for="password">Password :</label><input type="password" id="password" name="password" onkeypress="fncKeyPress(event);"/></p>
+			                <p><label for="language">Language :</label>
+			                <select name="language" >
+			                	<option value="ko">Korean</option>
+			                	<option value="en">English</option>
+			                </select></p>
+			                <script>loginForm.language.value = '<%=language%>';</script>
 			                <p class="inputbox_describe"><c:out value="${rejectMessage}"/></p>
 		                </form>
 		            </fieldset>
@@ -125,10 +137,10 @@ $(document).ready(function() {
 	    <hr />
 	    <div class="copyright">
 	    	<c:if test="${isAdminExist==false}">
-		       		 <span class="button">
-		       			<a id="btnAdd">Admininstrator account does not exist. Register Now!</a>
-		       			</span>
-		       </c:if>
+		     	<span class="button">
+			     	<a id="btnAdd">Administrator account does not exist. Register Now!</a>
+		       	</span>
+			</c:if>
 	    </div>
 	    <div class="copyright">Copyright ⓒ <span class="sitename">Anyframe Log Manager</span> All rights reserved.</div>
     </div>
@@ -172,5 +184,8 @@ $(document).ready(function() {
 </div>
 <!--[if IE]></div><![endif]-->
 <!--[if !IE]></div><![endif]--><!--// wrapper E -->
+<script language="JavaScript">
+	document.loginForm.userId.focus();
+</script>
 </body>
 </html>

@@ -475,13 +475,13 @@ $(document).ready(function() {
 		<div id="container">
         	<div id="leftspace">
             	<ul>
-                    <li><a href="<c:url value="/logManager.do?method=analysis4gridForm"/>"><spring:message code="logmanager.analysis.title"/></a></li>
+                     <li><a href="<c:url value="/logManager.do?method=analysis4gridForm"/>"><spring:message code="logmanager.analysis.title"/></a></li>
 				<c:if test="${sessionScope.loginAccount.userType=='Administrator'}">
-					<li><a href="<c:url value="/logManager.do?method=agentList"/>">Log Agent Management</a></li>
-					<li><a href="<c:url value="/logManager.do?method=repositoryListForm"/>">Log Repository Management</a></li>
-                   	<li><a href="<c:url value="/logManager.do?method=appList"/>">Log Application Management</a></li>
-                   	<li><a href="<c:url value="/account.do?method=view"/>">Account Management</a></li>
-				</c:if>
+					<li><a href="<c:url value="/logManager.do?method=agentList"/>"><spring:message code="logmanager.agent.title"/></a></li>
+					<li><a href="<c:url value="/logManager.do?method=repositoryListForm"/>"><spring:message code="logmanager.repository.title"/></a></li>
+					<li><a href="<c:url value="/logManager.do?method=appList"/>"><spring:message code="logmanager.logapplication.title"/></a></li>
+					<li><a href="<c:url value="/account.do?method=view"/>"><spring:message code="logmanager.account.title"/></a></li>
+                </c:if>
                 </ul>
 			</div>
 			<hr/>
@@ -509,9 +509,9 @@ $(document).ready(function() {
                             <tbody>
                             	<tr>
 									<td colspan="4" class="align_right nonebg">
-										<form:checkbox id="checkboxAdvancedOptions" path="advancedOptions" value="true" label="Advanced Options"/>
-										<form:checkbox id="checkboxMatchedLogOnly" path="matchedLogOnly" value="true" label="Matched Log Only"/>
-										<form:checkbox id="checkboxLogTailingMode" path="logTailingMode" value="true" label="Log Tailing"/>										
+										<form:checkbox id="checkboxAdvancedOptions" path="advancedOptions" value="true" /><spring:message code="logmanager.analysis.advanced.options"/>
+										<form:checkbox id="checkboxMatchedLogOnly" path="matchedLogOnly" value="true" /><spring:message code="logmanager.analysis.matched.only"/>
+										<form:checkbox id="checkboxLogTailingMode" path="logTailingMode" value="true" /><spring:message code="logmanager.analysis.logtailing"/>										
 									</td>
 								</tr>
 								<tr>
@@ -525,11 +525,11 @@ $(document).ready(function() {
 									</td>
 								</tr>
 								<tr class="advanced-option">
-									<th><spring:message code="logmanager.analysis.client_ip"/></th>
+									<th><spring:message code="logmanager.analysis.clientip"/></th>
 									<td>
 										<form:input id="inputClientIp" class="advanced-form" path="clientIp"/>
 									</td>
-									<th><spring:message code="logmanager.analysis.user.id"/></th>
+									<th><spring:message code="logmanager.analysis.userid"/></th>
 									<td>
 										<form:input id="inputUserId" class="advanced-form" path="userId"/>
 									</td>
@@ -537,11 +537,11 @@ $(document).ready(function() {
 								<tr>
 									<th rowspan="2"><spring:message code="logmanager.analysis.duration"/></th>
 									<td id="tdDurTempl" colspan="3">
-										<form:radiobutton path="durationTemplate" id="rdo1Hour" value="1" label="1 Hour"/>&nbsp;
-										<form:radiobutton path="durationTemplate" id="rdo3Hour" value="2" label="3 Hours"/>&nbsp;
-										<form:radiobutton path="durationTemplate" id="rdo1Day" value="3" label="1 Day"/>&nbsp;
-										<form:radiobutton path="durationTemplate" id="rdo1Week" value="4" label="1 Week"/>&nbsp;
-										<form:radiobutton path="durationTemplate" id="rdo1Month" value="5" label="1 Month"/>
+									<form:radiobutton path="durationTemplate" id="rdo1Hour" value="1"/><spring:message code="logmanager.analysis.duration.1time"/>&nbsp;
+										<form:radiobutton path="durationTemplate" id="rdo3Hour" value="2"/><spring:message code="logmanager.analysis.duration.3time"/>&nbsp;
+										<form:radiobutton path="durationTemplate" id="rdo1Day" value="3"/><spring:message code="logmanager.analysis.duration.1day"/>&nbsp;
+										<form:radiobutton path="durationTemplate" id="rdo1Week" value="4"/><spring:message code="logmanager.analysis.duration.1week"/>&nbsp;
+										<form:radiobutton path="durationTemplate" id="rdo1Month" value="5"/><spring:message code="logmanager.analysis.duration.1month"/>
 									</td>
 								</tr>
 								<tr>

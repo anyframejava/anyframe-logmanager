@@ -1,6 +1,29 @@
-﻿Anyframe Log Manager CHANGELOG
+Anyframe Log Manager CHANGELOG
 ==========================
 http://www.anyframejava.org
+
+Changes in version 1.7.0 (2013-05-31)
+-------------------------------------
+* 주요 변경 내역
+  - 메시지 리소스 기반의 국제화 지원 기능 강화
+  
+* 참조 라이브러리 변경 내역
+  - 없음
+  
+* 해결된 이슈목록
+  [LA-29]Log Manager 1.7.0 
+    - [LA-28] 국제화 지원
+    - [LA-27] IE8 에서 검색 옵션 표시 오류
+    
+
+* 상세 변경 내역
+[LA-28] 국제화 지원
+ - localeResolver 추가
+ - message_kr.properties, message_en.properties 추가
+ - 시작페이지에 언어선택 select box 추가 
+ - spring messagesource 변환 작업
+ - repositoryList alret 문구 수정
+ - 최초 mainpage 영문화
 
 Changes in version 1.6.0 (2012-12-28)
 -------------------------------------

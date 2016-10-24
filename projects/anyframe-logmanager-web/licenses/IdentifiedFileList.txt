@@ -1,0 +1,172 @@
+Anyframe 프로젝트 내에 사용된 외부 오픈 소스의 경우 원 오픈 소스의 라이센스 정책을 따른다. 
+아래는 Anyframe 프로젝트 내 파일별 오픈 소스 사용목록이므로 참고하도록 한다.
+[순번)파일명 : 사용한 오픈소스의 component명, version명, license명, usage, %, matched file명, matched file line, comment]
+
+1)/anyframe-logmanager-web/src/main/java/org/anyframe/logmanager/common/aspect/ExceptionTransfer.java : devstore, Unspecified, Apache License Version 2.0, Snippet, 67% trunk-20120902-svn.tgz/dl/trunk/pjt000. devframe/devframe 1.0.0/src/main/java/common/com/devstore/common/aspect/ExceptionTransfer.java 20 
+2)/anyframe-logmanager-web/src/main/java/org/anyframe/logmanager/common/aspect/LoggingAspect.java : devframe, Unspecified, Apache License Version 2.0, File, 60% trunk-20120902-svn.tgz/trunk/devframe/src/main/java/org/devframe/common/aspect/LoggingAspect.java 21 
+3)/anyframe-logmanager-web/src/main/java/org/anyframe/logmanager/common/LogManagerException.java : devframe, Unspecified, Apache License Version 2.0, File, 60% trunk-20120902-svn.tgz/trunk/devframe/src/main/java/org/devframe/common/exception/CommonException.java 3 
+"4)/anyframe-logmanager-web/src/main/webapp/ace-0.2.0/LICENSE : FWG_Anyframe_LogManager_MON, Unspecified, Apache License Version 2.0, Original Code, 100% ares-project-master-20120609.tgz/enyojs-ares-project-21e05f0/lib/foss/ace/assets/build/LICENSE  https://github.com/ajaxorg/ace 
+ace 에서 제공. BSD 로 변경됨"
+"5)/anyframe-logmanager-web/src/main/webapp/ace-0.2.0/LICENSE : ACE, 0.2.0, BSD 2.0, Component, 100%   https://github.com/ajaxorg/ace 
+ace 에서 제공. BSD 로 변경됨"
+6)/anyframe-logmanager-web/src/main/webapp/ace-0.2.0/Readme.md : FWG_Anyframe_LogManager_MON, Unspecified, Apache License Version 2.0, Original Code, 100% sky-edit-0.4.2.xpi/resources/sky-edit-at-jetpack-sky-edit-lib/data/support/ace/Readme.md  ACE 가 제공하는 단순 정보성 파일
+7)/anyframe-logmanager-web/src/main/webapp/ace-0.2.0/Readme.md : ACE, 0.2.0, BSD 2.0, Component, 100%   ACE 가 제공하는 단순 정보성 파일
+8)/anyframe-logmanager-web/src/main/webapp/ace-0.2.0/src/ace.js : ACE, 0.2.0, BSD 2.0, Component, 100%   
+9)/anyframe-logmanager-web/src/main/webapp/ace-0.2.0/src/ace-uncompressed.js : ACE, 0.2.0, BSD 2.0, Component, 100%   
+10)/anyframe-logmanager-web/src/main/webapp/ace-0.2.0/src/cockpit.js : ACE, 0.2.0, BSD 2.0, Component, 100%   
+11)/anyframe-logmanager-web/src/main/webapp/ace-0.2.0/src/cockpit-uncompressed.js : ACE, 0.2.0, BSD 2.0, Component, 100%   
+12)/anyframe-logmanager-web/src/main/webapp/ace-0.2.0/src/keybinding-emacs.js : ACE, 0.2.0, BSD 2.0, Component, 100%   
+13)/anyframe-logmanager-web/src/main/webapp/ace-0.2.0/src/keybinding-vim.js : ACE, 0.2.0, BSD 2.0, Component, 100%   
+14)/anyframe-logmanager-web/src/main/webapp/ace-0.2.0/src/mode-c_cpp.js : ACE, 0.2.0, BSD 2.0, Component, 100%   
+15)/anyframe-logmanager-web/src/main/webapp/ace-0.2.0/src/mode-clojure.js : ACE, 0.2.0, BSD 2.0, Component, 100%   
+16)/anyframe-logmanager-web/src/main/webapp/ace-0.2.0/src/mode-coffee.js : ACE, 0.2.0, BSD 2.0, Component, 100%   
+17)/anyframe-logmanager-web/src/main/webapp/ace-0.2.0/src/mode-csharp.js : ACE, 0.2.0, BSD 2.0, Component, 100%   
+18)/anyframe-logmanager-web/src/main/webapp/ace-0.2.0/src/mode-css.js : ACE, 0.2.0, BSD 2.0, Component, 100%   
+19)/anyframe-logmanager-web/src/main/webapp/ace-0.2.0/src/mode-groovy.js : ACE, 0.2.0, BSD 2.0, Component, 100%   
+20)/anyframe-logmanager-web/src/main/webapp/ace-0.2.0/src/mode-html.js : ACE, 0.2.0, BSD 2.0, Component, 100%   
+21)/anyframe-logmanager-web/src/main/webapp/ace-0.2.0/src/mode-java.js : ACE, 0.2.0, BSD 2.0, Component, 100%   
+22)/anyframe-logmanager-web/src/main/webapp/ace-0.2.0/src/mode-javascript.js : ACE, 0.2.0, BSD 2.0, Component, 100%   
+23)/anyframe-logmanager-web/src/main/webapp/ace-0.2.0/src/mode-json.js : ACE, 0.2.0, BSD 2.0, Component, 100%   
+24)/anyframe-logmanager-web/src/main/webapp/ace-0.2.0/src/mode-ocaml.js : ACE, 0.2.0, BSD 2.0, Component, 100%   
+25)/anyframe-logmanager-web/src/main/webapp/ace-0.2.0/src/mode-perl.js : ACE, 0.2.0, BSD 2.0, Component, 100%   
+26)/anyframe-logmanager-web/src/main/webapp/ace-0.2.0/src/mode-php.js : ACE, 0.2.0, BSD 2.0, Component, 100%   
+27)/anyframe-logmanager-web/src/main/webapp/ace-0.2.0/src/mode-python.js : ACE, 0.2.0, BSD 2.0, Component, 100%   
+28)/anyframe-logmanager-web/src/main/webapp/ace-0.2.0/src/mode-ruby.js : ACE, 0.2.0, BSD 2.0, Component, 100%   
+29)/anyframe-logmanager-web/src/main/webapp/ace-0.2.0/src/mode-scad.js : ACE, 0.2.0, BSD 2.0, Component, 100%   
+30)/anyframe-logmanager-web/src/main/webapp/ace-0.2.0/src/mode-scala.js : ACE, 0.2.0, BSD 2.0, Component, 100%   
+31)/anyframe-logmanager-web/src/main/webapp/ace-0.2.0/src/mode-scss.js : ACE, 0.2.0, BSD 2.0, Component, 100%   
+32)/anyframe-logmanager-web/src/main/webapp/ace-0.2.0/src/mode-svg.js : ACE, 0.2.0, BSD 2.0, Component, 100%   
+33)/anyframe-logmanager-web/src/main/webapp/ace-0.2.0/src/mode-textile.js : ACE, 0.2.0, BSD 2.0, Component, 100%   
+34)/anyframe-logmanager-web/src/main/webapp/ace-0.2.0/src/mode-xml.js : ACE, 0.2.0, BSD 2.0, Component, 100%   
+35)/anyframe-logmanager-web/src/main/webapp/ace-0.2.0/src/theme-clouds.js : ACE, 0.2.0, BSD 2.0, Component, 100%   
+36)/anyframe-logmanager-web/src/main/webapp/ace-0.2.0/src/theme-clouds_midnight.js : ACE, 0.2.0, BSD 2.0, Component, 100%   
+37)/anyframe-logmanager-web/src/main/webapp/ace-0.2.0/src/theme-cobalt.js : ACE, 0.2.0, BSD 2.0, Component, 100%   
+38)/anyframe-logmanager-web/src/main/webapp/ace-0.2.0/src/theme-crimson_editor.js : ACE, 0.2.0, BSD 2.0, Component, 100%   
+39)/anyframe-logmanager-web/src/main/webapp/ace-0.2.0/src/theme-dawn.js : ACE, 0.2.0, BSD 2.0, Component, 100%   
+40)/anyframe-logmanager-web/src/main/webapp/ace-0.2.0/src/theme-eclipse.js : ACE, 0.2.0, BSD 2.0, Component, 100%   
+41)/anyframe-logmanager-web/src/main/webapp/ace-0.2.0/src/theme-idle_fingers.js : ACE, 0.2.0, BSD 2.0, Component, 100%   
+42)/anyframe-logmanager-web/src/main/webapp/ace-0.2.0/src/theme-kr_theme.js : ACE, 0.2.0, BSD 2.0, Component, 100%   
+43)/anyframe-logmanager-web/src/main/webapp/ace-0.2.0/src/theme-merbivore.js : ACE, 0.2.0, BSD 2.0, Component, 100%   
+44)/anyframe-logmanager-web/src/main/webapp/ace-0.2.0/src/theme-merbivore_soft.js : ACE, 0.2.0, BSD 2.0, Component, 100%   
+45)/anyframe-logmanager-web/src/main/webapp/ace-0.2.0/src/theme-mono_industrial.js : ACE, 0.2.0, BSD 2.0, Component, 100%   
+46)/anyframe-logmanager-web/src/main/webapp/ace-0.2.0/src/theme-monokai.js : ACE, 0.2.0, BSD 2.0, Component, 100%   
+47)/anyframe-logmanager-web/src/main/webapp/ace-0.2.0/src/theme-pastel_on_dark.js : ACE, 0.2.0, BSD 2.0, Component, 100%   
+48)/anyframe-logmanager-web/src/main/webapp/ace-0.2.0/src/theme-solarized_dark.js : ACE, 0.2.0, BSD 2.0, Component, 100%   
+49)/anyframe-logmanager-web/src/main/webapp/ace-0.2.0/src/theme-solarized_light.js : ACE, 0.2.0, BSD 2.0, Component, 100%   
+50)/anyframe-logmanager-web/src/main/webapp/ace-0.2.0/src/theme-textmate.js : ACE, 0.2.0, BSD 2.0, Component, 100%   
+51)/anyframe-logmanager-web/src/main/webapp/ace-0.2.0/src/theme-twilight.js : ACE, 0.2.0, BSD 2.0, Component, 100%   
+52)/anyframe-logmanager-web/src/main/webapp/ace-0.2.0/src/theme-vibrant_ink.js : ACE, 0.2.0, BSD 2.0, Component, 100%   
+53)/anyframe-logmanager-web/src/main/webapp/ace-0.2.0/src/worker-coffee.js : ACE, 0.2.0, BSD 2.0, Component, 100%   
+54)/anyframe-logmanager-web/src/main/webapp/ace-0.2.0/src/worker-css.js : ACE, 0.2.0, BSD 2.0, Component, 100%   
+55)/anyframe-logmanager-web/src/main/webapp/ace-0.2.0/src/worker-javascript.js : ACE, 0.2.0, BSD 2.0, Component, 100%   
+56)/anyframe-logmanager-web/src/main/webapp/ace-0.2.0/textarea/editor.html : FWG_Anyframe_LogManager_MON, Unspecified, Apache License Version 2.0, Original Code, 100% socketstream_dashboard_example-master-20120531.tgz/paulbjensen-socketstream_dashboard_example-15c62ce/public/build/textarea/editor.html  Ace (Ajax.org Cloud9 Editor)가 제공하는 단순 정보성 파일. 자동생성된것으로 판단
+57)/anyframe-logmanager-web/src/main/webapp/ace-0.2.0/textarea/LICENSE : FWG_Anyframe_LogManager_MON, Unspecified, Apache License Version 2.0, Original Code, 100% ares-project-master-20120609.tgz/enyojs-ares-project-21e05f0/lib/foss/ace/assets/build/LICENSE  Ace (Ajax.org Cloud9 Editor)가 제공하는 단순 정보성 파일. 자동생성된것으로 판단
+58)/anyframe-logmanager-web/src/main/webapp/ace-0.2.0/textarea/LICENSE : ACE, 0.2.0, BSD 2.0, Component, 100%   Ace (Ajax.org Cloud9 Editor)가 제공하는 단순 정보성 파일. 자동생성된것으로 판단
+59)/anyframe-logmanager-web/src/main/webapp/ace-0.2.0/textarea/Readme.md : FWG_Anyframe_LogManager_MON, Unspecified, Apache License Version 2.0, Original Code, 100% sky-edit-0.4.2.xpi/resources/sky-edit-at-jetpack-sky-edit-lib/data/support/ace/Readme.md  Ace (Ajax.org Cloud9 Editor)가 제공하는 단순 정보성 파일. 자동 생성된것으로 판단
+60)/anyframe-logmanager-web/src/main/webapp/ace-0.2.0/textarea/Readme.md : ACE, 0.2.0, BSD 2.0, Component, 100%   Ace (Ajax.org Cloud9 Editor)가 제공하는 단순 정보성 파일. 자동 생성된것으로 판단
+61)/anyframe-logmanager-web/src/main/webapp/ace-0.2.0/textarea/src/ace.js : ACE, 0.2.0, BSD 2.0, Component, 100%   
+62)/anyframe-logmanager-web/src/main/webapp/ace-0.2.0/textarea/src/ace-uncompressed.js : ACE, 0.2.0, BSD 2.0, Component, 100%   
+63)/anyframe-logmanager-web/src/main/webapp/ace-0.2.0/textarea/src/mode-c_cpp.js : ACE, 0.2.0, BSD 2.0, Component, 100%   
+64)/anyframe-logmanager-web/src/main/webapp/ace-0.2.0/textarea/src/mode-clojure.js : ACE, 0.2.0, BSD 2.0, Component, 100%   
+65)/anyframe-logmanager-web/src/main/webapp/ace-0.2.0/textarea/src/mode-coffee.js : ACE, 0.2.0, BSD 2.0, Component, 100%   
+66)/anyframe-logmanager-web/src/main/webapp/ace-0.2.0/textarea/src/mode-csharp.js : ACE, 0.2.0, BSD 2.0, Component, 100%   
+67)/anyframe-logmanager-web/src/main/webapp/ace-0.2.0/textarea/src/mode-css.js : ACE, 0.2.0, BSD 2.0, Component, 100%   
+68)/anyframe-logmanager-web/src/main/webapp/ace-0.2.0/textarea/src/mode-groovy.js : ACE, 0.2.0, BSD 2.0, Component, 100%   
+69)/anyframe-logmanager-web/src/main/webapp/ace-0.2.0/textarea/src/mode-html.js : ACE, 0.2.0, BSD 2.0, Component, 100%   
+70)/anyframe-logmanager-web/src/main/webapp/ace-0.2.0/textarea/src/mode-java.js : ACE, 0.2.0, BSD 2.0, Component, 100%   
+71)/anyframe-logmanager-web/src/main/webapp/ace-0.2.0/textarea/src/mode-javascript.js : ACE, 0.2.0, BSD 2.0, Component, 100%   
+72)/anyframe-logmanager-web/src/main/webapp/ace-0.2.0/textarea/src/mode-json.js : ACE, 0.2.0, BSD 2.0, Component, 100%   
+73)/anyframe-logmanager-web/src/main/webapp/ace-0.2.0/textarea/src/mode-ocaml.js : ACE, 0.2.0, BSD 2.0, Component, 100%   
+74)/anyframe-logmanager-web/src/main/webapp/ace-0.2.0/textarea/src/mode-perl.js : ACE, 0.2.0, BSD 2.0, Component, 100%   
+75)/anyframe-logmanager-web/src/main/webapp/ace-0.2.0/textarea/src/mode-php.js : ACE, 0.2.0, BSD 2.0, Component, 100%   
+76)/anyframe-logmanager-web/src/main/webapp/ace-0.2.0/textarea/src/mode-python.js : ACE, 0.2.0, BSD 2.0, Component, 100%   
+77)/anyframe-logmanager-web/src/main/webapp/ace-0.2.0/textarea/src/mode-ruby.js : ACE, 0.2.0, BSD 2.0, Component, 100%   
+78)/anyframe-logmanager-web/src/main/webapp/ace-0.2.0/textarea/src/mode-scad.js : ACE, 0.2.0, BSD 2.0, Component, 100%   
+79)/anyframe-logmanager-web/src/main/webapp/ace-0.2.0/textarea/src/mode-scala.js : ACE, 0.2.0, BSD 2.0, Component, 100%   
+80)/anyframe-logmanager-web/src/main/webapp/ace-0.2.0/textarea/src/mode-scss.js : ACE, 0.2.0, BSD 2.0, Component, 100%   
+81)/anyframe-logmanager-web/src/main/webapp/ace-0.2.0/textarea/src/mode-svg.js : ACE, 0.2.0, BSD 2.0, Component, 100%   
+82)/anyframe-logmanager-web/src/main/webapp/ace-0.2.0/textarea/src/mode-textile.js : ACE, 0.2.0, BSD 2.0, Component, 100%   
+83)/anyframe-logmanager-web/src/main/webapp/ace-0.2.0/textarea/src/mode-xml.js : ACE, 0.2.0, BSD 2.0, Component, 100%   
+84)/anyframe-logmanager-web/src/main/webapp/ace-0.2.0/textarea/src/theme-clouds.js : ACE, 0.2.0, BSD 2.0, Component, 100%   
+85)/anyframe-logmanager-web/src/main/webapp/ace-0.2.0/textarea/src/theme-clouds_midnight.js : ACE, 0.2.0, BSD 2.0, Component, 100%   
+86)/anyframe-logmanager-web/src/main/webapp/ace-0.2.0/textarea/src/theme-cobalt.js : ACE, 0.2.0, BSD 2.0, Component, 100%   
+87)/anyframe-logmanager-web/src/main/webapp/ace-0.2.0/textarea/src/theme-crimson_editor.js : ACE, 0.2.0, BSD 2.0, Component, 100%   
+88)/anyframe-logmanager-web/src/main/webapp/ace-0.2.0/textarea/src/theme-dawn.js : ACE, 0.2.0, BSD 2.0, Component, 100%   
+89)/anyframe-logmanager-web/src/main/webapp/ace-0.2.0/textarea/src/theme-eclipse.js : ACE, 0.2.0, BSD 2.0, Component, 100%   
+90)/anyframe-logmanager-web/src/main/webapp/ace-0.2.0/textarea/src/theme-idle_fingers.js : ACE, 0.2.0, BSD 2.0, Component, 100%   
+91)/anyframe-logmanager-web/src/main/webapp/ace-0.2.0/textarea/src/theme-kr_theme.js : ACE, 0.2.0, BSD 2.0, Component, 100%   
+92)/anyframe-logmanager-web/src/main/webapp/ace-0.2.0/textarea/src/theme-merbivore.js : ACE, 0.2.0, BSD 2.0, Component, 100%   
+93)/anyframe-logmanager-web/src/main/webapp/ace-0.2.0/textarea/src/theme-merbivore_soft.js : ACE, 0.2.0, BSD 2.0, Component, 100%   
+94)/anyframe-logmanager-web/src/main/webapp/ace-0.2.0/textarea/src/theme-mono_industrial.js : ACE, 0.2.0, BSD 2.0, Component, 100%   
+95)/anyframe-logmanager-web/src/main/webapp/ace-0.2.0/textarea/src/theme-monokai.js : ACE, 0.2.0, BSD 2.0, Component, 100%   
+96)/anyframe-logmanager-web/src/main/webapp/ace-0.2.0/textarea/src/theme-pastel_on_dark.js : ACE, 0.2.0, BSD 2.0, Component, 100%   
+97)/anyframe-logmanager-web/src/main/webapp/ace-0.2.0/textarea/src/theme-solarized_dark.js : ACE, 0.2.0, BSD 2.0, Component, 100%   
+98)/anyframe-logmanager-web/src/main/webapp/ace-0.2.0/textarea/src/theme-solarized_light.js : ACE, 0.2.0, BSD 2.0, Component, 100%   
+99)/anyframe-logmanager-web/src/main/webapp/ace-0.2.0/textarea/src/theme-textmate.js : ACE, 0.2.0, BSD 2.0, Component, 100%   
+100)/anyframe-logmanager-web/src/main/webapp/ace-0.2.0/textarea/src/theme-twilight.js : ACE, 0.2.0, BSD 2.0, Component, 100%   
+101)/anyframe-logmanager-web/src/main/webapp/ace-0.2.0/textarea/src/theme-vibrant_ink.js : ACE, 0.2.0, BSD 2.0, Component, 100%   
+102)/anyframe-logmanager-web/src/main/webapp/logmanager/javascript/CommonScript.js : devframe, Unspecified, Apache License Version 2.0, Snippet, 98% trunk-20120902-svn.tgz/trunk/devstore/src/main/webapp/sample/javascript/CommonScript.js 1 자동생성된 코드로 판단
+103)/anyframe-logmanager-web/src/main/webapp/logmanager/javascript/InputCalendar.js : devframe, Unspecified, Apache License Version 2.0, File, 100% trunk-20120902-svn.tgz/trunk/devstore/src/main/webapp/sample/javascript/InputCalendar.js  자동생성된 코드로 판단
+104)/anyframe-logmanager-web/src/main/webapp/logmanager/javascript/logmanager.js : FWG_Anyframe_LogManager_MON, Unspecified, Apache License Version 2.0, Original Code, 9% trunk-20121002-svn.tgz/trunk-20121002-svn/prototype/src/main/webapp/resources/jquery/com/pezFramework/pez.common.js 119 
+105)/lib/activation-1.1.jar : javax.activation, 1.1, COMMON DEVELOPMENT AND DISTRIBUTION LICENSE (CDDL) Version 1.0, Component, 100%   
+106)/lib/ant-1.6.5.jar : Apache Ant, 1.6.5, Apache License Version 2.0, Component, 100% apache-ant-1.6.5-bin.tar.gz/apache-ant-1.6.5/lib/ant.jar  
+107)/lib/anyframe-core-1.5.0-20121213.082923-31.jar : FWG_Anyframe_LogManager_MON, Unspecified, Apache License Version 2.0, Original Code, 100%   
+108)/lib/anyframe-logmanager-common-1.5.2-20121205.103906-5.jar : FWG_Anyframe_LogManager_MON, Unspecified, Apache License Version 2.0, Original Code, 100%   
+109)/lib/aopalliance-1.0.jar : AOP Alliance (Java/J2EE AOP standard), 1.0, Public Domain, Component, 100% aopalliance.zip/aopalliance.jar  
+110)/lib/asm-3.1.jar : ASM, 3.1, ASM License, Component, 100%   
+111)/lib/asm-commons-3.1.jar : ASM, 3.1, ASM License, Component, 100%   
+112)/lib/asm-tree-3.1.jar : ASM, 3.1, ASM License, Component, 100%   
+113)/lib/aspectjrt-1.6.8.jar : aspectj, 1.6.8, Eclipse Public License - v 1.0, Component (Module), 100%   
+114)/lib/aspectjweaver-1.6.8.jar : aspectj, 1.6.8, Eclipse Public License - v 1.0, Component (Module), 100%   
+115)/lib/commons-beanutils-1.8.0.jar : Apache-Jakarta BeanUtils, 1.8.0, Apache License Version 2.0, Component, 100% commons-beanutils-1.8.0-bin.tar.gz/commons-beanutils-1.8.0/commons-beanutils-1.8.0.jar  
+116)/lib/commons-collections-3.2.jar : Apache Jakarta Commons Collections, 3.2, Apache License Version 2.0, Component, 100% commons-collections-3.2.tar.gz/commons-collections-3.2/commons-collections-3.2.jar  
+117)/lib/commons-dbcp-1.2.2.jar : Apache Jakarta DBCP, 1.2.2, Apache License Version 2.0, Component, 100% commons-dbcp-1.2.2.tar.gz/commons-dbcp-1.2.2/commons-dbcp-1.2.2.jar  
+118)/lib/commons-io-1.4.jar : Apache Jakarta Commons IO, 1.4, Apache License Version 2.0, Component, 100% commons-io-1.4-bin.tar.gz/commons-io-1.4/commons-io-1.4.jar  
+119)/lib/commons-net-3.0.1.jar : Apache Jakarta Commons Net, 3.0.1, Apache 1.1, Component, 100%   
+120)/lib/commons-pool-1.5.3.jar : Apache Jakarta Commons Pool, 1.5.3, Apache License Version 2.0, Component, 100%   
+121)/lib/ecj-3.5.1.jar : Eclipse JDT Core Batch Compiler, 3.5.1, Eclipse Public License - v 1.0, Component (Module), 100% ecj-3.5.1.jar/ecj-3.5.1.jar  
+122)/lib/emma-2.1.5320.jar : EMMA code coverage, maven-1.0-plugin-0.4, Common Public License, Component (Module), 100% emma-stable-2.1.5320-lib.zip/emma.jar  
+123)/lib/geronimo-annotation_1.0_spec-1.1.1.jar : Apache Geronimo, 1.0, Apache License Version 2.0, Component, 100%   
+124)/lib/geronimo-jaspic_1.0_spec-1.0.jar : Apache Geronimo, 1.0, Apache License Version 2.0, Component, 100%   
+125)/lib/geronimo-jta_1.1_spec-1.1.1.jar : Apache Geronimo, 1.1, Apache License Version 2.0, Component, 100%   
+126)/lib/gson-1.7.1.jar : google-gson, 1.7.1, Apache License Version 2.0, Component, 100%   
+127)/lib/hessian-3.1.6.jar : Hessian Binary Web Service Protocol, 3.1.6, Apache 1.1, Component, 100%   
+128)/lib/hibernate-validator-4.1.0.Final.jar : Hibernate Validator, 4.1.0 Final, Apache License Version 2.0, Component, 100%   
+129)/lib/jackson-core-asl-1.9.7.jar : jackson-core, 1.9.7, Apache License Version 2.0, Component, 100%   
+130)/lib/jackson-mapper-asl-1.9.7.jar : jackson-core, 1.9.7, Apache License Version 2.0, Component, 100%   
+131)/lib/javax.inject-1.jar : javax.inject, 1, Apache License Version 2.0, Component, 100%   
+132)/lib/jaxb-api-2.2.jar : JAXB 2.0 Project, 2.2, COMMON DEVELOPMENT AND DISTRIBUTION LICENSE (CDDL) Version 1.0, Component, 100%   
+133)/lib/jcl-over-slf4j-1.6.4.jar : slf4j, v_1.6.4, MIT License V2, Component, 100%   
+134)/lib/jetty-all-7.5.4.v20111024.jar : Jetty - Java HTTP Servlet Server, 7.5.4, Apache License Version 2.0, Component, 100%   
+135)/lib/jmock-junit4-2.4.0.jar : jMock, 2.4.0, BSD 2.0, Component, 100%   
+136)/lib/jsp-2.1-glassfish-2.1.v20100127.jar : GlassFish, 2.1, Common Development and Distribution (CDDL) 1.1 License, Component, 100%   
+137)/lib/jsp-api-2.1.jar : jsp-api-2.1, Unspecified, Unspecified, Component, 100%   
+138)/lib/jsp-api-2.1-glassfish-2.1.v20100127.jar : GlassFish, 2.1, Common Development and Distribution (CDDL) 1.1 License, Component, 100%   
+139)/lib/jsr250-api-1.0.jar : Common Annotations - JSR-250, 1.0, COMMON DEVELOPMENT AND DISTRIBUTION LICENSE (CDDL) Version 1.0, Component, 100% jsr250-api-1.0.tar/jsr250-api-1.0.jar  
+140)/lib/jstl-1.1.2.jar : Apache Jakarta Taglibs, current, Apache License Version 2.0, Component, 100% bin/jakarta-taglibs-standard-current.tar.gz/jakarta-taglibs-standard-1.1.2/standard-examples.war.---/WEB-INF/lib/jstl.jar  
+141)/lib/jta-1.1.jar : Java Transaction API (JTA) (JSR-907), 1.1, Java Transaction API 1.1 License, Component, 100% jta-1_1-classes.tar/jta-1.1.jar  
+142)/lib/junit-4.9.jar : JUnit, 4.9, Common Public License, Component (Module), 100%   
+143)/lib/log4j-1.2.15.jar : Apache log4j, 1.2.15, Apache License Version 2.0, Component, 100% apache-log4j-1.2.15.tar.gz/apache-log4j-1.2.15/log4j-1.2.15.jar  
+144)/lib/mail-1.4.1.jar : mail, 1.4.1, COMMON DEVELOPMENT AND DISTRIBUTION LICENSE (CDDL) Version 1.0, Component, 100%   
+145)/lib/mongo-java-driver-2.10.1.jar : mongo-java-driver, 2.10.1, Apache License Version 2.0, Component, 100%   
+146)/lib/poi-3.7.jar : Apache POI, 3.7, Apache 1.1, Component, 100%   
+147)/lib/servlet-api-2.5.jar : servlet-api-2.5, Unspecified, Unspecified, Component, 100%   
+148)/lib/slf4j-api-1.6.4.jar : slf4j, v_1.6.4, MIT License V2, Component, 100%   
+149)/lib/slf4j-log4j12-1.6.4.jar : slf4j, v_1.6.4, MIT License V2, Component, 100%   
+150)/lib/spring-aop-3.1.1.RELEASE.jar : Spring AOP Cache, 3.1.1, Apache License Version 2.0, Component, 100%   
+151)/lib/spring-asm-3.1.1.RELEASE.jar : Spring Framework - springframework, 3.1.1, Apache License Version 2.0, Component, 100%   
+152)/lib/spring-beans-3.1.1.RELEASE.jar : Spring Framework - springframework, 3.1.1, Apache License Version 2.0, Component, 100%   
+153)/lib/spring-context-3.1.1.RELEASE.jar : Spring Framework - springframework, 3.1.1, Apache License Version 2.0, Component, 100%   
+154)/lib/spring-core-3.1.1.RELEASE.jar : Spring Framework - springframework, 3.1.1, Apache License Version 2.0, Component, 100%   
+155)/lib/spring-data-commons-core-1.2.0.RELEASE.jar : Spring Framework - springframework, 3.1.1, Apache License Version 2.0, Component, 100%   
+156)/lib/spring-data-mongodb-1.0.2.RELEASE.jar : Spring Framework - springframework, 3.1.1, Apache License Version 2.0, Component, 100%   
+157)/lib/spring-expression-3.1.1.RELEASE.jar : Spring Framework - springframework, 3.1.1, Apache License Version 2.0, Component, 100%   
+158)/lib/spring-jdbc-3.1.1.RELEASE.jar : Spring Framework - springframework, 3.1.1, Apache License Version 2.0, Component, 100%   
+159)/lib/spring-test-3.1.1.RELEASE.jar : Spring Framework - springframework, 3.1.1, Apache License Version 2.0, Component, 100%   
+160)/lib/spring-tx-3.1.1.RELEASE.jar : Spring Framework - springframework, 3.1.1, Apache License Version 2.0, Component, 100%   
+161)/lib/spring-web-3.1.1.RELEASE.jar : Spring Framework - springframework, 3.1.1, Apache License Version 2.0, Component, 100%   
+162)/lib/spring-webmvc-3.1.1.RELEASE.jar : Spring Framework - springframework, 3.1.1, Apache License Version 2.0, Component, 100%   
+163)/lib/standard-1.1.2.jar : Apache Jakarta Taglibs, current, Apache License Version 2.0, Component, 100% bin/jakarta-taglibs-standard-current.tar.gz/jakarta-taglibs-standard-1.1.2/lib/standard.jar  
+164)/lib/validation-api-1.0.0.GA.jar : validation, 1.0.0.GA, Apache License Version 2.0, Component, 100%   
+165)/lib/velocity-dep-1.6.2.jar : Apache-Jakarta Velocity Tools, 1.6.2, Apache License Version 2.0, Component, 100%   
+

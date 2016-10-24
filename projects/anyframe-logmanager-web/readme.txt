@@ -1,4 +1,4 @@
-﻿Anyframe Log Manager, release 1.6.0 (2012.12)
+Anyframe Log Manager, release 1.7.0 (2012.05)
 ------------------------------------------------
 http://www.anyframejava.org/project/logmanager
 
