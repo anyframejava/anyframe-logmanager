@@ -1,0 +1,90 @@
+@charset "utf-8";
+
+h1 {margin:15px 0 0 10px}
+
+pre {word-wrap:break-word;white-space:pre-wrap;white-space:-moz-pre-wrap;white-space:-pre-wrap;white-space:-o-pre-wrap;word-break:break-all;
+	font-size:11px;}
+
+.FATAL {color:red;}
+.ERROR {color:red;}
+.ERROR > pre {color:red;}
+.WARN {color:blue;}
+.WARN > pre {color:blue;}
+
+/* progress bar */
+.loading {display:none;text-align:center;margin:0 auto;z-index:100;}
+.loading-red {display:none;left:0;top:0;padding:3px;position:absolute;background-color:#990000;color:white;font-weight:bold;font-family:tahoma,verdana;}
+#mask {display:none;position:absolute;width:100%;height:100%;background:#000000;left:0;top:0;z-index:5;filter:alpha(opacity=40);opacity:0.4;MozOpacity:0.4;KhtmlOpacity:0.4;}
+
+/* keyword highlight */
+.highlight {background-color:#c1ace3 !important; color:#29264d !important; font-weight:bold; display:inline-block; padding:0 3px; margin:0 1px;}
+/*.highlight { background-color: #aaeb75; }*/
+
+.poplayer {width : 100%;}
+#wrap {min-height:600px;}
+#footer {text-align:center;}
+
+.search_area table.btn td {background:none; background-color:#FFF; padding:0; line-height:130%;}
+
+.view th {font-size:96%;}
+.view input[type=text] {width:100%;}
+
+#tabs {position:relative; float:left; width:100%; border-bottom:1px solid #BBB;}
+#tabs ul {margin:0; width:100% !important; margin:5px 0 0 0;}
+#tabs ul li {background:none; float:left; background-color:#E9E9E9; border-bottom:none; margin:0 1px 0 0; padding:3px 20px;}
+#tabs ul li a {text-decoration:none; color:#555; width:100%;; display:block;}
+#tabs ul li.selected {background:url(../images/bg_bottom.jpg) repeat; }
+#tabs ul li.selected a {color:#fff;}
+
+#divMessageText {width:100%;border:solid 1px gray;}
+#divMessageGrid {width:100%;}/* border:solid 1px gray; */
+#divSearchCondition {width:100%;border:solid 1px gray;}
+
+#inputMessageText {width:450px;}
+#inputClientIp,#inputUserId {width:100%;}
+#inputClassName,#inputMethodName{width:240px;}
+#textFromDate,#textToDate {width:70px;}
+#btnLoggingPolicyFileLoad {padding : 0 2px 0 2px;}
+
+#pageNav {text-align:center;}
+#btnPagenationSearch {display:none;}
+#checkboxLogTailingModeBottom {display:none;}
+#checkboxLogTailingModeBottom + label {display:none;}
+
+th {text-align:right;}
+.input_search{width:100%;}
+.log-row {border-bottom:dotted 1px gray;height:20px;}
+.log-cell {border-left:dotted 1px gray;height:20px;font-size:11px;}
+.number-cell {text-align:right;padding:0 2px 0 2px;font-size:11px;}
+.log-row:hover {background-color:#E8EEFA;}
+.advanced-option {display:none;}
+
+select.select_search {width:100%;}
+
+#tblAppender {margin-top:10px;}
+img.editBtn,img.removeBtn, img.editor-select, img.set-logcollection {cursor:pointer;}
+#textEdit textarea {width:100%;height:600px}
+input.param-name {width:90%;}
+input.param-value {width:100%;}
+.view table td.layout {font-weight:bold;background:none;}
+.view table td.icon {padding:0;text-align:right;}
+td.value, td.class {word-wrap:break-word;white-space:pre-wrap;white-space:-moz-pre-wrap;white-space:-pre-wrap;white-space:-o-pre-wrap;word-break:break-all;}
+
+#tblAppender th {font-size:96%;}
+#tblSetLogCollection th {font-size:96%;}
+#taXmlEditor {width: 100%; height:100%;}
+
+#txtCollectionTerm {width:30px;}
+#selectCollectionTermUnit {width:50px;}
+#taLogDataSample {width:100%;height:100px;margin:3px 0 4px 0;}
+#taRegularExp {width:100%;height:36px;margin:3px 0 4px 0;}
+
+.view table td.span-td-top {background:none;}
+td.span-td-bottom {height:26px;vertical-align:top;padding:0 0 0 0;}
+
+#ulColumnsInfo li {border-bottom : 1px #cccccc solid;}
+#ulColumnsInfo li:hover {background-color:#dddddd}
+.list table td.selected {background-color:#B8E0F5}
+.logcollection-delete-button, .result-status-button {cursor:pointer;}
+.result-status-icon {vertical-align:middle;}
+#tdMessage li {border-bottom : 1px #cccccc solid;padding:5px 5px 5px 5px;}

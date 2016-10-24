@@ -1,0 +1,25 @@
+<chapter id="logmanager_log_repository">
+	<title>Log Repository Management</title>
+	<para>여기서는 로그 저장소 관리 기능을 상세히 설명한다.</para>
+	<para>Log Manager 1.6.0 버전 부터는 이전 버전과는 다르게 로그 데이타가 저장될 저장소를 별도로 관리하고 저장소에 부여된 권한 정책에 따라 사용자들이 조회할 수 있는 로그 데이타의 범위가 한정된다.</para>
+	<mediaobject>
+		<imageobject role="html">
+			<imagedata fileref="../image/logmanager/160_008.jpg" align="center"/>
+		</imageobject>
+		<imageobject role="fo">
+			<imagedata fileref="../image/logmanager/pdf/160_008.jpg" align="center"/>
+		</imageobject>
+		<textobject>
+			<phrase>Log Repository 관리 화면 이미지</phrase>
+		</textobject>
+		<caption>Log Repository Management</caption>
+	</mediaobject>
+	<itemizedlist>
+		<listitem><para>Repository 등록 - 현재는 MongoDB 만 지원하고 있으며, Repository Name은  알파벳과 '0' 이상의 숫자 그리고 '_'만 입력이 허용된다. 'Save' 버튼을 클릭하면 Repository 정보가 생성됨과 동시에 해당 Repository가 존재하지 않을 경우 해당 Repository를 생성한다.</para></listitem>
+		<listitem><para>Repository 삭제 - 목록 맨 우측의 삭제버튼을 통해 수행가능하며, Repository에 대한 Meta 정보만 삭제할 뿐 실제 Repository를 삭제하진 않는다.</para></listitem>
+	</itemizedlist>
+	<note>
+		<title>Monitor Level</title>
+		<para>1.6.0 부터는 Log 조회에 대한 권한을 Repository의 속성으로 부여하고 있다. 따라서 여기서 'Admin Only'로 셋팅하는 경우에는 해당 사용자 권한이 Administrator인 사용자만 로그데이타를 조회할 수 있게 된다.</para>
+	</note>
+</chapter>

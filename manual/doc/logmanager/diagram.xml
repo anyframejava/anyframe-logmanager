@@ -1,0 +1,44 @@
+<chapter id="logmanager_archtecture_diagram">
+	<title>아키텍쳐 구성도</title>
+	<para>Log Manager 는 Log Agent, Log Repository, Log Manager Web의 세 모듈로 구성된다.</para>
+	<para>
+		<itemizedlist>
+			<listitem>
+				<para>Log Agent는 로그를 관리할 대상 어플리케이션(Legacy Application)에 같이 설치되어 원하는 로그 정보를 Log Repository로 저장하는 역할을 수행하는 Log Manager Plugin 부분과 독립적으로 구동되어 로그데이타를 수집하고, 로그 정책정보를 관리하는 Agent Service로 나누어진다.</para>
+			</listitem>
+			<listitem>
+				<para>Log Repository는 말 그대로 로그데이타와 로그어플리케이션 정보를 저장하는 역할을 수행하며, 오픈소스 NoSQL DB 제품인 MongoDB를 활용하여 구축된다.</para>		
+			</listitem>
+			<listitem>
+				<para>마지막으로 Log Manager Web 모듈은 별도의 웹 어플리케이션으로 구성되며, 저장된 로그정보를 조회(Log Analysis)하거나, 로그 어플리케이션을 관리(Log Application Management)하고, 사용자 정보를 관리(Account Management)등을 수행한다.</para>
+			</listitem>
+		</itemizedlist>
+	</para>
+	<mediaobject>
+		<imageobject role="html">
+			<imagedata fileref="../image/logmanager/160_031.jpg" format="JPG" align="center"/>
+		</imageobject>
+		<imageobject role="fo">
+			<imagedata fileref="../image/logmanager/pdf/160_031.jpg" format="JPG" align="center"/>
+		</imageobject>
+		<textobject>
+			<phrase>Appender를 사용하여 직접 Log를 저장하거나 File 형태로 저장된 로그를 가져와서 parsing 하여 저장하는 Log Manager의 구조를 설명한다.</phrase>
+		</textobject>
+		<caption>S/W Architecture Diagram</caption>
+	</mediaobject>
+	
+	<para>1.5.0 버전부터 Log Agent Service를 제공함에 따라 원격지에 존재하는 다수의 어플리케이션의 로그를 한 곳에서 관리하는 것이 가능하게 되었다.</para>
+	
+	<mediaobject>
+		<imageobject role="html">
+			<imagedata fileref="../image/logmanager/160_032.jpg" format="JPG" align="center"/>
+		</imageobject>
+		<imageobject role="fo">
+			<imagedata fileref="../image/logmanager/pdf/160_032.jpg" format="JPG" align="center"/>
+		</imageobject>
+		<textobject>
+			<phrase>Log Manager는 Multi-Server 환경에서도 Log Agent Service를 이용하여 Log Application을 관리할 수 있다.</phrase>
+		</textobject> 
+		<caption>Multi-Server Service Senario</caption>
+	</mediaobject>  
+</chapter>

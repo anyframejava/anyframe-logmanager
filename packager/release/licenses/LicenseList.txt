@@ -1,0 +1,47 @@
+Anyframe 프로젝트 내에 사용된 외부 오픈 소스의 경우 원 오픈 소스의 라이센스 정책을 따른다. 
+아래는 각 외부 오픈 소스의 정보(라이센스, 소스 코드 및 라이브러리 다운로드 등)를 얻을 수 있는 사이트 URL이므로 참고하도록 한다.
+
+1) ACE0.2.0 : https://github.com/ajaxorg/ace, BSD 2.0
+2) AOP Alliance (Java/J2EE AOP standard) 1.0 : http://sourceforge.net/projects/aopalliance/, Public Domain
+3) Apache Ant 1.6.5 : http://ant.apache.org/, Apache License Version 2.0
+4) Apache Geronimo 1.0 : http://incubator.apache.org/projects/geronimo/index.html, Apache License Version 2.0
+5) Apache Geronimo 1.1 : http://incubator.apache.org/projects/geronimo/index.html, Apache License Version 2.0
+6) Apache Jakarta Commons Collections 3.2 : http://commons.apache.org/collections/, Apache License Version 2.0
+7) Apache Jakarta Commons IO 1.4 : http://commons.apache.org/io/, Apache License Version 2.0
+8) Apache Jakarta Commons Net 3.0.1 : http://commons.apache.org/net/, Apache 1.1
+9) Apache Jakarta Commons Pool 1.5.3 : http://commons.apache.org/pool/, Apache License Version 2.0
+10) Apache Jakarta DBCP 1.2.2 : http://commons.apache.org/dbcp/, Apache License Version 2.0
+11) Apache Jakarta Log4j 1.2.15 : http://logging.apache.org/log4j/2.x/, Apache License Version 2.0
+12) Apache Jakarta Taglibs current : http://tomcat.apache.org/taglibs/index.html, Apache License Version 2.0
+13) Apache log4j 1.2.15 : http://logging.apache.org/log4j/2.x/, Apache License Version 2.0
+14) Apache POI 3.7 : http://poi.apache.org/index.html, Apache 1.1
+15) Apache-Jakarta BeanUtils 1.8.0 : http://commons.apache.org/beanutils/index.html, Apache License Version 2.0
+16) Apache-Jakarta Velocity Tools 1.6.2 : http://velocity.apache.org/tools/devel/, Apache License Version 2.0
+17) ASM 3.1 : http://asm.ow2.org/, ASM License
+18) aspectj 1.6.8 : http://www.aspectj.org, Eclipse Public License - v 1.0
+19) Common Annotations - JSR-250 1.0 :  http://www.hibernate.org/, COMMON DEVELOPMENT AND DISTRIBUTION LICENSE (CDDL) Version 1.0
+20) devframe  : https://code.google.com/p/devframe/, Apache License Version 2.0
+21) devstore  : https://code.google.com/p/devstore/, Apache License Version 2.0
+22) Eclipse JDT Core Batch Compiler 3.5.1 : http://www.eclipse.org/jdt/core/, Eclipse Public License - v 1.0
+23) EMMA code coverage maven-1.0-plugin-0.4 : http://emma.sourceforge.net/, Common Public License
+24) GlassFish 2.1 : http://glassfish.java.net/, COMMON DEVELOPMENT AND DISTRIBUTION LICENSE (CDDL) Version 1.0
+25) google-gson 1.7.1 : http://code.google.com/p/google-gson/, Apache License Version 2.0
+26) Hessian Binary Web Service Protocol 3.1.6 : http://hessian.caucho.com/, Apache 1.1
+27) Hibernate Validator 4.1.0 Final : http://hibernate.org/subprojects/validator, Apache License Version 2.0
+28) jackson-core 1.9.7 : https://github.com/FasterXML/jackson-core/, Apache License Version 2.0
+29) Java Transaction API (JTA) (JSR-907) 1.1 : http://www.oracle.com/technetwork/java/index.html, Java Transaction API 1.1 License
+30) javax.activation 1.1 : https://github.com/kohsuke/javax.activation/, COMMON DEVELOPMENT AND DISTRIBUTION LICENSE (CDDL) Version 1.0
+31) javax.inject 1 : http://code.google.com/p/atinject, Apache License Version 2.0
+32) JAXB 2.0 Project 2.2 : http://jaxb.java.net/, COMMON DEVELOPMENT AND DISTRIBUTION LICENSE (CDDL) Version 1.0
+33) Jetty - Java HTTP Servlet Server 7.5.4 : http://jetty.codehaus.org/jetty/, Apache License Version 2.0
+34) jMock 2.4.0 : http://www.jmock.org/, BSD 2.0
+35) jsp-api-2.1  : http://java.net/projects/jsp, Sun Servlet Binary Code License
+36) JUnit 4.9 : http://www.junit.org/, Common Public License
+37) mail 1.4.1 : https://github.com/mikel/mail/, COMMON DEVELOPMENT AND DISTRIBUTION LICENSE (CDDL) Version 1.0
+38) mongo-java-driver 2.10.1 : http://www.mongodb.org/, Apache License Version 2.0
+39) servlet-api-2.5  : https://github.com/saces/servlet-api-2.5/, Sun Servlet Binary Code License
+40) slf4j v_1.6.4 : http://www.slf4j.org, MIT License V2
+41) Spring AOP Cache 3.1.1 : http://sourceforge.net/projects/spring-cache/, Apache License Version 2.0
+42) Spring Framework - springframework 3.1.1 : http://www.springsource.org/spring-framework, Apache License Version 2.0
+43) validation 1.0.0.GA : http://beanvalidation.org, Apache License Version 2.0
+

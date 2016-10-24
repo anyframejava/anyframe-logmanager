@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd"
+[
+<!ENTITY overview_background SYSTEM "logmanager/background.xml">
+<!ENTITY overview_background SYSTEM "logmanager/history.xml">
+<!ENTITY overview_support SYSTEM "logmanager/support.xml">
+<!ENTITY overview_concepts SYSTEM "logmanager/concepts.xml">
+<!ENTITY diagram SYSTEM "logmanager/diagram.xml">
+<!ENTITY logagent_install SYSTEM "logmanager/logagent_install.xml">
+<!ENTITY configuration_install SYSTEM "logmanager/configulation_install.xml">
+<!ENTITY reference_link SYSTEM "logmanager/reference_link.xml">
+<!ENTITY mongodb_install SYSTEM "logmanager/mongodb_install.xml">
+<!ENTITY logmanagerweb_install SYSTEM "logmanager/logmanagerweb_install.xml">
+<!ENTITY logmanager_first_login SYSTEM "logmanager/logmanager_first_login.xml">
+<!ENTITY review_log_agent_management SYSTEM "logmanager/review/log_agent_management.xml">
+<!ENTITY review_log_repository_management SYSTEM "logmanager/review/log_repository_management.xml">
+<!ENTITY review_menu_intro SYSTEM "logmanager/review/menu_intro.xml">
+<!ENTITY review_accunt_management SYSTEM "logmanager/review/account_management.xml">
+<!ENTITY review_log_analysis SYSTEM "logmanager/review/log_analysis.xml">
+<!ENTITY review_log_app_management SYSTEM "logmanager/review/log_app_management.xml">
+<!ENTITY review_login_logout SYSTEM "logmanager/review/login_logout.xml">
+]
+>
+<!-- 
+ -->
+<!--
+		Licensed to the Apache Software Foundation (ASF) under one or more
+		contributor license agreements. See the NOTICE file distributed with
+		this work for additional information regarding copyright ownership.
+		The ASF licenses this file to you under the Apache License, Version
+		2.0 (the "License"); you may not use this file except in compliance
+		with the License. You may obtain a copy of the License at
+
+		http://www.apache.org/licenses/LICENSE-2.0 Unless required by
+		applicable law or agreed to in writing, software distributed under the
+		License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
+		CONDITIONS OF ANY KIND, either express or implied. See the License for
+		the specific language governing permissions and limitations under the
+		License.
+-->
+    
+<book lang="ko">
+	<title>Anyframe Log Manager</title>
+	
+	<bookinfo>
+		<copyright>
+			<year>2007-2012</year>
+			<holder>삼성SDS</holder>
+		</copyright>
+		<releaseinfo>Version 1.7.1-SNAPSHOT</releaseinfo>
+
+		<productname>Anyframe Log Manager</productname>
+		
+		<authorgroup>
+			<corpauthor></corpauthor>
+		</authorgroup>
+		
+		<mediaobject>
+			<imageobject>
+				<imagedata fileref="../image/common/logo_pdf.jpg"/>
+			</imageobject>
+		</mediaobject>
+		<legalnotice>
+			<para>
+				본 문서의 저작권은 삼성SDS에 있으며 Anyframe 오픈소스 커뮤니티 활동의 목적하에서 자유로운 이용이 가능합니다.
+				본 문서를 복제, 배포할 경우에는 저작권자를 명시하여 주시기 바라며 본 문서를 변경하실 경우에는 원문과 변경된 내용을 표시하여 주시기 바랍니다. 
+				원문과 변경된 문서에 대한 상업적 용도의 활용은 허용되지 않습니다. 본 문서에 오류가 있다고 판단될 경우 이슈로 등록해 주시면 적절한 조치를 취하도록 하겠습니다.
+			</para>
+		</legalnotice>
+	</bookinfo>
+ 
+	<part id="logmanager_overview_part">
+		<title>Overview</title>
+		<partintro>
+			<para>Anyframe Log Manager(이하 Log Manager)는 자바기반의 웹 어플리케이션의 개발 및 운영/유지보수 시에 발생하는 여러 로그 데이타를 효율적으로 관리할 수 있도록 설계된 웹 기반의 도구(Tool)이다.</para> 
+			<para>본 장에서는 Log Manager의 개발 배경 및 주요 특징에 대한 간략한 소개를 제공한다.</para>
+		</partintro>
+		&overview_background;
+		&overview_history;
+		&overview_support;
+		&overview_concepts;
+	</part>
+	
+	<part id="logmanager_diagram_part">
+		<title>S/W 아키텍쳐 구성도 및 기술 구조</title>
+		<partintro>
+			<para>이번 장에서는 Log Manager의 소프트웨어 구성과 기술 구조에 대하여 다이어그램을 통하여 설명한다.</para>
+			<para>Log Manager는 Log Agent Service, Log Repository, Log Manager Web (Console)으로 구성되며, Log Agent Service는 Anyframe Java Plugin과 osgi 기반 서버, Log Repository는 MongoDB, Log Manager Web은 Anyframe Java 기반 웹 어플리케이션으로 각각 구현되어 있다.</para>
+		</partintro>
+		&diagram;
+	</part>
+	
+	<part id="logmanager_installandconfiguration_part">
+		<title>Installation and Configuration</title>
+		<partintro>
+			<para>이번 장에서는 Log Manager의 각 구현체에 대한 설치와 설정 방법에 대한 내용을 설명한다.</para>
+		</partintro>
+		&logagent_install;
+		&mongodb_install;
+		&logmanagerweb_install;
+		&configuration_install;
+		&logmanager_first_login;
+	</part>
+	
+	<part id="logmanager_review_part">
+		<title>기능 설명</title>
+		&review_menu_intro;
+		&review_login_logout;
+		&review_log_analysis;
+		&review_log_agent_management;
+		&review_log_repository_management;
+		&review_log_app_management;
+		&review_accunt_management;
+	</part>
+	
+	<part id="logmanager_reference_part">
+		<title>참고 사이트 링크</title>
+		&reference_link;
+	</part>
+	
+</book>

@@ -1,0 +1,53 @@
+<chapter id="logmanager_logagent_install">
+	<title>Log Agent 설치</title>
+	<para>Log Agent 는 부가 정보 추출을 위해 Legacy Application 에 Anyframe Java plugin 형태로 배포되는 Log Manager Plugin과 
+ 로그 데이타 수집 및 로그 정책 정보 반영을 위해 독립적인 서버 형태로 작동하는 Log Agent Service로 구분된다.</para>
+	<section id="logagent_plugin_install">
+		<title>Plugin 설치</title>
+		<para>Log Manager Plugin은 Legacy Application에 Anyframe Java plugin 형태로 배포된다.</para>
+		<para>Command 창에서 다음과 같이 명령어를 입력하여 Anyframe Log Manager plugin을 설치한다.</para>
+		<programlisting language="java"><![CDATA[mvn anyframe:install -Dname=logmanager]]></programlisting>
+		<para>
+			installed(mvn anyframe:installed) 혹은 jetty:run(mvn clean jetty:run) command를 이용하여 설치 결과를 확인해볼 수 있다. 
+		</para>
+		<para><link linkend="logmanager_configuration">Configuration</link>을 참고하여 legacy application의 'web.xml'과 Logging Policy File(log4j.xml 등)을 configuration 한다.</para>
+		<warning>
+			<title>Plugin 수동 설치</title>
+			<para>Legacy Application이 Anyframe IDE를 지원하지 않거나(즉, Anyframe 기반이 아니거나), 사용할 수 없는 경우에는 <ulink url="http://dev.anyframejava.org/docs/anyframe/plugin/optional/logmanager/1.0.4-SNAPSHOT/reference/htmlsingle/logmanager.html#logmanager_dependency">여기</ulink>를 참고하여 수동으로 설치해야 한다.</para>
+			<para>수동으로 설치하는 경우 Anyframe Java Plugin 에서 제공하는 샘플을 별도 제공되지 않음을 유의하기 바란다.</para>
+		</warning>
+		<note>
+			<title>Plugin 상세정보 안내</title>
+			<para>Log Manager Plugin은 Anyframe Plugin 형태로 제공되는 만큼 관련 매뉴얼이 별도로 제공되고 있다.</para>
+			<para>Log Manager Plugin의 설치 뿐만 아니라 보다 상세한 정보가 필요한 경우에는 <ulink url="http://dev.anyframejava.org/docs/anyframe/plugin/optional/logmanager/1.0.4-SNAPSHOT/reference/htmlsingle/logmanager.html">여기</ulink>를 참고한다.</para>
+		</note>
+	</section>
+	<section id="logagent_service_install">
+		<title>Agent Service 설치</title>
+		<para>Log Agent Service는 Log Manager 1.5.0부터 제공되는 서비스로 OSGi Framework를 기반으로 독립적으로 구동되어 로그 데이타 수집  및 로그 정책 정보 관리를 담당한다.</para>
+		<para>설치 대상경로에 <ulink url="http://www.anyframejava.org/project/logmanager#downloads">다운로드</ulink> 받은 anyframe-logmanager-agent-1.7.1-SNAPSHOT.zip 파일의 압축을 해제한 후 &quot;conf/logagent.ini&quot; 파일을  <link linkend="log_agent_service_config">여기</link>를 참고하여 설정한다.</para>
+		<section>
+			<title>Agent Service 구동</title>
+			<para>OS 종류에 따라서 "bin/startup-agent.cmd" 또는 "bin/startup-agent.sh" 파일을 실행하여 구동한다.</para>
+			<programlisting language="xml"><![CDATA[D:\mongodb\bin\> startup-agent ]]></programlisting>
+			<para>콘솔의 로그 정보를 통해 정상 구동 여부를 확인한다.</para>
+			<para>Agent Service의 구동 전에 MongoDB가 활성화 되어 있어야 하는 점을 주의하여야 한다.</para>
+			<mediaobject>
+				<imageobject role="html">
+					<imagedata fileref="../image/logmanager/160_029.jpg" format="JPG" align="center"/>
+				</imageobject>
+				<imageobject role="fo">
+					<imagedata fileref="../image/logmanager/pdf/160_029.jpg" format="JPG" align="center"/>
+				</imageobject>
+				<textobject>
+					<phrase>Agent 구동로그를 확인</phrase>
+				</textobject> 
+				<caption>Agent Service Startup</caption>
+			</mediaobject>
+		</section>
+		<section>
+			<title>Agent Service 종료</title>
+			<para>콘솔 창에서 'shutdown' 명령을 입력하여 종료시킨다. 또는 해당 프로세스를 kill 하여 종료한다.</para>
+		</section>
+	</section>
+</chapter>

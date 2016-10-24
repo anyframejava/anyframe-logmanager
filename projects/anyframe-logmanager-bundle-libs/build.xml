@@ -1,0 +1,75 @@
+<project name="anyframe-logmanager-bundle-core" default="all-local" basedir=".">
+	
+	<property environment="env" />
+	
+	<property name="bundle.name" value="anyframe-logmanager-bundle-libs" />
+	<property name="version" value="1.7.1-SNAPSHOT"/>
+	<property name="build" location="${basedir}/build"/>
+	
+	<target name="clean" description="clean up">
+		<delete dir="${dist}"/>
+		<delete dir="${build}"/>
+	</target>
+	
+	<target name="init" depends="clean">
+		<tstamp/>
+		<mkdir dir="${bundle.loc}"/>
+		<mkdir dir="${build}"/>
+		<mkdir dir="${dist}"/>
+	</target>
+	
+	<target name="dist.bundle" depends="init">
+		<copy todir="${build}">
+			<fileset dir="${basedir}" includes="org/**/*"/>
+		</copy>
+		<jar jarfile="${dist}/${bundle.name}-${version}.jar" basedir="${build}" 
+				manifest="${basedir}/META-INF/MANIFEST.MF" />
+	</target>
+	
+	<target name="dist.src.bundle">
+		<antcall target="compile.bundle"/>
+		<copy todir="${build}/src">
+			<fileset dir="${basedir}/src/main/java" includes="**/*" excludes="**/*.svn"/>
+		</copy>
+		<copy todir="${build}">
+			<fileset dir="${basedir}" includes="OSGI-INF/*.xml"/>
+			<fileset dir="${basedir}" includes="bundle.lib/*.jar"/>				
+		</copy>
+		<jar jarfile="${dist}/${bundle.name}-${version}.jar" basedir="${build}" 
+				manifest="${basedir}/META-INF/MANIFEST.MF" />
+	</target>
+	
+	<target name="all-local-src">
+		<property name="bundle.loc" value="../anyframe-logmanager-bundle/bundle"/>
+		<property name="dist" location="${basedir}/dist"/>
+		<antcall target="dist.src.bundle"/>
+		<delete dir="${bundle.loc}" includes="${bundle.name}-*.jar"/>
+		<copy todir="${bundle.loc}">
+			<fileset dir="${dist}"/>
+		</copy>
+	</target>
+			
+	<target name="all-local">
+		<property name="bundle.loc" value="../anyframe-logmanager-bundle/bundle"/>
+		<property name="dist" location="${basedir}/dist"/>
+		<antcall target="dist.bundle"/>
+		<delete dir="${bundle.loc}" includes="${bundle.name}-*.jar"/>
+		<copy todir="${bundle.loc}">
+			<fileset dir="${dist}"/>
+		</copy>
+		<delete dir="${build}"/>
+	</target>
+	
+	<target name="all.dbg">
+		<property name="dbg" value="on"/>
+		<antcall target="all-local"/>
+	</target>
+	
+	<target name="all">
+		<property name="bundle.loc" value="${bundle.dir}"/>
+		<property name="dist" location="${artifactsDir}"/>
+		<antcall target="dist.bundle"/>
+	</target>
+	
+	<target name="default" depends="all-local"/>
+</project>

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component name="LogAgentHessianServlet" immediate="true">
+	<implementation class="org.anyframe.logmanager.bundle.servlet.LogAgentHessianServlet"/>
+	<reference name="HTTP_SERVICE"
+		interface="org.osgi.service.http.HttpService"
+		cardinality="1..1"
+		policy="dynamic"
+		bind="setHttpService"
+	/>
+</component>

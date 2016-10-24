@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans
+      http://www.springframework.org/schema/beans/spring-beans-3.1.xsd">
+      
+	<!-- Add Hessian ServiceExporter -->
+	<bean id="hessianLogApplicationService" class="org.springframework.remoting.caucho.HessianServiceExporter">
+	    <property name="service" ref="logApplicationService" />
+	    <property name="serviceInterface" value="org.anyframe.logmanager.service.LogApplicationService" />
+	</bean>
+	
+	<bean id="hessianProxyFactory" class="com.caucho.hessian.client.HessianProxyFactory"/>
+</beans>

@@ -1,0 +1,23 @@
+Anyframe 프로젝트 내에 사용된 외부 오픈 소스의 경우 원 오픈 소스의 라이센스 정책을 따른다. 
+아래는 각 외부 오픈 소스의 정보(라이센스, 소스 코드 및 라이브러리 다운로드 등)를 얻을 수 있는 사이트 URL이므로 참고하도록 한다.
+
+1)Apache Felix 4.0.2 : http://felix.apache.org/site/index.html, Apache License Version 2.0
+2)Apache log4j 1.2.16 : http://logging.apache.org/log4j/2.x/, Apache License Version 2.0
+3)Apache log4j 1.2.15 : http://logging.apache.org/log4j/2.x/, Apache License Version 2.0
+4)Berkeley DB Java Edition 4.0.103 : http://www.oracle.com/us/products/database/overview/index.html, Oracle Berkeley DB Java Edition License
+5)Hessian Binary Web Service Protocol 3.1.6 : http://hessian.caucho.com/, Apache 1.1
+6)json-framework 1.0.0 : https://github.com/bpo/json-framework/, JSon License
+7)mongo-java-driver 2.10.1 : http://www.mongodb.org/, Apache License Version 2.0
+8)org.apache.felix.configadmin 1.2.4 : http://felix.apache.org/site/index.html, Apache License Version 2.0
+9)org.apache.felix.eventadmin 1.0.0 : http://felix.apache.org/site/index.html, Apache License Version 2.0
+10)org.apache.felix.http.api 2.2.0 : http://felix.apache.org/site/index.html, Apache License Version 2.0
+11)org.apache.felix.http.base 2.2.0 : http://felix.apache.org/site/index.html, Apache License Version 2.0
+12)org.apache.felix.http.jetty 2.2.0 : http://felix.apache.org/site/index.html, Apache License Version 2.0
+13)org.apache.felix.log 1.0.0 : http://felix.apache.org/site/index.html, Apache License Version 2.0
+14)org.apache.felix.prefs 1.0.4 : http://felix.apache.org/site/index.html, Apache License Version 2.0
+15)org.apache.felix.scr 1.4.0 : http://felix.apache.org/site/index.html, Apache License Version 2.0
+16)org.apache.felix.shell 1.4.2 : http://felix.apache.org/site/index.html, Apache License Version 2.0
+17)org.apache.felix.shell.remote 1.0.4 : http://felix.apache.org/site/index.html, Apache License Version 2.0
+18)org.apache.felix.shell.tui 1.4.1 : http://felix.apache.org/site/index.html, Apache License Version 2.0
+19)slf4j v_1.6.4 : http://www.slf4j.org, MIT License V2
+

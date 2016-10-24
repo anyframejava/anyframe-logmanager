@@ -1,0 +1,22 @@
+<chapter id="logmanager_menu_intro">
+	<title>전체 화면 구조</title>
+	<para>Log Manager Web 모듈은 다음과 같은 화면 구조로 이루어져 있다.</para>
+	<para>Log Manager Web 모듈을 크게 3단구조로 이루어져 있으며, 웹 표준 및 크로스 브라우징을 제공하도록 구현되었다.</para>
+	<itemizedlist>
+		<listitem><para>상단에는 현재 로그인한 사용자의 정보와 로그아웃을 위한 링크가 간략하게 제공된다.</para></listitem>
+		<listitem><para>좌측은 메뉴 영역으로 로그인한 사용자의 Type(Administrator/Developer)에 따라 표시되는 메뉴의 수가 달라지도록 되어있다.</para></listitem>
+		<listitem><para>우측이 주요 업무 화면영역으로 로그 조회나, 관리 등의 업무를 수행하는 영역이다.</para></listitem>
+	</itemizedlist>
+	<mediaobject>
+		<imageobject role="html">
+			<imagedata fileref="../image/logmanager/160_002.jpg" align="center" />
+		</imageobject>
+		<imageobject role="fo">
+			<imagedata fileref="../image/logmanager/pdf/160_002.jpg" align="center" />
+		</imageobject>
+		<textobject>
+			<phrase>로그인 후 첫 화면 이미지</phrase>
+		</textobject>
+		<caption>Main Page</caption>
+	</mediaobject>
+</chapter>

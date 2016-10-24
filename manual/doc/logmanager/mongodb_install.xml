@@ -1,0 +1,44 @@
+<chapter id="logmanager_MongoDB_install">
+	<title>MongoDB 설치</title>
+	<para>MongoDB의 설치 단계는 일반적으로 다음과 같다</para>
+	<itemizedlist>
+		<listitem><para>다운로드</para></listitem>
+		<listitem><para>설치파일 준비 및 배포</para></listitem>
+		<listitem><para>data directory 생성</para></listitem>
+		<listitem><para>서버 구동 및 확인</para></listitem>
+	</itemizedlist>
+	<section>
+		<title>다운로드</title>
+		<para>서버 O/S와 버전에 따라 적합한 설치 파일을 다운로드 받는다.</para>
+		<para>다운로드 경로 - <ulink url="http://www.mongodb.org/downloads">http://www.mongodb.org/downloads</ulink></para>
+	</section>
+	<section>
+		<title>설치파일 준비 및 배포</title>
+		<para>설치할 경로에 준비된 설치파일의 압축을 해제한다.</para>
+	</section>
+	<section>
+		<title>data directory 생성</title>
+		<para>데이타가 저장될 데이타 디렉토리를 생성한다.</para>
+		<para>예) Window인 경우</para>
+		<programlisting language="xml"><![CDATA[D:\> mkdir D:\mongodb\data]]></programlisting>
+	</section>
+	<section>
+		<title>서버 구동 및 확인</title>
+		<para>다음 명령어를 통해 MongoDB를 구동시킨다.</para>
+		<programlisting language="xml"><![CDATA[D:\> cd D:\mongodb\mongodb-win32-x86_64-2.2.0\bin
+D:\mongodb\mongodb-win32-x86_64-2.2.0\bin> mongod --dbpath D:\mongodb\data]]></programlisting>
+		<mediaobject>
+			<imageobject role="html">
+				<imagedata fileref="../image/logmanager/160_036.jpg" format="JPG" align="center"/>
+			</imageobject>
+			<imageobject role="fo">
+				<imagedata fileref="../image/logmanager/pdf/160_036.jpg" format="JPG" align="center"/>
+			</imageobject>
+			<textobject>
+				<phrase>Mongo-DB 구동로그를 확인</phrase>
+			</textobject> 
+			<caption>구동여부 확인</caption>
+		</mediaobject>
+	</section>
+	<para>* MongoDB에 대한 설치관련 상세정보는 <ulink url="http://www.mongodb.org/display/DOCS/Quickstart">http://www.mongodb.org/display/DOCS/Quickstart</ulink>에서 얻을 수 있다.</para>
+</chapter>

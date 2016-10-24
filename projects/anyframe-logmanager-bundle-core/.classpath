@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" output="target/classes" path="src/main/java"/>
+	<classpathentry exported="true" kind="lib" path="bundle.lib/mongo-java-driver-2.10.1.jar"/>
+	<classpathentry kind="lib" path="bundle.lib/hessian-3.1.6.jar"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="con" path="org.maven.ide.eclipse.MAVEN2_CLASSPATH_CONTAINER"/>
+	<classpathentry kind="lib" path="bundle.lib/anyframe-logmanager-common-1.7.1-SNAPSHOT.jar"/>
+	<classpathentry kind="con" path="org.eclipse.pde.core.requiredPlugins"/>
+	<classpathentry kind="lib" path="bundle.lib/felix.jar"/>
+	<classpathentry kind="lib" path="bundle.lib/org.apache.felix.http.jetty-2.2.0.jar"/>
+	<classpathentry kind="output" path="target/classes"/>
+</classpath>

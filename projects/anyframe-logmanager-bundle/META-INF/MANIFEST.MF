@@ -1,0 +1,5 @@
+Manifest-Version: 1.0
+Bundle-SymbolicName: anyframe-logmanager-bundle
+Main-Class: org.anyframe.logmanager.bundle.BundleStart
+Built-By: jaehyoung.eum
+Class-Path: ../bundle/felix.jar

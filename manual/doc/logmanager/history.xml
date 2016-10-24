@@ -1,0 +1,24 @@
+<chapter id="logmanager_history">
+	<title>개발 History</title>
+	<para>
+		<itemizedlist>
+			<listitem>
+				<para>2011년 11월 1일 가칭 'Log Analyzer' 개발 시작</para>
+			</listitem>
+			<listitem>
+				<para>2011년 12월 16일 'Anyframe Log Manager'로 명명</para>
+			</listitem>
+			<listitem>
+				<para>2012년 1월 5일 'Anyframe Log Manager 1.0.0' launching</para>
+			</listitem>
+			<listitem>
+				<para>2012년 6월 18일 'Anyframe Log Manager 1.5.0' launching</para>
+				<para> - Log Agent Service 지원 시작</para>
+			</listitem>
+			<listitem>
+				<para>2012년 11월 9일 'Anyframe Log Manager 1.5.1' launching</para>
+				<para> - Logback 일부 기능 지원 시작</para>
+			</listitem>
+		</itemizedlist>
+	</para>
+</chapter>

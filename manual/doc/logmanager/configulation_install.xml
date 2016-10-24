@@ -1,0 +1,74 @@
+<chapter id="logmanager_configuration">
+	<title>Configuration</title>
+	<para>여기서는 Log Manager의 각 구성요소들의 설정방법에 대하여 안내하고 있다.</para>
+	<section id="logmanager_web_xml">
+		<title>web.xml과 Logging Policy File(log4j.xml 등) - Legacy Application</title>
+		<para>Legacy Application의 web.xml과 Logging Policy File(log4j.xml 등)을 설정하는 방법은 Log Manager plugin 매뉴얼에서 제공하고 있으며 내용은 <ulink url="http://dev.anyframejava.org/docs/anyframe/plugin/optional/logmanager/1.0.4-SNAPSHOT/reference/htmlsingle/logmanager.html#logmanager_configuration">여기</ulink>를 클릭하여 참조한다.</para>
+	</section>
+	<section id="logmanager_mongo_properties">
+		<title>mongo.properties - Log Manager Web</title>
+		<para>war 파일 배포 후 /WEB-INF/classes/mongo.properties 파일을 열어서 mongo.host, mongo.port 등의 MongoDB 관련설정 값을 설치환경에 맞도록 설정한다.</para>
+		<para>mongo.properties에서 굵은 글씨로 표시된 부분이 수정해야할 대상이다.</para>
+		<programlisting language="xml"><emphasis role="bold">mongo.host=localhost #MongoDB 주소</emphasis>
+<emphasis role="bold">mongo.port=27017 #MongoDB 접속 port 정보</emphasis><![CDATA[
+mongo.connectionsPerHost=8
+mongo.threadsAllowedToBlockForConnectionMultiplier=4
+mongo.connectTimeout=1000
+mongo.maxWaitTime=1500
+mongo.autoConnectRetry=true 
+mongo.socketKeepAlive=true
+mongo.socketTimeout=1500
+mongo.slaveOk=true
+mongo.database.name=logs #log data가 저장될 collection 명
+mongo.app.collection=LogApplication  #log application 정보가 저장될 collection 명
+mongo.agent.collection=LogAgent #log agent service 정보가 저장될 collection 명
+mongo.appender.collection=LogAppender #log application 내의 appender 정보가 저장될 collection 명
+mongo.logcollection.collection=LogCollection #log application 내의 로그 수집 정보가 저장될 collection 명
+mongo.logcollectionresult.collection=LogCollectionResult #log application 내의 로그 수집 결과가 저장될 collection 명
+mongo.default.collection=Default #로그 수집시 default 로 사용될 log repository collection 명
+mongo.account.collection=Account #account 정보가 저장될 collection 명]]></programlisting>
+	</section>
+	<section id="log_agent_service_config">
+		<title>logagent.ini - Log Agent Service</title>
+		<para>logagent.ini는 Log Agent Service의 설정 파일이며, Agent 설치경로의 conf 폴더 아래에 위치하고 있다.</para>
+		<programlisting language="xml">#
+# Log Level: Set log level for Anyframe Log Manager Server. This affects Anyframe
+# Log Manager system log. (eg. [/path/to/logmanager]/meta/log_[yyyymmdd].log)
+#
+# Each number means a certain log level, so "1" is "error", "2" is "warning",
+# "3" is "info", and "4" is "debug".
+<emphasis role="bold">log.level = 1 # agent service의 로그 레벨, 일반적으로 1로 설정한다.</emphasis>
+
+# "http.port"
+<emphasis role="bold">http.port = 9870 # agent service의 http 통신 포트 설정, 기본값은 9870이다.</emphasis>
+
+#################################### MongoDB Info. ######################################################
+<emphasis role="bold">logmanager.web.url=http://localhost:8089/logmanager/remote/ 
+   # 관리 서비스를 제공받을 Log Manager Web의 http url link, ip, port, context root 등을 적절하게 변경하여야 한다.</emphasis>
+
+#################################### MongoDB Info. ######################################################
+<emphasis role="bold">mongo.host=localhost # MongoDB ip</emphasis>
+<emphasis role="bold">mongo.port=27017 # MongoDB port</emphasis>
+mongo.connectionsPerHost=10
+mongo.threadsAllowedToBlockForConnectionMultiplier=4
+mongo.connectTimeout=1000
+mongo.maxWaitTime=1500
+mongo.autoConnectRetry=true 
+mongo.socketKeepAlive=true
+mongo.socketTimeout=1500
+mongo.database.name=logs
+mongo.app.collection=LogApplication
+mongo.agent.collection=LogAgent
+mongo.appender.collection=LogAppender
+mongo.logcollection.collection=LogCollection
+mongo.logcollectionresult.collection=LogCollectionResult
+mongo.default.collection=Default
+mongo.account.collection=Account
+
+#################################### Log App Info. ######################################################
+<emphasis role="bold">default.polling.time=1000s # 기본 polling time 정보</emphasis>
+#s=sec,m=minute,h=hour,d=day
+		</programlisting>
+		<para>파일 설정 후에는 agent server를 재기동 하여야 한다.</para>
+	</section>
+</chapter>
