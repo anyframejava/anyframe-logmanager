@@ -32,7 +32,6 @@ import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Result;
 import javax.xml.transform.Source;
 import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
@@ -53,7 +52,6 @@ import org.w3c.dom.Text;
  * xml parser class for log4j.xml
  * 
  * @author Jaehyoung Eum
- * 
  */
 public class Log4jXmlBuilder {
 
@@ -70,10 +68,10 @@ public class Log4jXmlBuilder {
 	private static final String PARAM = "param";
 	private static final String LAYOUT = "layout";
 	private static final String INDENT = "    ";
-	
+
 	private Document log4jXmlDoc;
 	private String log4jXmlPath;
-	
+
 	/**
 	 * constructor
 	 * 
@@ -95,30 +93,25 @@ public class Log4jXmlBuilder {
 		super();
 		parse(is);
 	}
-	
+
 	/**
 	 * @return
 	 * @throws Exception
 	 */
 	public String getXmlString() throws Exception {
-		try {
-			Source source = new DOMSource(log4jXmlDoc);
-			StringWriter writer = new StringWriter();
-			
-			Result result = new StreamResult(writer);
-			
-			TransformerFactory tf = TransformerFactory.newInstance();
-			tf.setAttribute("indent-number", new Integer(4));
-			
-			Transformer xformer = tf.newTransformer();
-			xformer.setOutputProperty(OutputKeys.DOCTYPE_SYSTEM, "log4j.dtd");
-			xformer.setOutputProperty(OutputKeys.INDENT, "yes");
-			xformer.transform(source, result);
-			return writer.toString();
-		} catch (TransformerException ex) {
-			ex.printStackTrace();
-			return null;
-		}
+		Source source = new DOMSource(log4jXmlDoc);
+		StringWriter writer = new StringWriter();
+
+		Result result = new StreamResult(writer);
+
+		TransformerFactory tf = TransformerFactory.newInstance();
+		tf.setAttribute("indent-number", new Integer(4));
+
+		Transformer xformer = tf.newTransformer();
+		xformer.setOutputProperty(OutputKeys.DOCTYPE_SYSTEM, "log4j.dtd");
+		xformer.setOutputProperty(OutputKeys.INDENT, "yes");
+		xformer.transform(source, result);
+		return writer.toString();
 	}
 
 	/**
@@ -139,7 +132,7 @@ public class Log4jXmlBuilder {
 		xformer.setOutputProperty(OutputKeys.INDENT, "yes");
 		xformer.transform(source, result);
 	}
-	
+
 	/**
 	 * get root node
 	 * 
@@ -216,13 +209,14 @@ public class Log4jXmlBuilder {
 			Node node = list.item(i);
 			if (node.getNodeName().equalsIgnoreCase(LEVEL)) {
 				NamedNodeMap nodeAttr = node.getAttributes();
-				if (nodeAttr != null)
+				if (nodeAttr != null) {
 					root.setLevel(nodeAttr.getNamedItem(VALUE).getNodeValue());
-
+				}
 			} else if (node.getNodeName().equalsIgnoreCase(APPENDER_REF)) {
 				NamedNodeMap nodeAttr = node.getAttributes();
-				if (nodeAttr != null)
+				if (nodeAttr != null) {
 					appenders.add(nodeAttr.getNamedItem(REF).getNodeValue());
+				}
 			}
 		}
 		root.setAppenderRefs(appenders);
@@ -292,13 +286,13 @@ public class Log4jXmlBuilder {
 		Element rootElement = log4jXmlDoc.getDocumentElement();
 		Map<String, Node> previousNodeMap = new HashMap<String, Node>();
 		Map<String, Appender> appenderMap = new HashMap<String, Appender>();
-		
+
 		NodeList list = log4jXmlDoc.getElementsByTagName(APPENDER);
-		for(int i=0;i<list.getLength();i++){
+		for (int i = 0; i < list.getLength(); i++) {
 			Node previousNode = list.item(i);
 			previousNodeMap.put(previousNode.getAttributes().getNamedItem(NAME).getNodeValue(), previousNode);
 		}
-		
+
 		for (int i = 0; i < appenders.size(); i++) {
 			Appender appender = (Appender) appenders.get(i);
 			appenderMap.put(appender.getName(), appender);
@@ -308,19 +302,19 @@ public class Log4jXmlBuilder {
 				rootElement.appendChild(node);
 				Text t = log4jXmlDoc.createTextNode("\n" + INDENT);
 				rootElement.insertBefore(t, node);
-			}else{ // appender update
+			} else { // appender update
 				changeAppender(tempNode, appender);
 			}
 		}
-		
+
 		// appender delete
 		Iterator<String> i = previousNodeMap.keySet().iterator();
-		while(i.hasNext()) {
+		while (i.hasNext()) {
 			String key = i.next();
-			if(appenderMap.get(key) == null) {
+			if (appenderMap.get(key) == null) {
 				Node node = previousNodeMap.get(key);
-				if(Node.TEXT_NODE == node.getNextSibling().getNodeType()) {
-					((Text)node.getNextSibling()).setData("");
+				if (Node.TEXT_NODE == node.getNextSibling().getNodeType()) {
+					((Text) node.getNextSibling()).setData("");
 				}
 				node.getParentNode().removeChild(node);
 			}
@@ -336,29 +330,27 @@ public class Log4jXmlBuilder {
 		NamedNodeMap nnm = tempNode.getAttributes();
 		Node n = nnm.getNamedItem(CLASS);
 		n.setNodeValue(appender.getAppenderClass());
-		
+
 		removeNodes(tempNode, PARAM);
-		if(appender.getParams() != null){
+		if (appender.getParams() != null) {
 			int paramsSize = appender.getParams().size();
-			for(int i=0;i<paramsSize;i++) {
+			for (int i = 0; i < paramsSize; i++) {
 				tempNode.appendChild(convertParam2Node(appender.getParams().get(i)));
 			}
 		}
 		removeNodes(tempNode, LAYOUT);
-		if(appender.getLayout() != null) {
+		if (appender.getLayout() != null) {
 			tempNode.appendChild(convertLayout2Node(appender.getLayout()));
 		}
-		
-		for(int i=0;i<tempNode.getChildNodes().getLength();i++) {
-			if(Node.TEXT_NODE == tempNode.getChildNodes().item(i).getNodeType()) {
-				Text t = (Text)tempNode.getChildNodes().item(i);
+
+		for (int i = 0; i < tempNode.getChildNodes().getLength(); i++) {
+			if (Node.TEXT_NODE == tempNode.getChildNodes().item(i).getNodeType()) {
+				Text t = (Text) tempNode.getChildNodes().item(i);
 				t.setData("");
 			}
 		}
-		((Text)tempNode.getChildNodes().item(0)).setData("\n" + INDENT + INDENT);
+		((Text) tempNode.getChildNodes().item(0)).setData("\n" + INDENT + INDENT);
 	}
-	
-	
 
 	/**
 	 * convert appender to xml element
@@ -376,8 +368,8 @@ public class Log4jXmlBuilder {
 			Param param = (Param) appender.getParams().get(i);
 			el.appendChild(convertParam2Node(param));
 		}
-		if(appender.getLayout() != null) {
-			el.appendChild(convertLayout2Node(appender.getLayout()));	
+		if (appender.getLayout() != null) {
+			el.appendChild(convertLayout2Node(appender.getLayout()));
 		}
 		return el;
 	}
@@ -392,7 +384,7 @@ public class Log4jXmlBuilder {
 	private Node convertLayout2Node(Layout layout) throws Exception {
 		Node node = null;
 		node = log4jXmlDoc.createElement(LAYOUT);
-		((Element)node).setAttribute(CLASS, layout.getLayoutClass());
+		((Element) node).setAttribute(CLASS, layout.getLayoutClass());
 		List<Param> params = layout.getParams();
 		int paramLength = params.size();
 		for (int i = 0; i < paramLength; i++) {
@@ -440,27 +432,27 @@ public class Log4jXmlBuilder {
 	 * 
 	 * @param loggers
 	 */
-	public void setLoggerNodeList(List<Logger> loggers) throws Exception  {
+	public void setLoggerNodeList(List<Logger> loggers) throws Exception {
 		Element rootElement = log4jXmlDoc.getDocumentElement();
-		
+
 		NodeList loggerNodeList = log4jXmlDoc.getElementsByTagName(LOGGER);
-		while(loggerNodeList.getLength() > 0) {
+		while (loggerNodeList.getLength() > 0) {
 			Node rn = loggerNodeList.item(0);
-			((Text)rn.getPreviousSibling()).setData("");
-			((Text)rn.getNextSibling()).setData("");
+			((Text) rn.getPreviousSibling()).setData("");
+			((Text) rn.getNextSibling()).setData("");
 			rn.getParentNode().removeChild(loggerNodeList.item(0));
 		}
-		
+
 		int loggerSize = loggers.size();
 		int appenderRefsSize = 0;
 		for (int i = 0; i < loggerSize; i++) {
 			Logger logger = (Logger) loggers.get(i);
 			Node loggerNode = log4jXmlDoc.createElement(LOGGER);
-			((Element)loggerNode).setAttribute(NAME, logger.getName());
-			((Element)loggerNode).setAttribute(ADDITIVITY, logger.getAdditivity());
+			((Element) loggerNode).setAttribute(NAME, logger.getName());
+			((Element) loggerNode).setAttribute(ADDITIVITY, logger.getAdditivity());
 			loggerNode.appendChild(convertLevel2Node(logger.getLevel()));
 			appenderRefsSize = logger.getAppenderRefs().size();
-			for(int j=0;j<appenderRefsSize;j++){
+			for (int j = 0; j < appenderRefsSize; j++) {
 				loggerNode.appendChild(convertAppenderRef2Node(logger.getAppenderRefs().get(j)));
 			}
 			rootElement.insertBefore(loggerNode, log4jXmlDoc.getElementsByTagName(ROOT).item(0));
@@ -468,8 +460,7 @@ public class Log4jXmlBuilder {
 			rootElement.insertBefore(pt, loggerNode);
 		}
 	}
-	
-	
+
 	/**
 	 * convert appender param to xml element
 	 * 
@@ -479,18 +470,18 @@ public class Log4jXmlBuilder {
 	 */
 	private Node convertParam2Node(Param param) throws Exception {
 		Node paramNode = log4jXmlDoc.createElement(PARAM);
-		((Element)paramNode).setAttribute(NAME, param.getName());
-		((Element)paramNode).setAttribute(VALUE, param.getValue());
+		((Element) paramNode).setAttribute(NAME, param.getName());
+		((Element) paramNode).setAttribute(VALUE, param.getValue());
 		return paramNode;
 	}
-	
+
 	/**
 	 * @param parentNode
 	 * @param level
 	 */
 	private Node convertLevel2Node(String level) throws Exception {
 		Node levelNode = log4jXmlDoc.createElement(LEVEL);
-		((Element)levelNode).setAttribute(VALUE, level);
+		((Element) levelNode).setAttribute(VALUE, level);
 		return levelNode;
 	}
 
@@ -501,7 +492,7 @@ public class Log4jXmlBuilder {
 	 */
 	private Node convertAppenderRef2Node(String ref) throws Exception {
 		Node appenderRefNode = log4jXmlDoc.createElement(APPENDER_REF);
-		((Element)appenderRefNode).setAttribute(REF, ref);
+		((Element) appenderRefNode).setAttribute(REF, ref);
 		return appenderRefNode;
 	}
 
@@ -513,35 +504,34 @@ public class Log4jXmlBuilder {
 		Node rootNode = log4jXmlDoc.getElementsByTagName(ROOT).item(0);
 		List<Node> appenderRefList = new ArrayList<Node>();
 		NodeList childNodeList = rootNode.getChildNodes();
-		for(int i=0;i<childNodeList.getLength();i++){
-			if(LEVEL.equals(childNodeList.item(i).getNodeName())) {
+		for (int i = 0; i < childNodeList.getLength(); i++) {
+			if (LEVEL.equals(childNodeList.item(i).getNodeName())) {
 				// level
 				rootNode.replaceChild(convertLevel2Node(root.getLevel()), childNodeList.item(i));
 			}
 		}
-		
+
 		NodeList childList = rootNode.getChildNodes();
-		for(int i=0;i<childList.getLength();i++) {
-			if(APPENDER_REF.equals(childList.item(i).getNodeName())) {
+		for (int i = 0; i < childList.getLength(); i++) {
+			if (APPENDER_REF.equals(childList.item(i).getNodeName())) {
 				appenderRefList.add(childList.item(i));
 			}
 		}
-		for(int i=0;i<appenderRefList.size();i++) {
+		for (int i = 0; i < appenderRefList.size(); i++) {
 			Node node = appenderRefList.get(i);
-			if(Node.TEXT_NODE == node.getNextSibling().getNodeType()) {
-				((Text)node.getNextSibling()).setData("");
+			if (Node.TEXT_NODE == node.getNextSibling().getNodeType()) {
+				((Text) node.getNextSibling()).setData("");
 			}
 			node.getParentNode().removeChild(node);
 		}
-		
+
 		// appender-refs
 		int appenderRefsSize = root.getAppenderRefs().size();
-		for(int i=0;i<appenderRefsSize;i++){
-			rootNode.appendChild(convertAppenderRef2Node(root.getAppenderRefs().get(i)));	
+		for (int i = 0; i < appenderRefsSize; i++) {
+			rootNode.appendChild(convertAppenderRef2Node(root.getAppenderRefs().get(i)));
 		}
 	}
-	
-	
+
 	/**
 	 * @param parentNode
 	 * @param elementName
@@ -555,7 +545,7 @@ public class Log4jXmlBuilder {
 				removeNodeList.add(child);
 			}
 		}
-		for(int i=0;i<removeNodeList.size();i++) {
+		for (int i = 0; i < removeNodeList.size(); i++) {
 			parentNode.removeChild(removeNodeList.get(i));
 		}
 	}

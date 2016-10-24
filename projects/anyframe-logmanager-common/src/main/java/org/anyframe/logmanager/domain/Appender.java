@@ -19,17 +19,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * @author Jaehyung Eum
- *
+ * This is AnalysisLog class.
+ * 
+ * @author Jaehyoung Eum
  */
 public class Appender {
-	
+
 	private String name;
 	private String appenderClass;
 	private List<Param> params;
 	private Layout layout;
 	private List<String> appenderRefs;
-	
+
 	/**
 	 * @return the appenderRefs
 	 */
@@ -38,22 +39,24 @@ public class Appender {
 	}
 
 	/**
-	 * @param appenderRefs the appenderRefs to set
+	 * @param appenderRefs
+	 *            the appenderRefs to set
 	 */
 	public void setAppenderRefs(List<String> appenderRefs) {
 		this.appenderRefs = appenderRefs;
 	}
 
 	/**
-	 * @param appenderRefs the appenderRefs to set
+	 * @param appenderRefs
+	 *            the appenderRefs to set
 	 */
 	public void setAppenderRef(String appenderRef) {
-		if(this.appenderRefs == null) {
+		if (this.appenderRefs == null) {
 			this.appenderRefs = new ArrayList<String>();
 		}
 		this.appenderRefs.add(appenderRef);
 	}
-	
+
 	/**
 	 * @return
 	 */
@@ -95,32 +98,33 @@ public class Appender {
 	public void setParams(List<Param> params) {
 		this.params = params;
 	}
-	
+
 	/**
 	 * @param paramName
 	 * @return
 	 */
 	public Param getParam(String paramName) {
 		int paramSize = -1;
-		if(params != null) {
+		if (params != null) {
 			paramSize = this.params.size();
-			for(int i=0;i<paramSize;i++) {
-				if(paramName.equals(params.get(i).getName())){
+			for (int i = 0; i < paramSize; i++) {
+				if (paramName.equals(params.get(i).getName())) {
 					return params.get(i);
 				}
 			}
 			return null;
-		}else{
+		} else {
 			return null;
 		}
-		
+
 	}
-	
+
 	/**
 	 * @param param
 	 */
 	public void setParam(Param param) {
-		if(this.params == null) this.params = new ArrayList<Param>();
+		if (this.params == null)
+			this.params = new ArrayList<Param>();
 		this.params.add(param);
 	}
 
@@ -138,7 +142,9 @@ public class Appender {
 		this.layout = layout;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see java.lang.Object#toString()
 	 */
 	@Override

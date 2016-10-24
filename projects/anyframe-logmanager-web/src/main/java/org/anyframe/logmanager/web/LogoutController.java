@@ -28,8 +28,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
  */
 @Controller("logoutCountroller")
 public class LogoutController {
-	
-	
+
 	/**
 	 * 
 	 * @param session
@@ -38,14 +37,15 @@ public class LogoutController {
 	 */
 	@RequestMapping("/logout.do")
 	public String logout(HttpSession session) throws Exception {
-		/*Account account = (Account)session.getAttribute("loginAccount");
-		if(account == null){
-			throw new Exception("User information is not exist!");
-		}
-		else
-			session.removeAttribute("loginAccount");*/
+		/*
+		 * Account account = (Account)session.getAttribute("loginAccount");
+		 * if(account == null){ throw new
+		 * 		Exception("User information is not exist!"); } 
+		 * else
+		 * 		session.removeAttribute("loginAccount");
+		 */
 		session.invalidate();
-		
-		return "redirect:/welcome.do?method=view"; 
+
+		return "redirect:/welcome.do?method=view";
 	}
 }

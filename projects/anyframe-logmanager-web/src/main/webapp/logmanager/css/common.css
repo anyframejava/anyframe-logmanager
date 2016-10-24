@@ -154,7 +154,7 @@ h2 {border-bottom:1px solid #bbbbbb; background:url(../images/blit_h2.gif) no-re
 .view table .bottomline th, .view table .bottomline td, .view table .bottomline {border-bottom:1px solid #b3ace3; background:none;}
 .view table .bottomline th, .view table th.bottomline {background-color:#f0eef9;}
 .view table .bottomline td {background-color:#FFF;}
-.view input, .view select {border:1px solid #aaa; width:180px; margin:3px 0 4px 0;}
+.view input[type=text], .view select {border:1px solid #aaa; width:180px; margin:3px 0 4px 0;}
 .view select {width:183px;}
 
 

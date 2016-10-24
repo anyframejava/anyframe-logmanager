@@ -33,7 +33,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class LoggingAspect {
 
-	@Pointcut("execution(* org.anyframe.logmanager..*Impl.*(..)) || execution(* org.anyframe.mip.query..*MiPServiceImpl.*(..))")
+	@Pointcut("execution(* org.anyframe.logmanager..*Impl.*(..)))")
 	public void serviceMethod() {
 	}
 

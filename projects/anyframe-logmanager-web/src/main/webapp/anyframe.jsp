@@ -37,8 +37,6 @@ function fncKeyPress(event){
 
 $(document).ready(function() {
 
-	$('#userId').select();
-	
 	$('#btnAdd').click(function(e) {
 		document.accountForm.reset();
 		$('#account-detail-form').dialog({width:430,position:['center', 'center']});
@@ -47,6 +45,7 @@ $(document).ready(function() {
 			width:$('#account-detail-form table').width() + 70
 		});
 	});
+	
 	$('#account-detail-form').dialog({
 		autoOpen: false,
 		width: 430,
@@ -80,6 +79,8 @@ $(document).ready(function() {
 				$( "#account-detail-form" ).dialog('close');
 			}}
 	});
+	
+	$('#userId').focus();
 });
 </script>
 
@@ -161,7 +162,7 @@ $(document).ready(function() {
 			        <th>User Type</th>
 			        <td>
 			        	<select class="select_search" name="userType" id="userType">
-			        		<option value="Administrator" label="Administrator"/>
+			        		<option value="Administrator">Administrator</option>
 			        	</select>
 			       </td>
 			    </tr>

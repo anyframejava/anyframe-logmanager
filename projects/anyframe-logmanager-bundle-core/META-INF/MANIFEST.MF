@@ -2,14 +2,17 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: anyframe-logmanager-bundle-core
 Bundle-SymbolicName: anyframe-logmanager-bundle-core
-Bundle-Version: 1.0.1.SNAPSHOT
+Bundle-Version: 1.5.2.SNAPSHOT
 Bundle-Activator: org.anyframe.logmanager.bundle.core.Activator
 Bundle-Vendor: Samsung SDS
 Bundle-RequiredExecutionEnvironment: J2SE-1.5
 Bundle-ClassPath: .,
- bundle.lib/anyframe-logmanager-common-1.5.1.jar,
+ bundle.lib/anyframe-logmanager-common-1.6.0.jar,
  bundle.lib/hessian-3.1.6.jar,
- bundle.lib/mongo-java-driver-2.8.0.jar
+ bundle.lib/log4j-1.2.16.jar,
+ bundle.lib/slf4j-api-1.6.4.jar,
+ bundle.lib/slf4j-log4j12-1.6.4.jar,
+ bundle.lib/mongo-java-driver-2.10.1.jar
 Import-Package: com.caucho.burlap.io,
  com.caucho.burlap.server,
  javax.management,
@@ -24,7 +27,9 @@ Import-Package: com.caucho.burlap.io,
  org.anyframe.logmanager.util,
  org.osgi.framework,
  org.osgi.service.http,
- org.w3c.dom
+ org.slf4j,
+ org.w3c.dom,
+ org.xml.sax
 Service-Component: OSGI-INF/logagent_hessian_servlet.xml
 Export-Package: com.caucho.burlap.io,
  com.caucho.burlap.server,

@@ -19,54 +19,56 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * This is Root class.
+ * 
  * @author Jaehyoung Eum
- *
  */
 public class Root {
-	
+
 	private String level;
 	private List<String> appenderRefs;
-	
-	
+
 	/**
 	 * @return
 	 */
 	public String getLevel() {
 		return level;
 	}
-	
+
 	/**
 	 * @param level
 	 */
 	public void setLevel(String level) {
 		this.level = level;
 	}
-	
+
 	/**
 	 * @return
 	 */
 	public List<String> getAppenderRefs() {
 		return appenderRefs;
 	}
-	
+
 	/**
 	 * @param appenderRefs
 	 */
 	public void setAppenderRefs(List<String> appenderRefs) {
 		this.appenderRefs = appenderRefs;
 	}
-	
+
 	/**
 	 * @param appenderRef
 	 */
 	public void setAppenderRef(String appenderRef) {
-		if(this.appenderRefs == null) {
+		if (this.appenderRefs == null) {
 			this.appenderRefs = new ArrayList<String>();
 		}
 		this.appenderRefs.add(appenderRef);
 	}
-	
-	/* (non-Javadoc)
+
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see java.lang.Object#toString()
 	 */
 	@Override

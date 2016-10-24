@@ -4,19 +4,23 @@
 	<para>Log Manager Web의 설치 절차는 일반적으로 다음과 같다</para>
 	<itemizedlist>
 		<listitem><para>아래의 경로에서 배포파일을 다운로드 받는다.</para>
-			<para>다운로드 경로 : <ulink url="http://anyframejava.org/project/logmanager#downloads">anyframe-logmanager-web-1.5.1-bin.zip</ulink></para></listitem>
+			<para>다운로드 경로 : <ulink url="http://anyframejava.org/project/logmanager#downloads">anyframe-logmanager-web-1.6.0-bin.zip</ulink></para></listitem>
 		<listitem><para>배포파일 압축 해제</para><para>설치할 경로에 배포할 압축파일을 해제한다.</para></listitem>
 		<listitem><para>startup.cmd 또는 startup.sh 파일을 열어서 포트 정보와 웹 어플리케이션 명을 설정한다.(기본값은 8089, logmanager)</para></listitem>
 		<listitem><para><link linkend="logmanager_configuration">여기</link>를 참고하여 configuration을 수행한다.</para></listitem>
 		<listitem>
 			<para>startup.cmd 또는 startup.sh를 구동하여 서버를 동작시킨다.</para>
-			<para><programlisting language="xml"><![CDATA[D:\anyframe-logmanager-web-1.5.1> startup]]></programlisting></para>
+			<para><programlisting language="xml"><![CDATA[D:\anyframe-logmanager-web-1.6.0> startup]]></programlisting></para>
 		</listitem>
 	</itemizedlist>
 	<note>
 		<title>War 파일 수동 설치</title>
-		<para>Embed된 Jetty가 아닌 별도의 WAS나 Servlet Container를 활용할 경우 배포 파일에서 anyframe-logmanager-web-1.5.1.war파일을 해당 WAS나 Servlet Container로 배포하면 된다.</para>
+		<para>Embed된 Jetty가 아닌 별도의 WAS나 Servlet Container를 활용할 경우 배포 파일에서 anyframe-logmanager-web-1.6.0.war파일을 해당 WAS나 Servlet Container로 배포하면 된다.</para>
 		<para>WAS 별 배포 방법에 대한 설명은 본 문서 범위를 넘어가므로 생략하였다.</para>
-	</note>		
+	</note>
+	<warning>
+		<title>설치 경로 주의사항</title>
+		<para>설치 경로상에 한글 또는 공백 문자가 포함된 경우 포함된 Jetty 엔진이 정상적으로 구동하지 않을 수도 있으니 한글 또는 공백문자가 설치 경로 상에 포함되지 않도록 주의한다.</para>
+	</warning>		
 	
 </chapter>

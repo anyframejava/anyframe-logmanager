@@ -15,16 +15,15 @@
  */
 package org.anyframe.logmanager.domain;
 
-import java.util.List;
-
 import org.springframework.data.annotation.Id;
 
 /**
+ * This is LogApplication class.
+ * 
  * @author Jaehyoung Eum
- *
  */
 public class LogApplication {
-	
+
 	@Id
 	private String id;
 	private String appName;
@@ -32,11 +31,8 @@ public class LogApplication {
 	private String loggingFramework;
 	private int status;
 	private String statusMessage;
-	private List<Logger> loggers;
-	private List<Appender> appenders;
-	private Root root;
 	private String agentId;
-	
+
 	/**
 	 * @return the loggingFramework
 	 */
@@ -45,7 +41,8 @@ public class LogApplication {
 	}
 
 	/**
-	 * @param loggingFramework the loggingFramework to set
+	 * @param loggingFramework
+	 *            the loggingFramework to set
 	 */
 	public void setLoggingFramework(String loggingFramework) {
 		this.loggingFramework = loggingFramework;
@@ -66,63 +63,50 @@ public class LogApplication {
 	}
 
 	/**
-	 * @return the root
-	 */
-	public Root getRoot() {
-		return root;
-	}
-	
-	/**
-	 * @param root the root to set
-	 */
-	public void setRoot(Root root) {
-		this.root = root;
-	}
-	
-	/**
 	 * @return the id
 	 */
 	public String getId() {
 		return id;
 	}
-	
+
 	/**
-	 * @param id the id to set
+	 * @param id
+	 *            the id to set
 	 */
 	public void setId(String id) {
 		this.id = id;
 	}
-	
+
 	/**
 	 * @return the statusMessage
 	 */
 	public String getStatusMessage() {
 		return statusMessage;
 	}
-	
+
 	/**
-	 * @param statusMessage the statusMessage to set
+	 * @param statusMessage
+	 *            the statusMessage to set
 	 */
 	public void setStatusMessage(String statusMessage) {
 		this.statusMessage = statusMessage;
 	}
-	
+
 	/**
 	 * @return the appName
 	 */
 	public String getAppName() {
 		return appName;
 	}
-	
+
 	/**
-	 * @param appName the appName to set
+	 * @param appName
+	 *            the appName to set
 	 */
 	public void setAppName(String appName) {
 		this.appName = appName;
 	}
-	
-	
-	
+
 	/**
 	 * @return the loggingPolicyFilePath
 	 */
@@ -131,7 +115,8 @@ public class LogApplication {
 	}
 
 	/**
-	 * @param loggingPolicyFilePath the loggingPolicyFilePath to set
+	 * @param loggingPolicyFilePath
+	 *            the loggingPolicyFilePath to set
 	 */
 	public void setLoggingPolicyFilePath(String loggingPolicyFilePath) {
 		this.loggingPolicyFilePath = loggingPolicyFilePath;
@@ -143,51 +128,24 @@ public class LogApplication {
 	public int getStatus() {
 		return status;
 	}
-	
+
 	/**
-	 * @param status the status to set
+	 * @param status
+	 *            the status to set
 	 */
 	public void setStatus(int status) {
 		this.status = status;
 	}
-	
-	/**
-	 * @return the loggers
-	 */
-	public List<Logger> getLoggers() {
-		return loggers;
-	}
-	
-	/**
-	 * @param loggers the loggers to set
-	 */
-	public void setLoggers(List<Logger> loggers) {
-		this.loggers = loggers;
-	}
-	
-	/**
-	 * @return the appenders
-	 */
-	public List<Appender> getAppenders() {
-		return appenders;
-	}
-	
-	/**
-	 * @param appenders the appenders to set
-	 */
-	public void setAppenders(List<Appender> appenders) {
-		this.appenders = appenders;
-	}
-	
-	/* (non-Javadoc)
+
+
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see java.lang.Object#toString()
 	 */
 	@Override
 	public String toString() {
-		return "LogApplication [id=" + id + ", appName=" + appName + ", loggingPolicyFilePath=" + loggingPolicyFilePath 
-		+ ", status=" + status + ", statusMessage=" + statusMessage 
-		+ ", root=" + (root == null ? "" : root.toString())
-		+ ", loggers=" + (loggers == null ? "" : loggers.toString()) + ", appenders=" + (appenders == null ? "" : appenders.toString()) + "]";
+		return "LogApplication [id=" + id + ", appName=" + appName + ", loggingPolicyFilePath=" + loggingPolicyFilePath + ", status=" + status + ", statusMessage=" + statusMessage + "]";
 	}
-	
+
 }

@@ -15,7 +15,6 @@
  */
 package org.anyframe.logmanager.web;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.URLEncoder;
@@ -23,33 +22,39 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import javax.xml.parsers.SAXParser;
-import javax.xml.parsers.SAXParserFactory;
 
 import org.anyframe.logmanager.LogManagerConstant;
 import org.anyframe.logmanager.common.LogManagerException;
 import org.anyframe.logmanager.domain.Account;
-import org.anyframe.logmanager.domain.AnalysisLog;
+import org.anyframe.logmanager.domain.Appender;
+import org.anyframe.logmanager.domain.ColumnsInfo;
+import org.anyframe.logmanager.domain.Log4j;
 import org.anyframe.logmanager.domain.LogAgent;
-import org.anyframe.logmanager.domain.LogAppender;
 import org.anyframe.logmanager.domain.LogApplication;
+import org.anyframe.logmanager.domain.LogCollection;
+import org.anyframe.logmanager.domain.LogCollectionResult;
+import org.anyframe.logmanager.domain.LogDataMap;
+import org.anyframe.logmanager.domain.LogRepository;
 import org.anyframe.logmanager.domain.LogSearchCondition;
+import org.anyframe.logmanager.domain.Root;
 import org.anyframe.logmanager.service.LogAgentService;
 import org.anyframe.logmanager.service.LogApplicationService;
+import org.anyframe.logmanager.service.LogCollectionService;
+import org.anyframe.logmanager.service.LogRepositoryService;
 import org.anyframe.logmanager.service.LogSearchService;
-import org.anyframe.logmanager.util.ExcelInfoHandler;
-import org.anyframe.logmanager.util.ExcelInfoHandler.ColumnInfo;
-import org.apache.commons.beanutils.BeanUtils;
-import org.apache.commons.beanutils.PropertyUtils;
+import org.anyframe.logmanager.util.LogDataFormatUtil;
 import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFCellStyle;
 import org.apache.poi.hssf.usermodel.HSSFDataFormat;
@@ -66,25 +71,25 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.caucho.hessian.client.HessianRuntimeException;
 import com.google.gson.Gson;
 
 /**
  * Log Manager Controller Class
  * 
  * @author Jaehyoung Eum
- * 
  */
 @Controller("logManagerController")
 @RequestMapping("/logManager.do")
 public class LogManagerController {
 
 	private static Logger logger = LoggerFactory.getLogger(LogManagerController.class);
-	
+
 	@ModelAttribute("loggingFrameworks")
-	public String[] getLoggingFrameworks() throws Exception{
-		return  LogManagerConstant.LOGGING_FRAMEWORKS;
+	public String[] getLoggingFrameworks() throws Exception {
+		return LogManagerConstant.LOGGING_FRAMEWORKS;
 	}
-	
+
 	@Inject
 	@Named("logSearchService")
 	private LogSearchService service;
@@ -92,15 +97,23 @@ public class LogManagerController {
 	@Inject
 	@Named("logApplicationService")
 	private LogApplicationService appService;
-	
+
 	@Inject
 	@Named("logAgentService")
 	private LogAgentService agentService;
 	
+	@Inject
+	@Named("logCollectionService")
+	private LogCollectionService logCollectionService;
+	
+	@Inject
+	@Named("logRepositoryService")
+	private LogRepositoryService logRepositoryService;
+
 	/**
-	 * Log Application Save method 
-	 * Reference to Array binding...
-	 * (for Ajax Request)
+	 * Log Application Save method Reference to Array binding... (for Ajax
+	 * Request)
+	 * 
 	 * @param id
 	 * @param loggers
 	 * @param appenders
@@ -112,38 +125,27 @@ public class LogManagerController {
 	 * @throws Exception
 	 */
 	@RequestMapping(params = "method=saveLogApplication")
-	public String saveLogApplication(@RequestParam(value = "id") String id, 
-			@RequestParam(value = "appenders[]", required = false) String[] appenders, 
-			@RequestParam(value = "pollingTimes[]", required = false) String[] pollingTimes,
-			@RequestParam(value = "monitorLevels[]", required = false) int[] monitorLevels,
-			@RequestParam(value = "fileAppenders[]", required = false) boolean[] fileAppenders,
-			@RequestParam(value = "collectionNames[]", required = false) String[] collectionNames,
-			@RequestParam(value = "status[]", required = false) int[] status,
-			@RequestParam(value = "appName") String appName, 
-			@RequestParam(value = "agentId") String agentId,
-			@RequestParam(value = "loggingPolicyFilePath") String loggingPolicyFilePath,
-			@RequestParam(value = "loggingFramework") String loggingFramework,
-			Model model, HttpServletRequest request) throws Exception {
+	public String saveLogApplication(LogApplication param, Model model, HttpServletRequest request) {
 		
-		LogApplication param = new LogApplication();
-		if ("".equals(id)) {
-			param.setId(null);
-		} else {
-			param.setId(id);
+		try{
+			if ("".equals(param.getId())) {
+				param.setId(null);
+			}
+
+			appService.saveLogApplication(param);
+
+		}catch(Exception e){
+			logger.error(e.getMessage(), e);
+			model.addAttribute("isFail", true);
+			model.addAttribute("failMessage", e.getLocalizedMessage());
 		}
-		param.setAppName(appName);
-		param.setLoggingPolicyFilePath(loggingPolicyFilePath);
-		param.setLoggingFramework(loggingFramework);
-		param.setAgentId(agentId);
-		param.setStatus(LogManagerConstant.APP_STATUS_INACTIVE);
-
-		appService.saveLogApplication(param, appenders, pollingTimes, monitorLevels, fileAppenders, collectionNames, status);
-
+		
 		return "jsonView";
 	}
-	
+
 	/**
 	 * check for log application duplication
+	 * 
 	 * @param appName
 	 * @param model
 	 * @param request
@@ -151,19 +153,25 @@ public class LogManagerController {
 	 * @throws Exception
 	 */
 	@RequestMapping(params = "method=checkApplicationExist")
-	public String checkApplicationExist(LogApplication param, Model model, HttpServletRequest request) throws Exception {
-		LogApplication app = appService.checkLogApplicationExist(param);
-		if(app == null) {
-			model.addAttribute("isExist", false);
-		}else{
-			model.addAttribute("isExist", true);
+	public String checkApplicationExist(LogApplication param, Model model, HttpServletRequest request) {
+		try{
+			LogApplication app = appService.checkLogApplicationExist(param);
+			if (app == null) {
+				model.addAttribute("isExist", false);
+			} else {
+				model.addAttribute("isExist", true);
+			}
+		}catch(Exception e){
+			logger.error(e.getMessage(), e);
+			model.addAttribute("isFail", true);
+			model.addAttribute("failMessage", e.getLocalizedMessage());
 		}
+		
 		return "jsonView";
 	}
 
 	/**
-	 * Log Application delete method
-	 * (for Ajax Request)
+	 * Log Application delete method (for Ajax Request)
 	 * 
 	 * @param param
 	 * @param model
@@ -172,14 +180,19 @@ public class LogManagerController {
 	 * @throws Exception
 	 */
 	@RequestMapping(params = "method=deleteApplication")
-	public String deleteApplication(LogApplication param, Model model, HttpServletRequest request) throws Exception {
-		appService.deleteApplication(param);
+	public String deleteApplication(LogApplication param, Model model, HttpServletRequest request) {
+		try{
+			appService.deleteApplication(param);
+		}catch(Exception e){
+			logger.error(e.getMessage(), e);
+			model.addAttribute("isFail", true);
+			model.addAttribute("failMessage", e.getLocalizedMessage());
+		}
 		return "jsonView";
 	}
 
 	/**
-	 * Log Application reload method 
-	 * (for Ajax Request)
+	 * Log Application reload method (for Ajax Request)
 	 * 
 	 * @param param
 	 * @param model
@@ -188,102 +201,88 @@ public class LogManagerController {
 	 * @throws Exception
 	 */
 	@RequestMapping(params = "method=reloadApplication")
-	public String reloadApplication(LogApplication param, Model model, HttpServletRequest request) throws Exception {
-		appService.reloadApplication(param);
-		return "jsonView";
-	}
-
-	/**
-	 * Get Appender List method
-	 * (for Ajax Request)
-	 * 
-	 * @param param
-	 * @param model
-	 * @param request
-	 * @return
-	 * @throws Exception
-	 */
-	@RequestMapping(params = "method=getAppenderList")
-	public String getAppenderList(LogApplication param, Model model, HttpSession session) throws Exception {
-		Account loginAccount = (Account)session.getAttribute("loginAccount");
-		List<LogAppender> appenders = null;
-		if(LogManagerConstant.COLLECTION_BASED.equals(param.getAppName())){
-			appenders = appService.getAppenderList(loginAccount.getUserType());
-		}else{
-			appenders = appService.getAppenderList(param.getAppName(), loginAccount.getUserType());	
-		}
-		
-		model.addAttribute("appenders", appenders);
-		return "jsonView";
-	}
-	
-	/**
-	 * @param model
-	 * @return
-	 * @throws Exception
-	 */
-	@RequestMapping(params = "method=getAppList")
-	public String getAppList(Model model) throws Exception {
-		model.addAttribute("apps", service.getActiveLogApplicationList());
-		return "jsonView";
-	}
-	
-	/**
-	 * @param collectionName
-	 * @param model
-	 * @param session
-	 * @return
-	 * @throws Exception
-	 */
-	@RequestMapping(params = "method=getAppListByCollection")
-	public String getAppListByCollection(@RequestParam(value="collectionName") String collectionName, Model model, HttpSession session) throws Exception {
-		Account account = (Account)session.getAttribute("loginAccount");
-		List<LogAppender> appenders = appService.getLogAppenderListByCollection(collectionName, account.getUserType());
-		
-		model.addAttribute("apps", appenders);
-		return "jsonView";
-	}
-
-	/**
-	 * log4j.xml file load method
-	 * (for Ajax Request)
-	 * 
-	 * @param param
-	 * @param model
-	 * @param request
-	 * @return
-	 * @throws Exception
-	 */
-	@RequestMapping(params = "method=loadLoggingPolicyFile")
-	public String loadLoggingPolicyFile(@RequestParam(value="agentId") String agentId, 
-			@RequestParam(value="loggingPolicyFilePath") String loggingPolicyFilePath,
-			@RequestParam(value="loggingFramework") String loggingFramework,
-			Model model, HttpServletRequest request) throws Exception {
-		
-		LogApplication logApplication = null;
-		String loggingPolicyXml = null;
-//		LogApplication app = null;
-//		app = appService.loadLoggingPolicyFile(param);
-//		model.addAttribute("app", app);
+	public String reloadApplication(LogApplication param, Model model, HttpServletRequest request) {
 		try{
-			logApplication = agentService.getLoggingPolicyFileInfo(agentId, loggingPolicyFilePath, loggingFramework);
-			loggingPolicyXml = agentService.getLoggingPolicyFileInfoString(agentId, loggingPolicyFilePath, loggingFramework);
-			if(logApplication == null) throw new Exception(loggingPolicyFilePath + " info is not valid."); 
-			
-			model.addAttribute("logApplication", logApplication);
-			model.addAttribute("xmlString", loggingPolicyXml);
-		}catch(LogManagerException e){
+			appService.reloadApplication(param);	
+		}catch(Exception e){
+			logger.error(e.getMessage(), e);
 			model.addAttribute("isFail", true);
 			model.addAttribute("failMessage", e.getLocalizedMessage());
-			return "jsonView";
 		}
 		
 		return "jsonView";
 	}
 
+
 	/**
-	 * view log application detail info...
-	 * (for Ajax Request)
+	 * log4j.xml file load method (for Ajax Request)
+	 * 
+	 * @param param
+	 * @param model
+	 * @param request
+	 * @return
+	 * @throws Exception
+	 */
+	@SuppressWarnings("unchecked")
+	@RequestMapping(params = "method=loadLoggingPolicyFile")
+	public String loadLoggingPolicyFile(@RequestParam(value = "agentId") String agentId, @RequestParam(value = "loggingPolicyFilePath") String loggingPolicyFilePath,
+			@RequestParam(value = "loggingFramework") String loggingFramework, Model model, HttpServletRequest request) {
+
+		try {
+			Map<String, Object> log4j = agentService.getLog4jXml(agentId, loggingPolicyFilePath, loggingFramework);
+			if (log4j == null) {
+				throw new LogManagerException(loggingPolicyFilePath + " info is not valid.");
+			}
+
+			model.addAttribute("appenders", (List<Appender>)log4j.get("appenders"));
+			model.addAttribute("loggers", (List<Logger>)log4j.get("loggers"));
+			model.addAttribute("root", (Root)log4j.get("root"));
+		} catch (HessianRuntimeException e){
+			logger.error(e.getMessage(), e);
+			model.addAttribute("isFail", true);
+			model.addAttribute("failMessage", "check the status of the agent.");
+		} catch (Exception e) {
+			logger.error(e.getMessage(), e);
+			model.addAttribute("isFail", true);
+			model.addAttribute("failMessage", e.getLocalizedMessage());
+		}
+
+		return "jsonView";
+	}
+	
+	/**
+	 * @param agentId
+	 * @param loggingPolicyFilePath
+	 * @param loggingFramework
+	 * @param model
+	 * @param request
+	 * @return
+	 */
+	@RequestMapping(params = "method=loadLoggingPolicyFileString")
+	public String loadLoggingPolicyFileString(@RequestParam(value = "agentId") String agentId, 
+			@RequestParam(value = "loggingPolicyFilePath") String loggingPolicyFilePath,
+			@RequestParam(value = "loggingFramework") String loggingFramework, 
+			Model model, HttpServletRequest request) {
+
+		String loggingPolicyXml = null;
+		try {
+			loggingPolicyXml = agentService.getLoggingPolicyFileInfoString(agentId, loggingPolicyFilePath, loggingFramework);
+			model.addAttribute("xmlString", loggingPolicyXml);
+		} catch (HessianRuntimeException e){
+			logger.error(e.getMessage(), e);
+			model.addAttribute("isFail", true);
+			model.addAttribute("failMessage", "check the status of the agent.");
+		} catch (Exception e) {
+			logger.error(e.getMessage(), e);
+			model.addAttribute("isFail", true);
+			model.addAttribute("failMessage", e.getLocalizedMessage());
+		}
+
+		return "jsonView";
+	}
+
+	/**
+	 * view log application detail info... (for Ajax Request)
 	 * 
 	 * @param param
 	 * @param model
@@ -292,21 +291,17 @@ public class LogManagerController {
 	 * @throws Exception
 	 */
 	@RequestMapping(params = "method=viewAppDetail")
-	public String viewAppDetail(LogApplication param, Model model, HttpSession session) throws Exception {
+	public String viewAppDetail(LogApplication param, Model model, HttpSession session) {
 		LogApplication app = null;
-		List<LogAppender> currentAppenders = null;
-		Account loginAccount = (Account)session.getAttribute("loginAccount");
-		app = appService.getLogApplicationById(param);
 		try{
-			LogApplication r = agentService.getLoggingPolicyFileInfo(app.getAgentId(), app.getLoggingPolicyFilePath(), app.getLoggingFramework());
-			app.setAppenders(r.getAppenders());
-			model.addAttribute("isConnect", true);
-		}catch(LogManagerException e) {
-			model.addAttribute("isConnect", false);
+			app = appService.getLogApplicationById(param);
+			model.addAttribute("app", app);	
+		}catch(Exception e){
+			logger.error(e.getMessage(), e);
+			model.addAttribute("isFail", true);
+			model.addAttribute("failMessage", e.getLocalizedMessage());
 		}
-		currentAppenders = appService.getAppenderList(app.getAgentId(), app.getAppName(), loginAccount.getUserType());
-		model.addAttribute("currAppenders", currentAppenders);
-		model.addAttribute("app", app);
+		
 		return "jsonView";
 	}
 
@@ -326,20 +321,869 @@ public class LogManagerController {
 		model.addAttribute("list", list);
 		return "logmanager/appList";
 	}
+
+	/**
+	 * @param model
+	 * @return
+	 * @throws Exception
+	 */
+	@RequestMapping(params = "method=getAgentList")
+	public String getAgentList(Model model) {
+		List<LogAgent> agentList = null;
+		try{
+			agentList = agentService.getLogAgentList();
+			model.addAttribute("agentList", agentList);	
+		}catch(Exception e){
+			logger.error(e.getMessage(), e);
+			model.addAttribute("isFail", true);
+			model.addAttribute("failMessage", e.getLocalizedMessage());
+		}
+		
+		return "jsonView";
+	}
+
+	/**
+	 * @param id
+	 * @param model
+	 * @return
+	 */
+	@RequestMapping(params = "method=getLogData")
+	public String getLogData(@RequestParam("id") String id, @RequestParam("repositoryName") String repositoryName, Model model) {
+		try{
+			LogDataMap log = service.getLogData(id, repositoryName);
+			model.addAttribute("log", log);
+		}catch(Exception e){
+			logger.error(e.getMessage(), e);
+			model.addAttribute("isFail", true);
+			model.addAttribute("failMessage", e.getLocalizedMessage());
+		}
+		
+		return "jsonView";
+	}
+
+	/**
+	 * log search for text type view (for Ajax Request)
+	 * 
+	 * @param searchCondition
+	 * @param model
+	 * @param request
+	 * @return
+	 * @throws Exception
+	 */
+	@RequestMapping(params = "method=analysis")
+	public String analysis(LogSearchCondition searchCondition, Model model, HttpServletRequest request) {
+		logger.debug("searchCondition=\n{}", searchCondition.toString());
+		List<LogDataMap> list = null;
+		try{
+			list = getLogList(searchCondition, model, request);
+			if (list == null)
+				list = new ArrayList<LogDataMap>();
+			model.addAttribute("searchCondition", searchCondition);
+			model.addAttribute("listCount", list.size());
+			model.addAttribute("list", list);	
+		}catch(Exception e){
+			logger.error(e.getMessage(), e);
+			model.addAttribute("isFail", true);
+			model.addAttribute("failMessage", e.getLocalizedMessage());
+		}
+		
+		return "jsonView";
+	}
+
+	/**
+	 * log search form load for text type view
+	 * 
+	 * @param searchCondition
+	 * @param model
+	 * @param request
+	 * @return
+	 * @throws Exception
+	 */
+	@RequestMapping(params = "method=analysisForm")
+	public String analysisForm(LogSearchCondition searchCondition, Model model, HttpServletRequest request, HttpSession session) throws Exception {
+		
+		Account currentAccount = (Account)session.getAttribute("loginAccount");
+		
+		List<String> appNameList = new ArrayList<String>();
+		appNameList.add("== Select ==");
+		appNameList.addAll(service.getActiveLogApplicationNameList());
+		List<String> repositoryList = new ArrayList<String>();
+		repositoryList.add("== Select ==");
+		repositoryList.addAll(logRepositoryService.getActiveLogRepositoryNameList(currentAccount.getUserType()));
+
+		Date currentDateTime = new Date();
+		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+		SimpleDateFormat hourFormat = new SimpleDateFormat("HH");
+		SimpleDateFormat minuteFormat = new SimpleDateFormat("mm");
+		String currentDate = dateFormat.format(currentDateTime);
+		String currentHour = hourFormat.format(currentDateTime);
+		String currentMinute = Integer.toString((int) (Math.floor((Integer.parseInt(minuteFormat.format(currentDateTime)) / 10)) * 10));
+		if ("0".equals(currentMinute))
+			currentMinute = "00";
+
+		if (searchCondition.getFromDate() == null) {
+			searchCondition.setFromDate(currentDate);
+			searchCondition.setFromHour(currentHour);
+			searchCondition.setFromMinute(currentMinute);
+		}
+
+		if (searchCondition.getToDate() == null) {
+			searchCondition.setToDate(currentDate);
+			searchCondition.setToHour(currentHour);
+			searchCondition.setToMinute(currentMinute);
+		}
+
+		if (searchCondition.getAppName() == null) {
+			searchCondition.setMatchedLogOnly(true);
+		}
+
+		model.addAttribute("pollingTerm", LogManagerConstant.POLLING_DURATION_SECOND);
+		model.addAttribute("appNameList", appNameList);
+		model.addAttribute("repositoryList", repositoryList);
+		model.addAttribute("levels", LogManagerConstant.LEVELS_SEARCH);
+		model.addAttribute("hours", LogManagerConstant.HOURS);
+		model.addAttribute("minutes", LogManagerConstant.MINUTES);
+		model.addAttribute("searchCondition", searchCondition);
+		
+		return "logmanager/analysis";
+	}
+
+	/**
+	 * log search form load for grid type view
+	 * 
+	 * @param searchCondition
+	 * @param model
+	 * @param request
+	 * @return
+	 * @throws Exception
+	 */
+	@RequestMapping(params = "method=analysis4gridForm")
+	public String analysis4gridForm(LogSearchCondition searchCondition, Model model, HttpSession session) throws Exception {
+		logger.debug("searchCondition4gridForm=\n{}", searchCondition.toString());
+		
+		Account currentAccount = (Account)session.getAttribute("loginAccount");
+		
+		List<String> appNameList = new ArrayList<String>();
+		appNameList.add("== Select ==");
+		appNameList.addAll(service.getActiveLogApplicationNameList());
+		List<String> repositoryList = new ArrayList<String>();
+		repositoryList.add("== Select ==");
+		repositoryList.addAll(logRepositoryService.getActiveLogRepositoryNameList(currentAccount.getUserType()));
+
+		Date currentDateTime = new Date();
+		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+		SimpleDateFormat hourFormat = new SimpleDateFormat("HH");
+		SimpleDateFormat minuteFormat = new SimpleDateFormat("mm");
+		String currentDate = dateFormat.format(currentDateTime);
+		String currentHour = hourFormat.format(currentDateTime);
+		String currentMinute = Integer.toString((int) (Math.floor((Integer.parseInt(minuteFormat.format(currentDateTime)) / 10)) * 10));
+
+		if ("0".equals(currentMinute))
+			currentMinute = "00";
+
+		if (searchCondition.getFromDate() == null) {
+			searchCondition.setFromDate(currentDate);
+			searchCondition.setFromHour(currentHour);
+			searchCondition.setFromMinute(currentMinute);
+		}
+
+		if (searchCondition.getToDate() == null) {
+			searchCondition.setToDate(currentDate);
+			searchCondition.setToHour(currentHour);
+			searchCondition.setToMinute(currentMinute);
+		}
+
+		if (searchCondition.getAppName() == null) {
+			searchCondition.setMatchedLogOnly(true);
+		}
+
+		searchCondition.setPageIndex(1);
+		searchCondition.setPageSize(10);
+
+		model.addAttribute("appNameList", appNameList);
+		model.addAttribute("repositoryList", repositoryList);
+		model.addAttribute("levels", LogManagerConstant.LEVELS_SEARCH);
+		model.addAttribute("hours", LogManagerConstant.HOURS);
+		model.addAttribute("minutes", LogManagerConstant.MINUTES);
+		model.addAttribute("searchCondition", searchCondition);
+		
+		return "logmanager/analysis4gridForm";
+	}
+
+	/**
+	 * load log data for grid type view (for Ajax Request)
+	 * 
+	 * @param searchCondition
+	 * @param model
+	 * @param request
+	 * @return
+	 * @throws Exception
+	 */
+	@RequestMapping(params = "method=analysis4grid")
+	public String analysis4grid(LogSearchCondition searchCondition, Model model, HttpServletRequest request) {
+
+		List<LogDataMap> list = null;
+		try{
+			list = getLogList(searchCondition, model, request);
+
+			Map<String, Object> jsonModel = new HashMap<String, Object>();
+
+			int maxPage = 0;
+			maxPage = (int) (searchCondition.getTotalCount() / searchCondition.getPageSize());
+			if ((searchCondition.getTotalCount() % searchCondition.getPageSize()) > 0)
+				maxPage++;
+
+			jsonModel.put("page", searchCondition.getPageIndex() + "");
+			jsonModel.put("total", maxPage + "");
+			jsonModel.put("records", searchCondition.getTotalCount() + "");
+			jsonModel.put("rows", list);
+
+			model.addAllAttributes(jsonModel);
+		}catch(Exception e){
+			logger.error(e.getMessage(), e);
+			model.addAttribute("isFail", true);
+			model.addAttribute("failMessage", e.getLocalizedMessage());
+		}
+
+		return "jsonView";
+	}
+
+	/**
+	 * log data export for text file type
+	 * 
+	 * @param searchCondition
+	 * @param model
+	 * @param request
+	 * @return
+	 * @throws Exception
+	 */
+	@RequestMapping(params = "method=txtExport")
+	public String txtExport(LogSearchCondition searchCondition, Model model, HttpServletRequest request, HttpServletResponse response) throws Exception {
+		searchCondition.setPageIndex(-1);
+		analysis(searchCondition, model, request);
+		String fileName = null;
+		String sDate = null;
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss", new Locale("ko_KR"));
+		sDate = sdf.format(new Date());
+		StringBuffer sb = new StringBuffer();
+		sb.append(searchCondition.getAppName().substring(searchCondition.getAppName().lastIndexOf("/") + 1));
+		sb.append("_").append(searchCondition.getCollection()).append("_").append(sDate).append(".txt");
+		fileName = sb.toString();
+		response.reset();
+		response.setContentType("text/plain");
+		String userAgent = request.getHeader("User-Agent");
+
+		if (userAgent.indexOf("MSIE 5.5") > -1) {
+			response.setHeader("Content-Disposition", "filename=\"" + URLEncoder.encode(fileName, "UTF-8") + "\";");
+		} else if (userAgent.indexOf("MSIE") > -1) {
+			response.setHeader("Content-Disposition", "attachment; filename=\"" + java.net.URLEncoder.encode(fileName, "UTF-8") + "\";");
+		} else {
+			response.setHeader("Content-Disposition", "attachment; filename=\"" + new String(fileName.getBytes("euc-kr"), "latin1") + "\";");
+		}
+
+		response.setHeader("Content-Transfer-Encoding", "binary;");
+		response.setHeader("Pragma", "no-cache;");
+		response.setHeader("Expires", "-1;");
+		
+		return "logmanager/export/txtExportForm";
+	}
+
+	/**
+	 * log data export for excel file type
+	 * 
+	 * @param searchCondition
+	 * @param model
+	 * @param request
+	 * @return
+	 * @throws Exception
+	 */
+	@RequestMapping(params = "method=xlsExport")
+	public void xlsExport(LogSearchCondition searchCondition, Model model, HttpServletRequest request, HttpServletResponse response) throws Exception {
+
+		searchCondition.setPageIndex(-1);
+		searchCondition.setCollection(searchCondition.getRepositoryName());
+
+		String fileName = null;
+		String sDate = null;
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss", new Locale("ko_KR"));
+		sDate = sdf.format(new Date());
+		StringBuffer sb = new StringBuffer();
+		sb.append(searchCondition.getAppName().substring(searchCondition.getAppName().lastIndexOf("/") + 1));
+		sb.append("_").append(searchCondition.getCollection()).append("_").append(sDate).append(".xls");
+		fileName = sb.toString();
+
+		SimpleDateFormat dateTimeFormat = new SimpleDateFormat("yyyy-MM-ddHHmm");
+		logger.debug("from:{}", searchCondition.getFromDate() + searchCondition.getFromHour() + searchCondition.getFromMinute());
+		logger.debug("to:{}", searchCondition.getToDate() + searchCondition.getToHour() + searchCondition.getToMinute());
+		if (searchCondition.isUseFromDate())
+			searchCondition.setFromDateTime(dateTimeFormat.parse(searchCondition.getFromDate() + searchCondition.getFromHour() + searchCondition.getFromMinute()));
+		if (searchCondition.isUseToDate())
+			searchCondition.setToDateTime(dateTimeFormat.parse(searchCondition.getToDate() + searchCondition.getToHour() + searchCondition.getToMinute()));
+
+		List<LogDataMap> resultList = service.searchAnalysisLog(searchCondition);
+
+		response.reset();
+		response.setContentType("application/x-msexcel;charset=MS949");
+		// response.setContentType("application/octet-stream");
+		String userAgent = request.getHeader("User-Agent");
+
+		if (userAgent.indexOf("MSIE 5.5") > -1) {
+			response.setHeader("Content-Disposition", "filename=\"" + URLEncoder.encode(fileName, "UTF-8") + "\";");
+		} else if (userAgent.indexOf("MSIE") > -1) {
+			response.setHeader("Content-Disposition", "attachment; filename=\"" + java.net.URLEncoder.encode(fileName, "UTF-8") + "\";");
+		} else {
+			response.setHeader("Content-Disposition", "attachment; filename=\"" + new String(fileName.getBytes("euc-kr"), "latin1") + "\";");
+		}
+		response.setHeader("Content-Description", "JSP Generated Data");
+		response.setHeader("Content-Transfer-Encoding", "binary;");
+		response.setHeader("Pragma", "no-cache;");
+		response.setHeader("Expires", "-1;");
+
+		HSSFWorkbook workbook = new HSSFWorkbook();
+		HSSFSheet sheet = workbook.createSheet(fileName);
+
+		OutputStream fileOut = null;
+		try {
+			fileOut = response.getOutputStream();
+			HSSFRow row = null;
+			HSSFRow headerRow = null;
+
+			HSSFDataFormat df = workbook.createDataFormat();
+
+			HSSFCellStyle headerStyle = workbook.createCellStyle();
+			HSSFFont boldFont = workbook.createFont();
+			boldFont.setBoldweight(HSSFFont.BOLDWEIGHT_BOLD);
+			headerStyle.setFont(boldFont);
+			headerStyle.setAlignment(HSSFCellStyle.ALIGN_CENTER);
+
+			HSSFCellStyle style = workbook.createCellStyle();
+			style.setAlignment(HSSFCellStyle.ALIGN_LEFT);
+			style.setVerticalAlignment(HSSFCellStyle.VERTICAL_CENTER);
+
+			HSSFCellStyle dateStyle = workbook.createCellStyle();
+			dateStyle.setDataFormat(df.getFormat("yyyy-mm-dd h:mm:ss.000"));
+			dateStyle.setAlignment(HSSFCellStyle.ALIGN_LEFT);
+			dateStyle.setVerticalAlignment(HSSFCellStyle.VERTICAL_CENTER);
+
+			HSSFCellStyle messageStyle = workbook.createCellStyle();
+			messageStyle.setWrapText(true);
+			messageStyle.setAlignment(HSSFCellStyle.ALIGN_LEFT);
+			messageStyle.setVerticalAlignment(HSSFCellStyle.VERTICAL_CENTER);
+
+			HSSFCell cell;
+			HSSFCell headerCell;
+
+			short width = 265;
+			
+			Iterator<String> j = null;
+			String key = null;
+			int cellIndex = 0;
+			int listSize = 0;
+			
+			String level = null;
+			Date timestamp = null;
+			String message = null;
+			
+			if(resultList != null) {
+				listSize = resultList.size();
+				for (int i = 0; i < listSize; i++) {
+					LogDataMap log = (LogDataMap) resultList.get(i);
+					if(i == 0) {
+						headerRow = sheet.createRow(i); // level header
+						sheet.setColumnWidth(0, 7 * width);
+						headerCell = headerRow.createCell(0);
+						HSSFRichTextString headerValue = new HSSFRichTextString("level");
+						headerCell.setCellValue(headerValue);
+						headerCell.setCellStyle(headerStyle);
+						
+						headerCell = headerRow.createCell(1); // time stamp header
+						sheet.setColumnWidth(1, 24 * width);
+						headerValue = new HSSFRichTextString("timestamp");
+						headerCell.setCellValue(headerValue);
+						headerCell.setCellStyle(headerStyle);
+						
+						headerCell = headerRow.createCell(2); // message header
+						sheet.setColumnWidth(2, 70 * width);
+						headerValue = new HSSFRichTextString("message");
+						headerCell.setCellValue(headerValue);
+						headerCell.setCellStyle(headerStyle);
+					}
+
+					row = sheet.createRow(i + 1);
+					
+					// level
+					level = (String)log.get("level");
+					cell = row.createCell(0);
+					cell.setCellStyle(style);
+					cell.setCellType(HSSFCell.CELL_TYPE_STRING);
+					cell.setCellValue(level);
+					
+					// timestamp
+					timestamp = (Date)log.get("timestamp");
+					cell = row.createCell(1);
+					cell.setCellStyle(dateStyle);
+					cell.setCellValue(timestamp);
+					
+					// message
+					message = (String)log.get("message");
+					HSSFRichTextString messageValue = new HSSFRichTextString(message);
+					cell = row.createCell(2);
+					cell.setCellStyle(messageStyle);
+					cell.setCellType(HSSFCell.CELL_TYPE_STRING);
+					cell.setCellValue(messageValue);
+					
+					cellIndex = 3;
+					j = log.keySet().iterator();
+					while(j.hasNext()) {
+						key = j.next();
+						if("_id".equals(key) || "message".equals(key) || "timestamp".equals(key) || "level".equals(key)) {
+							continue;
+						}
+						//logger.debug("key=" + key);
+						if(i == 0) {
+							sheet.setColumnWidth(cellIndex, 20 * width);	
+							
+							headerCell = headerRow.createCell(cellIndex);
+							HSSFRichTextString headerValue = new HSSFRichTextString(key);
+							headerCell.setCellValue(headerValue);
+							headerCell.setCellStyle(headerStyle);
+						}
+						cell = row.createCell(cellIndex);
+						Object value = log.get(key);
+						if(value instanceof Date) {
+							cell.setCellStyle(dateStyle);
+							cell.setCellValue((Date)value);
+						}else{
+							cell.setCellStyle(style);
+							cell.setCellType(HSSFCell.CELL_TYPE_STRING);
+							cell.setCellValue((String)log.get(key));
+						}
+						
+						cellIndex++;
+					}
+				}
+				workbook.write(fileOut);
+			}
+		} catch (Exception e) {
+			throw e;
+		} finally {
+			try {
+				if (fileOut != null) {
+					fileOut.flush();
+					fileOut.close();
+				}
+			} catch (IOException ex) {
+				logger.warn(ex.getMessage(), ex);
+			}
+		}
+	}
+
+	/**
+	 * @param refresh
+	 * @param model
+	 * @param request
+	 * @return
+	 * @throws Exception
+	 */
+	@RequestMapping(params = "method=agentList")
+	public String agentList(@RequestParam(value = "refresh", defaultValue = "false") boolean refresh, Model model, HttpServletRequest request) throws Exception {
+		List<LogAgent> list = null;
+
+		// before
+		list = agentService.getLogAgentList();
+
+		if (refresh) {
+			logger.info("refresh is true");
+			agentService.refreshAgent(list);
+		}
+		// after
+		list = agentService.getLogAgentList();
+
+		model.addAttribute("list", list);
+		
+		return "logmanager/agentList";
+	}
+
+	/**
+	 * @param agentId
+	 * @param model
+	 * @param request
+	 * @return
+	 * @throws Exception
+	 */
+	@RequestMapping(params = "method=deleteAgent")
+	public String deleteAgent(@RequestParam(value = "agentId") String agentId, Model model) {
+		try{
+			agentService.deleteLogAgent(agentId);	
+		}catch(Exception e){
+			logger.error(e.getMessage(), e);
+			model.addAttribute("isFail", true);
+			model.addAttribute("failMessage", e.getLocalizedMessage());
+		}
+		
+		return "jsonView";
+	}
+
+	/**
+	 * @param agentId
+	 * @param model
+	 * @return
+	 * @throws Exception
+	 */
+	@RequestMapping(params = "method=restartAgent")
+	public String restartAgent(@RequestParam(value = "agentId") String agentId, Model model) {
+		try {
+			agentService.restartLogAgent(agentId);
+		} catch (Exception e) {
+			logger.error(e.getMessage(), e);
+			model.addAttribute("isFail", true);
+			model.addAttribute("failMessage", e.getLocalizedMessage());
+		}
+		return "jsonView";
+	}
+
+	/**
+	 * @param param
+	 * @param loggingPolicyFileText
+	 * @return
+	 * @throws Exception
+	 */
+	@RequestMapping(params = "method=saveLoggingPolicyFileText")
+	public String saveLoggingPolicyFileText(LogApplication param, @RequestParam(value = "loggingPolicyFileText") String loggingPolicyFileText, Model model) {
+		try {
+			LogApplication logApp = appService.getLogApplication(param);
+			agentService.saveLoggingPolicyFileText(logApp, loggingPolicyFileText);
+		} catch (HessianRuntimeException e){
+			logger.error(e.getMessage(), e);
+			model.addAttribute("isFail", true);
+			model.addAttribute("failMessage", "check the status of the agent.");
+		} catch (Exception e) {
+			logger.error(e.getMessage(), e);
+			model.addAttribute("isFail", true);
+			model.addAttribute("failMessage", e.getLocalizedMessage());
+		}
+		return "jsonView";
+	}
+
+	/**
+	 * @param param
+	 * @param loggingPolicyFileJson
+	 * @param model
+	 * @return
+	 * @throws Exception
+	 */
+	@RequestMapping(params = "method=saveLog4jXml")
+	public String saveLog4jXml(LogApplication param, @RequestParam(value = "loggingPolicyFileJson") String loggingPolicyFileJson, Model model) {
+		try {
+			LogApplication logApp = appService.getLogApplication(param);
+			Gson gson = new Gson();
+			Log4j log4j = gson.fromJson(loggingPolicyFileJson, Log4j.class);
+			// System.out.println(log4j.toString());
+			agentService.saveLog4jXml(logApp, log4j.getAppenders(), log4j.getLoggers(), log4j.getRoot());
+		} catch (HessianRuntimeException e){
+			logger.error(e.getMessage(), e);
+			model.addAttribute("isFail", true);
+			model.addAttribute("failMessage", "check the status of the agent.");
+		} catch (Exception e) {
+			logger.error(e.getMessage(), e);
+			model.addAttribute("isFail", true);
+			model.addAttribute("failMessage", e.getLocalizedMessage());
+		}
+		return "jsonView";
+	}
+	
+	/**
+	 * @param param
+	 * @param model
+	 * @return
+	 */
+	@RequestMapping(params = "method=getLogCollectionResultList")
+	public String getLogCollectionResultList(LogCollectionResult param, Model model) {
+		
+		try{
+			List<LogCollectionResult> list = logCollectionService.getLogCollectionResultList(param.getCollectionId());
+			model.addAttribute("list", list);
+		}catch(Exception e){
+			logger.error(e.getMessage(), e);
+			model.addAttribute("isFail", true);
+			model.addAttribute("failMessage", e.getLocalizedMessage());
+		}
+		
+		return "jsonView";
+	}
+	
+	@RequestMapping(params = "method=getResultMessage")
+	public String getResultMessage(@RequestParam("collectionId") String collectionId, @RequestParam("iterationOrder") int iterationOrder, @RequestParam("messageType") String messageType, Model model) {
+		
+		try{
+			List<String> messages = logCollectionService.getResultMessage(collectionId, iterationOrder, messageType);
+			model.addAttribute("messages", messages);
+		}catch(Exception e){
+			logger.error(e.getMessage(), e);
+			model.addAttribute("isFail", true);
+			model.addAttribute("failMessage", e.getLocalizedMessage());
+		}
+		
+		return "jsonView";
+	}
+
+	/**
+	 * @param param
+	 * @param model
+	 * @return
+	 * @throws Exception
+	 */
+	@RequestMapping(params = "method=getLogCollectionList")
+	public String getLogCollectionList(LogCollection param, Model model) {
+		try{
+			List<LogCollection> logCollectionList = logCollectionService.getLogCollectionListByAppName(param);
+			model.addAttribute("logCollectionList", logCollectionList);
+		}catch(Exception e){
+			logger.error(e.getMessage(), e);
+			model.addAttribute("isFail", true);
+			model.addAttribute("failMessage", e.getLocalizedMessage());
+		}
+		return "jsonView";
+	}
+	
+	/**
+	 * @param collectionId
+	 * @param model
+	 * @return
+	 */
+	@RequestMapping(params = "method=getLogCollection")
+	public String getLogCollection(@RequestParam(value = "collectionId")String collectionId, Model model) {
+		try{
+			LogCollection logCollection = logCollectionService.getLogCollection(collectionId);
+			model.addAttribute("logCollection", logCollection);
+		}catch(Exception e){
+			logger.error(e.getMessage(), e);
+			model.addAttribute("isFail", true);
+			model.addAttribute("failMessage", e.getLocalizedMessage());
+		}
+		return "jsonView";
+	}
+	
+	/**
+	 * @param collectionId
+	 * @param model
+	 * @return
+	 */
+	@RequestMapping(params = "method=deleteLogCollection")
+	public String deleteLogCollection(@RequestParam(value = "collectionId")String collectionId, Model model) {
+		try{
+			logCollectionService.deleteLogCollection(collectionId);
+		}catch(Exception e){
+			logger.error(e.getMessage(), e);
+			model.addAttribute("isFail", true);
+			model.addAttribute("failMessage", e.getLocalizedMessage());
+		}
+		return "jsonView";
+	}
+	
+	/**
+	 * @param regularExp
+	 * @param sampleData
+	 * @return
+	 * @throws Exception
+	 */
+	@SuppressWarnings("unchecked")
+	@RequestMapping(params = "method=checkRegularExpression")
+	public String checkRegularExpression(@RequestParam("regularExp") String regularExp, @RequestParam("logDataSample") String logDataSample, 
+			@RequestParam("isRegExp") boolean isRegExp, Model model) {
+		Pattern p = null;
+		Matcher m = null;
+		List<String> columnNames = new ArrayList<String>();
+		List<String> dateFormats = new ArrayList<String>();
+		String convertedExpression = null;
+		try{
+			logger.debug("received expression=" + regularExp);
+			
+			if(isRegExp){
+				p = Pattern.compile(regularExp, Pattern.DOTALL);
+				m = p.matcher(logDataSample);
+			}else{
+				Map<String, Object> convertMap = LogDataFormatUtil.convertLogDataFormat(regularExp);
+				
+				columnNames = (List<String>)convertMap.get("columnNameList");
+				dateFormats = (List<String>)convertMap.get("dateFormatList");
+				convertedExpression = (String)convertMap.get("regexp");
+				logger.debug("converted expression=" + convertedExpression);
+				p = Pattern.compile(convertMap.get("regexp").toString(), Pattern.DOTALL);
+				m = p.matcher(logDataSample);
+			}
+			
+			if(m.matches()) {
+				int groupCount = m.groupCount();
+				List<String> columns = new ArrayList<String>();
+				for(int i=1;i<=groupCount;i++){
+					columns.add(m.replaceAll("$" + i));
+				}
+				model.addAttribute("columnNames", columnNames);
+				model.addAttribute("dateFormats", dateFormats);
+				model.addAttribute("columns", columns);
+				model.addAttribute("columnCount", groupCount);
+			}else{
+				model.addAttribute("isFail", true);
+				model.addAttribute("failMessage", "Don't match data pattern.");
+			}	
+		}catch(Exception e) {
+			logger.error(e.getMessage(), e);
+			model.addAttribute("isFail", true);
+			model.addAttribute("failMessage", "Don't match data pattern.\n---------------------\n" + e.getLocalizedMessage());
+		}
+		
+		return "jsonView";
+	}
+	
+	/**
+	 * @param param
+	 * @param model
+	 * @return
+	 * @throws Exception
+	 */
+	@RequestMapping(params = "method=saveSetLogCollection")
+	public String saveSetLogCollection(LogCollection param, @RequestParam("isRegExp") boolean isRegExp,
+			@RequestParam(value = "columnName[]", required = false) String[] columnNames,
+			@RequestParam(value = "columnType[]", required = false) String[] columnTypes, 
+			@RequestParam(value = "dateFormat[]", required = false) String[] dateFormats, Model model) {
+		
+		try{
+			param.setRegExp(isRegExp);
+			logger.debug(param.toString());
+			if(columnNames != null) {
+				ColumnsInfo[] colsInfo = new ColumnsInfo[columnNames.length];
+				for(int i=0;i<columnNames.length;i++) {
+					colsInfo[i] = new ColumnsInfo();
+					colsInfo[i].setColumnName(columnNames[i]);
+					colsInfo[i].setColumnType(columnTypes[i]);
+					if("date".equals(columnTypes[i]) || "timestamp".equals(columnTypes[i])) {
+						colsInfo[i].setDateFormat(dateFormats[i]);
+					}else{
+						colsInfo[i].setDateFormat(null);	
+					}
+				}
+				param.setColumnsInfo(colsInfo);
+				
+				if ("".equals(param.getId())) {
+					param.setId(null);
+				}else{
+					LogCollection previousLogCollection = logCollectionService.getLogCollection(param.getId());
+					param.setLastUpdate(previousLogCollection.getLastUpdate()); // last update 유지
+				}
+				logCollectionService.saveLogCollection(param);
+				List<LogCollection> logCollectionsList = logCollectionService.getLogCollectionListByAppName(param);
+				model.addAttribute("logCollectionsList", logCollectionsList);
+			}else{
+				throw new LogManagerException("columnNames is null.");
+			}
+			
+		}catch(Exception e) {
+			logger.error(e.getMessage(), e);
+			model.addAttribute("isFail", true);
+			model.addAttribute("failMessage", e.getLocalizedMessage());
+		}
+		
+		return "jsonView";
+	}
+	
+	/**
+	 * @param param
+	 * @param model
+	 * @return
+	 */
+	@RequestMapping(params = "method=getActiveLogRepositoryList")
+	public String getActiveLogRepositoryList(LogRepository param, Model model, HttpSession session)	 {
+		try{
+			Account currentAccount = (Account)session.getAttribute("loginAccount");
+			param.setActive(true);
+			List<LogRepository> repoList = logRepositoryService.getActiveLogRepositoryList(currentAccount.getUserType());
+			model.addAttribute("repositoryList", repoList);
+		}catch(Exception e){
+			logger.error(e.getMessage(), e);
+			model.addAttribute("isFail", true);
+			model.addAttribute("failMessage", e.getLocalizedMessage());
+		}
+		return "jsonView";
+	}
+	
+	/**
+	 * @param param
+	 * @param model
+	 * @return
+	 */
+	@RequestMapping(params = "method=saveLogRepository")
+	public String saveLogRepository(LogRepository param, Model model) {
+		
+		try{
+			logger.debug(param.toString());
+			
+			if ("".equals(param.getId())) {
+				param.setId(null);
+			}
+			logRepositoryService.saveLogRepository(param);
+			model.addAttribute("param", param);
+			
+		}catch(Exception e) {
+			logger.error(e.getMessage(), e);
+			model.addAttribute("isFail", true);
+			model.addAttribute("failMessage", e.getLocalizedMessage());
+		}
+		
+		return "jsonView";
+	}
+	
+	/**
+	 * @param param
+	 * @param model
+	 * @return
+	 */
+	@RequestMapping(params = "method=deleteLogRepository")
+	public String deleteLogRepository(LogRepository param, Model model) {
+		try{
+			logger.debug(param.toString());
+			logRepositoryService.removeLogRepository(param);
+			model.addAttribute("param", param);
+		}catch(Exception e) {
+			logger.error(e.getMessage(), e);
+			model.addAttribute("isFail", true);
+			model.addAttribute("failMessage", e.getLocalizedMessage());
+		}
+		return "jsonView";
+	}
+	
+	/**
+	 * @param param
+	 * @param model
+	 * @return
+	 */
+	@RequestMapping(params = "method=getLogRepository")
+	public String getLogRepository(LogRepository param, Model model) {
+		try{
+			logger.debug(param.toString());
+			LogRepository repository = logRepositoryService.getLogRepository(param);
+			model.addAttribute("repository", repository);
+			model.addAttribute("param", param);
+		}catch(Exception e) {
+			logger.error(e.getMessage(), e);
+			model.addAttribute("isFail", true);
+			model.addAttribute("failMessage", e.getLocalizedMessage());
+		}
+		return "jsonView";
+	}
 	
 	/**
 	 * @param model
 	 * @return
 	 * @throws Exception
 	 */
-	@RequestMapping(params = "method=getActiveAgentList")
-	public String getActiveAgentList(Model model) throws Exception {
-		List<LogAgent> agentList = null;
-		agentList = agentService.getLogAgentList(LogManagerConstant.AGENT_STATUS_ACTIVE);
-		model.addAttribute("agentList", agentList);
-		return "jsonView";
+	@RequestMapping(params = "method=repositoryListForm")
+	public String getLogRepositoryListForm(Model model) throws Exception {
+		List<LogRepository> list = logRepositoryService.getAllLogRepositoryList();
+		model.addAttribute("repositoryList", list);
+		return "logmanager/repositoryList";
 	}
-
+	
 	/**
 	 * private method for log search function
 	 * 
@@ -348,23 +1192,23 @@ public class LogManagerController {
 	 * @param request
 	 * @throws Exception
 	 */
-	private List<AnalysisLog> getLogList(LogSearchCondition searchCondition, Model model, HttpServletRequest request) throws Exception {
-		List<AnalysisLog> list = null;
-		
+	private List<LogDataMap> getLogList(LogSearchCondition searchCondition, Model model, HttpServletRequest request) throws Exception {
+		List<LogDataMap> list = null;
+
 		if (searchCondition.getAppName() != null) {
-			if(searchCondition.isLogTailingMode()){
-				if(!"".equals(searchCondition.getPreviousTimestamp())) {
+			if (searchCondition.isLogTailingMode()) {
+				if (!"".equals(searchCondition.getPreviousTimestamp())) {
 					searchCondition.setUseToDate(false);
 					searchCondition.setUseFromDate(true);
 					SimpleDateFormat dateTimeFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss, SSS");
 					Date f = dateTimeFormat.parse(searchCondition.getPreviousTimestamp());
-					f.setTime(f.getTime() + ((long)1));
+					f.setTime(f.getTime() + ((long) 1));
 					searchCondition.setFromDateTime(f);
 					logger.debug("from:{}", searchCondition.getFromDateTime());
-				}else{
-					return new ArrayList<AnalysisLog>();
+				} else {
+					return new ArrayList<LogDataMap>();
 				}
-			}else{
+			} else {
 				SimpleDateFormat dateTimeFormat = new SimpleDateFormat("yyyy-MM-ddHHmm");
 				logger.debug("from:{}", searchCondition.getFromDate() + searchCondition.getFromHour() + searchCondition.getFromMinute());
 				logger.debug("to:{}", searchCondition.getToDate() + searchCondition.getToHour() + searchCondition.getToMinute());
@@ -373,7 +1217,7 @@ public class LogManagerController {
 				if (searchCondition.isUseToDate())
 					searchCondition.setToDateTime(dateTimeFormat.parse(searchCondition.getToDate() + searchCondition.getToHour() + searchCondition.getToMinute()));
 			}
-			searchCondition.setCollection(searchCondition.getAppenderName());
+			searchCondition.setCollection(searchCondition.getRepositoryName());
 			list = service.searchAnalysisLog(searchCondition);
 		} else {
 			Date currentDateTime = new Date();
@@ -396,486 +1240,7 @@ public class LogManagerController {
 
 			searchCondition.setMatchedLogOnly(true);
 		}
-		
+
 		return list;
-	}
-	
-	/**
-	 * log search for text type view
-	 * (for Ajax Request)
-	 * 
-	 * @param searchCondition
-	 * @param model
-	 * @param request
-	 * @return
-	 * @throws Exception
-	 */
-	@RequestMapping(params = "method=analysis")
-	public String analysis(LogSearchCondition searchCondition, Model model, HttpServletRequest request) throws Exception {
-		logger.debug("searchCondition=\n{}", searchCondition.toString());
-		List<AnalysisLog> list = null;
-		list = getLogList(searchCondition, model, request);
-		if(list == null) list = new ArrayList<AnalysisLog>();
-		model.addAttribute("searchCondition", searchCondition);
-		model.addAttribute("listCount", list.size());
-		model.addAttribute("list", list);
-		return "jsonView";
-	}
-	
-	/**
-	 * log search form load for text type view
-	 * 
-	 * @param searchCondition
-	 * @param model
-	 * @param request
-	 * @return
-	 * @throws Exception
-	 */
-	@RequestMapping(params = "method=analysisForm")
-	public String analysisForm(LogSearchCondition searchCondition, Model model, HttpServletRequest request) throws Exception {
-		List<LogApplication> appList = service.getActiveLogApplicationList();
-		List<String> appNameList = new ArrayList<String>();
-		for (int i = 0; i < appList.size(); i++) {
-			appNameList.add(appList.get(i).getAppName());
-		}
-		
-		Date currentDateTime = new Date();
-		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-		SimpleDateFormat hourFormat = new SimpleDateFormat("HH");
-		SimpleDateFormat minuteFormat = new SimpleDateFormat("mm");
-		String currentDate = dateFormat.format(currentDateTime);
-		String currentHour = hourFormat.format(currentDateTime);
-		String currentMinute = Integer.toString((int) (Math.floor((Integer.parseInt(minuteFormat.format(currentDateTime)) / 10)) * 10));
-		if ("0".equals(currentMinute))
-			currentMinute = "00";
-
-		if(searchCondition.getFromDate() == null) {
-			searchCondition.setFromDate(currentDate);
-			searchCondition.setFromHour(currentHour);
-			searchCondition.setFromMinute(currentMinute);
-		}
-		
-		if(searchCondition.getToDate() == null) {
-			searchCondition.setToDate(currentDate);
-			searchCondition.setToHour(currentHour);
-			searchCondition.setToMinute(currentMinute);
-		}
-		
-		if(searchCondition.getAppName() == null) {
-			searchCondition.setMatchedLogOnly(true);
-		}
-		
-		model.addAttribute("pollingTerm", LogManagerConstant.POLLING_DURATION_SECOND);
-		model.addAttribute("appNameList", appNameList);
-		model.addAttribute("levels", LogManagerConstant.LEVELS_SEARCH);
-		model.addAttribute("hours", LogManagerConstant.HOURS);
-		model.addAttribute("minutes", LogManagerConstant.MINUTES);
-		model.addAttribute("searchCondition", searchCondition);
-		return "logmanager/analysis";
-	}
-	
-	/**
-	 * log search form load for grid type view
-	 * 
-	 * @param searchCondition
-	 * @param model
-	 * @param request
-	 * @return
-	 * @throws Exception
-	 */
-	@RequestMapping(params = "method=analysis4gridForm")
-	public String analysis4gridForm(LogSearchCondition searchCondition, Model model, HttpSession session) throws Exception {
-		logger.debug("searchCondition4gridForm=\n{}", searchCondition.toString());
-		List<LogApplication> appList = service.getActiveLogApplicationList();
-		List<String> appNameList = new ArrayList<String>();
-		for (int i = 0; i < appList.size(); i++) {
-			appNameList.add(appList.get(i).getAppName());
-		}
-		
-		Date currentDateTime = new Date();
-		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-		SimpleDateFormat hourFormat = new SimpleDateFormat("HH");
-		SimpleDateFormat minuteFormat = new SimpleDateFormat("mm");
-		String currentDate = dateFormat.format(currentDateTime);
-		String currentHour = hourFormat.format(currentDateTime);
-		String currentMinute = Integer.toString((int) (Math.floor((Integer.parseInt(minuteFormat.format(currentDateTime)) / 10)) * 10));
-
-		if ("0".equals(currentMinute))
-			currentMinute = "00";
-		
-		if(searchCondition.getFromDate() == null) {
-			searchCondition.setFromDate(currentDate);
-			searchCondition.setFromHour(currentHour);
-			searchCondition.setFromMinute(currentMinute);
-		}
-		
-		if(searchCondition.getToDate() == null) {
-			searchCondition.setToDate(currentDate);
-			searchCondition.setToHour(currentHour);
-			searchCondition.setToMinute(currentMinute);
-		}
-		
-		if(searchCondition.getAppName() == null) {
-			searchCondition.setMatchedLogOnly(true);
-		}
-
-		searchCondition.setPageIndex(1);
-		searchCondition.setPageSize(10);
-		
-		model.addAttribute("appNameList", appNameList);
-		model.addAttribute("levels", LogManagerConstant.LEVELS_SEARCH);
-		model.addAttribute("hours", LogManagerConstant.HOURS);
-		model.addAttribute("minutes", LogManagerConstant.MINUTES);
-		model.addAttribute("searchCondition", searchCondition);
-		return "logmanager/analysis4gridForm";
-	}
-	
-	/**
-	 * load log data for grid type view
-	 * (for Ajax Request)
-	 * 
-	 * @param searchCondition
-	 * @param model
-	 * @param request
-	 * @return
-	 * @throws Exception
-	 */
-	@RequestMapping(params = "method=analysis4grid")
-	public String analysis4grid(LogSearchCondition searchCondition, Model model, HttpServletRequest request) throws Exception {
-		
-		List<AnalysisLog> list = null;
-		
-		list = getLogList(searchCondition, model, request);
-		
-		Map<String, Object> jsonModel = new HashMap<String, Object>();
-		
-		int maxPage = 0;
-		maxPage = (int)(searchCondition.getTotalCount() / searchCondition.getPageSize());
-		if((searchCondition.getTotalCount() % searchCondition.getPageSize()) > 0) maxPage++;
-		
-		jsonModel.put("page", searchCondition.getPageIndex() + "");
-		jsonModel.put("total", maxPage + "");
-		jsonModel.put("records", searchCondition.getTotalCount() + "");
-		jsonModel.put("rows", list);
-		
-		model.addAllAttributes(jsonModel);
-		
-		return "jsonView";
-	}
-
-	/**
-	 * log data export for text file type
-	 * @param searchCondition
-	 * @param model
-	 * @param request
-	 * @return
-	 * @throws Exception
-	 */
-	@RequestMapping(params = "method=txtExport")
-	public String txtExport(LogSearchCondition searchCondition, Model model, HttpServletRequest request, HttpServletResponse response) throws Exception {
-		searchCondition.setPageIndex(-1);
-		analysis(searchCondition, model, request);
-		String fileName = null;
-		String sDate = null;
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss", new Locale("ko_KR"));
-		sDate = sdf.format(new Date());
-		StringBuffer sb = new StringBuffer();
-		sb.append(searchCondition.getAppName().substring(searchCondition.getAppName().lastIndexOf("/")+1));
-		sb.append("_").append(searchCondition.getCollection()).append("_").append(sDate).append(".txt");
-		fileName = sb.toString();
-		response.reset();
-		response.setContentType("text/plain");
-		String userAgent = request.getHeader("User-Agent");
-
-		if (userAgent.indexOf("MSIE 5.5") > -1) {
-			response.setHeader("Content-Disposition", "filename=\"" + URLEncoder.encode(fileName, "UTF-8") + "\";");
-		} else if (userAgent.indexOf("MSIE") > -1) {
-			response.setHeader("Content-Disposition", "attachment; filename=\"" + java.net.URLEncoder.encode(fileName, "UTF-8") + "\";");
-		} else {
-			response.setHeader("Content-Disposition", "attachment; filename=\"" + new String(fileName.getBytes("euc-kr"), "latin1") + "\";");
-		}
-
-		response.setHeader("Content-Transfer-Encoding", "binary;");
-		response.setHeader("Pragma", "no-cache;");
-		response.setHeader("Expires", "-1;");
-		return "logmanager/export/txtExportForm";
-	}
-
-	/**
-	 * log data export for excel file type
-	 * 
-	 * @param searchCondition
-	 * @param model
-	 * @param request
-	 * @return
-	 * @throws Exception
-	 */
-	@RequestMapping(params = "method=xlsExport")
-	public void xlsExport(LogSearchCondition searchCondition, Model model, HttpServletRequest request, HttpServletResponse response) throws Exception {
-		
-		searchCondition.setPageIndex(-1);
-		searchCondition.setCollection(searchCondition.getAppenderName());
-		
-		String fileName = null;
-		String sDate = null;
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss", new Locale("ko_KR"));
-		sDate = sdf.format(new Date());
-		StringBuffer sb = new StringBuffer();
-		sb.append(searchCondition.getAppName().substring(searchCondition.getAppName().lastIndexOf("/")+1));
-		sb.append("_").append(searchCondition.getCollection()).append("_").append(sDate).append(".xls");
-		fileName = sb.toString();
-		
-		SimpleDateFormat dateTimeFormat = new SimpleDateFormat("yyyy-MM-ddHHmm");
-		logger.debug("from:{}", searchCondition.getFromDate() + searchCondition.getFromHour() + searchCondition.getFromMinute());
-		logger.debug("to:{}", searchCondition.getToDate() + searchCondition.getToHour() + searchCondition.getToMinute());
-		if (searchCondition.isUseFromDate())
-			searchCondition.setFromDateTime(dateTimeFormat.parse(searchCondition.getFromDate() + searchCondition.getFromHour() + searchCondition.getFromMinute()));
-		if (searchCondition.isUseToDate())
-			searchCondition.setToDateTime(dateTimeFormat.parse(searchCondition.getToDate() + searchCondition.getToHour() + searchCondition.getToMinute()));
-		
-		List<AnalysisLog> resultList = service.searchAnalysisLog(searchCondition);
-		
-		response.reset();
-		response.setContentType("application/x-msexcel;charset=MS949");
-		//response.setContentType("application/octet-stream");
-		String userAgent = request.getHeader("User-Agent");
-
-		if (userAgent.indexOf("MSIE 5.5") > -1) {
-			response.setHeader("Content-Disposition", "filename=\"" + URLEncoder.encode(fileName, "UTF-8") + "\";");
-		} else if (userAgent.indexOf("MSIE") > -1) {
-			response.setHeader("Content-Disposition", "attachment; filename=\"" + java.net.URLEncoder.encode(fileName, "UTF-8") + "\";");
-		} else {
-			response.setHeader("Content-Disposition", "attachment; filename=\"" + new String(fileName.getBytes("euc-kr"), "latin1") + "\";");
-		}
-		response.setHeader("Content-Description", "JSP Generated Data");
-		response.setHeader("Content-Transfer-Encoding", "binary;");
-		response.setHeader("Pragma", "no-cache;");
-		response.setHeader("Expires", "-1;");
-		
-		
-		HSSFWorkbook workbook = new HSSFWorkbook();
-    	HSSFSheet sheet = workbook.createSheet(fileName);
-    	
-    	OutputStream fileOut = null;
-    	try {
-    		fileOut = response.getOutputStream();
-    		HSSFRow row;
-    		
-    		HSSFDataFormat  df = workbook.createDataFormat();
-    		
-    		HSSFCellStyle headerStyle = workbook.createCellStyle();
-    		HSSFFont boldFont = workbook.createFont();
-    		boldFont.setBoldweight(HSSFFont.BOLDWEIGHT_BOLD);
-    		headerStyle.setFont(boldFont);
-    		headerStyle.setAlignment(HSSFCellStyle.ALIGN_CENTER);
-    		
-    		HSSFCellStyle style = workbook.createCellStyle();
-    		style.setAlignment(HSSFCellStyle.ALIGN_LEFT);
-    		style.setVerticalAlignment(HSSFCellStyle.VERTICAL_CENTER);
-    		
-    		HSSFCellStyle dateStyle = workbook.createCellStyle();
-			dateStyle.setDataFormat(df.getFormat("yyyy-mm-dd h:mm:ss.000"));
-			dateStyle.setAlignment(HSSFCellStyle.ALIGN_LEFT);
-			dateStyle.setVerticalAlignment(HSSFCellStyle.VERTICAL_CENTER);
-			
-			HSSFCellStyle messageStyle = workbook.createCellStyle();
-			messageStyle.setWrapText(true);
-			messageStyle.setAlignment(HSSFCellStyle.ALIGN_LEFT);
-			messageStyle.setVerticalAlignment(HSSFCellStyle.VERTICAL_CENTER);
-			
-    		HSSFCell cell;
-    		
-    		row = sheet.createRow(0);
-    		
-    		List<ColumnInfo> columnInfoList = getColumnInfo(request);
-    		
-    		int columnCount = columnInfoList.size();
-    		String[] header = new String[columnCount];
-    		int[] cellwidth = new int[columnCount];
-    		String[] fieldName = new String[columnCount];
-    		String[] columnType = new String[columnCount];
-    		String[] mask = new String[columnCount];
-    		
-    		ColumnInfo columnInfo = null;
-    		short width = 265;
-    		
-    		for( int i = 0 ; i < columnCount ; i++ ){
-    			columnInfo = columnInfoList.get(i);
-    			header[i] = columnInfo.getColumnName();
-    			cellwidth[i] = columnInfo.getColumnWidth();
-    			fieldName[i] = columnInfo.getFieldName();
-    			columnType[i] = columnInfo.getColumnType();
-    			mask[i] = columnInfo.getMask();
-    			sheet.setColumnWidth(i, cellwidth[i] * width);
-    			cell = row.createCell(i);
-    			cell.setCellValue(new HSSFRichTextString(header[i]));
-    			cell.setCellStyle(headerStyle);
-    		}
-    		
-    		for( int i = 0 ; i < resultList.size() ; i++ ){
-    			row = sheet.createRow(i + 1);
-    			AnalysisLog log = (AnalysisLog)resultList.get(i);
-    			
-	    		for( int j = 0 ; j < columnCount ; j++ ) {
-	    			cell = row.createCell(j);
-	    			
-	    			if(columnType[j].equals("Date")){
-	    				Date _date = (Date)PropertyUtils.getProperty(log, fieldName[j]);
-	    				if(_date == null) {
-	    					cell.setCellValue("");
-	    				}else{
-		        			cell.setCellStyle(dateStyle);
-		        			cell.setCellValue(_date);
-	    				}
-	        			
-	    			}else if("message".equals(fieldName[j])) {
-	    				HSSFRichTextString richValue = new HSSFRichTextString((String)PropertyUtils.getProperty(log, fieldName[j]));
-	    				cell.setCellStyle(messageStyle);
-	    				cell.setCellType(HSSFCell.CELL_TYPE_STRING);
-	    				cell.setCellValue(richValue);
-	    			}else if("clientIp".equals(fieldName[j])) {
-	    				cell.setCellValue(log.getMdc().get("clientIp"));
-	    				cell.setCellStyle(style);
-	    			}else if("userId".equals(fieldName[j])) {
-	    				cell.setCellValue(log.getMdc().get("userId"));
-	    				cell.setCellStyle(style);
-	    			}else{
-	    				cell.setCellValue(BeanUtils.getProperty(log, fieldName[j]));
-	    				cell.setCellStyle(style);
-	    			}
-//	    			cell.setCellValue(BeanUtils.getProperty(log, fieldName[j]));
-//	    			cell.setCellStyle(style);
-	    		}
-    		}
-    		workbook.write(fileOut);
-    	}catch (Exception e){
-    		throw e;
-    	} finally {
-    		try{
-    			if (fileOut != null) {
-    				fileOut.flush();
-    				fileOut.close();
-    			}
-    		}catch(IOException ex){
-    			throw ex;
-    		}
-    	}
-	}
-	
-	/**
-	 * @param refresh
-	 * @param model
-	 * @param request
-	 * @return
-	 * @throws Exception
-	 */
-	@RequestMapping(params = "method=agentList")
-	public String agentList(@RequestParam(value="refresh", defaultValue="false") boolean refresh, Model model, HttpServletRequest request) throws Exception {
-		List<LogAgent> list = null;
-		
-		//before
-		list = agentService.getLogAgentList();
-		
-		if(refresh) {
-			logger.info("refresh is true");
-			agentService.refreshAgent(list);
-		}
-		// after
-		list = agentService.getLogAgentList();
-		
-		model.addAttribute("list", list);
-		return "logmanager/agentList";
-	}
-	
-	/**
-	 * @param agentId
-	 * @param model
-	 * @param request
-	 * @return
-	 * @throws Exception
-	 */
-	@RequestMapping(params = "method=deleteAgent")
-	public String deleteAgent(@RequestParam(value="agentId") String agentId) throws Exception {
-		agentService.deleteLogAgent(agentId);
-		return "jsonView";
-	}
-	
-	/**
-	 * @param agentId
-	 * @param model
-	 * @return
-	 * @throws Exception
-	 */
-	@RequestMapping(params = "method=restartAgent")
-	public String restartAgent(@RequestParam(value="agentId") String agentId, Model model) throws Exception {
-		try{
-			agentService.restartLogAgent(agentId);
-		}catch(LogManagerException e){
-			model.addAttribute("isFail", true);
-			model.addAttribute("failMessage", e.getLocalizedMessage());
-		}
-		return "jsonView";
-	}
-	
-	/**
-	 * @param param
-	 * @param loggingPolicyFileText
-	 * @return
-	 * @throws Exception
-	 */
-	@RequestMapping(params = "method=saveLoggingPolicyFileText")
-	public String saveLoggingPolicyFileText(LogApplication param, @RequestParam(value="loggingPolicyFileText") String loggingPolicyFileText, Model model) throws Exception {
-		try{
-			LogApplication logApp = appService.getLogApplication(param);
-			agentService.saveLoggingPolicyFileText(logApp, loggingPolicyFileText);
-		}catch(LogManagerException e){
-			model.addAttribute("isFail", true);
-			model.addAttribute("failMessage", e.getLocalizedMessage());
-		}
-		return "jsonView";
-	}
-	
-	@RequestMapping(params = "method=saveLoggingPolicyFile")
-	public String saveLoggingPolicyFile(LogApplication param, @RequestParam(value="loggingPolicyFileJson") String loggingPolicyFileJson, Model model) throws Exception {
-		try{
-			LogApplication logApp = appService.getLogApplication(param);
-			Gson gson = new Gson();
-			LogApplication log4j = gson.fromJson(loggingPolicyFileJson, LogApplication.class);
-			//System.out.println(log4j.toString());
-			logApp.setRoot(log4j.getRoot());
-			logApp.setAppenders(log4j.getAppenders());
-			logApp.setLoggers(log4j.getLoggers());
-			agentService.saveLoggingPolicyFile(logApp);
-		}catch(LogManagerException e){
-			model.addAttribute("isFail", true);
-			model.addAttribute("failMessage", e.getLocalizedMessage());
-		}
-		return "jsonView";
-	}
-	
-	/**
-	 * get column info for excel export
-	 * 
-	 * @param request
-	 * @return
-	 * @throws Exception
-	 */
-	private List<ColumnInfo> getColumnInfo(HttpServletRequest request) throws Exception{
-		try {
-			SAXParserFactory factory = SAXParserFactory.newInstance();
-		    SAXParser saxParser = factory.newSAXParser();
-			
-			ExcelInfoHandler handler = new ExcelInfoHandler();
-			File file = new File(request.getSession().getServletContext().getRealPath("/WEB-INF/classes/excel/logExport.xml"));
-			
-			if(file.canWrite()){
-				saxParser.parse(file, handler);
-			}else{
-				throw new Exception("cannot find logExport.xml");
-			}
-			return handler.columnInfoList;
-		} catch (Exception e) {
-			throw new Exception("fail to get column info", e);
-		}
 	}
 }

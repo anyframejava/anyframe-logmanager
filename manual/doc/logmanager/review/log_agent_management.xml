@@ -1,28 +1,49 @@
 <chapter id="logmanager_logagent_management">
 	<title>Log Agent Management</title>
-	<para>Anyframe Log Manager는 1.5.0 버전 부터 별도의 Log Agent 를 통하여 로그 수집 및 로그 정책(log4j.xml 등) 관리를 수행하도록 제공하고 있다. </para>
-	<para>Log Agent Service를 사용함으로서 다수의 물리적으로 분리되어 있는 시스템 환경에서도 로그 정책을 수집하거나 관리하는 것이 가능해지게 되었다.</para>
-	<para>Log Agent Service는 오픈 소스 기반의 OSGi  프레임 워크인 Apache Felix 를 활용하여 개발되었으며, Anyframe 커뮤니티 사이트를 통해 다운로드/배포 받을 수 있다.</para>
-	<para>Log Agent 배포 및 설치에 대한 내용은 <link linkend="logagent_service_install">여기</link>를 참조한다.</para>
-	<para>* 이전 버전에서의 Anyframe Plug-in 기반의 Log Agent는 Log Manager Plug-in 으로 구분하여 설명한다.</para>
-	<para>'Log Agent Management'는 다수의 Log Agent Service의 상태를 모니터하고 관리할 수 있는 기능을 제공하고 있으며, 주요 기능은 다음과 같다.</para>
+	<para>Anyframe Log Manager는 1.5.0 버전 부터 별도의 Log Agent 를 통하여 로그 수집 및 로그
+		정책(log4j.xml 등) 관리를 수행하도록 제공하고 있다. </para>
+	<para>Log Agent Service를 사용함으로서 다수의 물리적으로 분리되어 있는 시스템 환경에서도 로그 정책을
+		수집하거나 관리하는 것이 가능해지게 되었다.</para>
+	<para>Log Agent Service는 오픈 소스 기반의 OSGi 프레임 워크인 Apache Felix 를 활용하여
+		개발되었으며, Anyframe 커뮤니티 사이트를 통해 다운로드/배포 받을 수 있다.</para>
+	<para>
+		Log Agent 배포 및 설치에 대한 내용은
+		<link linkend="logagent_service_install">여기</link>
+		를 참조한다.
+	</para>
+	<para>* 이전 버전에서의 Anyframe Plug-in 기반의 Log Agent는 Log Manager Plug-in 으로
+		구분하여 설명한다.</para>
+	<para>'Log Agent Management'는 다수의 Log Agent Service의 상태를 모니터하고 관리할 수 있는
+		기능을 제공하고 있으며, 주요 기능은 다음과 같다.</para>
 	<itemizedlist>
-		<listitem><para>Log Agent Service의 현재 상태 모니터링/Refresh</para></listitem>
-		<listitem><para>Log Agent Service 재시작/변경사항 반영</para></listitem>
-		<listitem><para>Log Agent Service 등록정보 삭제</para></listitem>
+		<listitem>
+			<para>Log Agent Service의 현재 상태 모니터링/Refresh</para>
+		</listitem>
+		<listitem>
+			<para>Log Agent Service 재시작/변경사항 반영</para>
+		</listitem>
+		<listitem>
+			<para>Log Agent Service 등록정보 삭제</para>
+		</listitem>
 	</itemizedlist>
 	<section>
 		<title>Log Agent Service 화면</title>
 		<mediaobject>
 			<imageobject role="html">
-				<imagedata fileref="../image/logmanager/LM151-015.JPG" align="center" />
+				<imagedata fileref="../image/logmanager/160_007.jpg"
+					align="center" />
 			</imageobject>
 			<imageobject role="fo">
-				<imagedata fileref="../image/logmanager/pdf/LM151-015.JPG" align="center" />
+				<imagedata fileref="../image/logmanager/pdf/160_007.jpg"
+					align="center" />
 			</imageobject>
+			<textobject>
+				<phrase>Log Agent 관리 화면 이미지</phrase>
+			</textobject>
 			<caption>Log Application List</caption>
 		</mediaobject>
 		<informaltable>
+			<caption>Log Agent 관리 정보</caption>
 			<tgroup cols="2">
 				<thead>
 					<row>
@@ -32,24 +53,37 @@
 				</thead>
 				<tbody>
 					<row>
-						<entry><emphasis role="bold">Agent ID</emphasis></entry>
+						<entry>
+							<emphasis role="bold">Agent ID</emphasis>
+						</entry>
 						<entry>해당 agent의 ip 와 포트정보를 조합하여 표시되는 unique 한 agent 식별 정보</entry>
 					</row>
 					<row>
-						<entry><emphasis role="bold">Status</emphasis></entry>
-						<entry>가장 마지막으로 보고된 Agent의 상태정보를 표시, 'Refresh' 를 통하여 agent 상태정보를 업데이트 할 수 있다.</entry>
+						<entry>
+							<emphasis role="bold">Status</emphasis>
+						</entry>
+						<entry>가장 마지막으로 보고된 Agent의 상태정보를 표시, 'Refresh' 를 통하여 agent 상태정보를
+							업데이트 할 수 있다.</entry>
 					</row>
 					<row>
-						<entry><emphasis role="bold">Last Update</emphasis></entry>
+						<entry>
+							<emphasis role="bold">Last Update</emphasis>
+						</entry>
 						<entry>최근에 구동되었거나 shutdown 된 시간 정보를 표시한다.</entry>
 					</row>
 					<row>
-						<entry><emphasis role="bold">Actions > Restart</emphasis></entry>
-						<entry>Agent 가 'Active' 상태인 경우에 표시되며, 변경된 Agent 또는 Log Application의 관리 정보를 Agent 에 반영할 수 있다.</entry>
+						<entry>
+							<emphasis role="bold">Actions > Restart</emphasis>
+						</entry>
+						<entry>Agent 가 'Active' 상태인 경우에 표시되며, 변경된 Agent 또는 Log
+							Application의 관리 정보를 Agent 에 반영할 수 있다.</entry>
 					</row>
 					<row>
-						<entry><emphasis role="bold">Actions > Delete</emphasis></entry>
-						<entry>해당 Agent 정보를 삭제한다. 단, 삭제하더라도 현재 기동중인 Agent의 기능에 영향을 주지는 않으며, Agent의 재기동 시에는 자동으로 재등록된다.</entry>
+						<entry>
+							<emphasis role="bold">Actions > Delete</emphasis>
+						</entry>
+						<entry>해당 Agent 정보를 삭제한다. 단, 삭제하더라도 현재 기동중인 Agent의 기능에 영향을 주지는
+							않으며, Agent의 재기동 시에는 자동으로 재등록된다.</entry>
 					</row>
 				</tbody>
 			</tgroup>
@@ -58,33 +92,34 @@
 	<para>
 		<note>
 			<title>Agent Service 등록</title>
-			<para>Log Agent Service는 최초 구동 시 스스로의 정보를 지정된 MongoDB Repository에 저장하므로 본 화면에서는 별도의 Agent 등록기능은 존재하지 않는다.</para>
+			<para>Log Agent Service는 최초 구동 시 스스로의 정보를 지정된 MongoDB
+				Repository(:LogAgent)에 저장하므로 본 화면에서는 별도의 Agent 등록기능은 존재하지 않는다.
+			</para>
 		</note>
 		<note>
 			<title>'Refresh' 기능</title>
-			<para>'Refresh' 기능은 단순히 화면을 Refresh 하는 것이 아니라 페이지 로딩 이후 Agent Service의 상태 변경이 있었는지를 확인하여 업데이트 하는 기능이다.</para>
+			<para>'Refresh' 기능은 단순히 화면을 Refresh 하는 것이 아니라 페이지 로딩 이후 Agent
+				Service의 상태 변경이 있었는지를 확인하여 업데이트 하는 기능이다.</para>
 		</note>
 		<mediaobject>
 			<imageobject role="html">
-				<imagedata fileref="../image/logmanager/LM151-016.JPG" align="center" />
+				<imagedata fileref="../image/logmanager/160_039.jpg"
+					align="center" />
 			</imageobject>
 			<imageobject role="fo">
-				<imagedata fileref="../image/logmanager/pdf/LM151-016.JPG" align="center" />
+				<imagedata fileref="../image/logmanager/pdf/160_039.jpg"
+					align="center" />
 			</imageobject>
+			<textobject>
+				<phrase>Log Agent 재시작 시 화면 이미지</phrase>
+			</textobject>
 			<caption>Log Agent Restart Complete</caption>
 		</mediaobject>
-		<mediaobject>
-			<imageobject role="html">
-				<imagedata fileref="../image/logmanager/LM151-017.JPG" align="center" />
-			</imageobject>
-			<imageobject role="fo">
-				<imagedata fileref="../image/logmanager/pdf/LM151-017.JPG" align="center" />
-			</imageobject>
-			<caption>Log Agent Restart Console Message</caption>
-		</mediaobject>
-		<note id="agent_service_restart">
+		<note>
 			<title>'Restart' 기능</title>
-			<para>'Restart' 기능은 agent service의 내부 태스크 엔진을 재구동하여 설정 관련 변경사항을 reload 할 수 있게 하는 기능으로. log applictaion의 정보가 변경된 경우 restart를 해주어야만 agent에 반영할 수 있다.</para>
+			<para>'Restart' 기능은 agent service의 내부 태스크 엔진을 재구동하여 설정 관련 변경사항을
+				reload 할 수 있게 하는 기능으로. log applictaion의 정보가 변경된 경우 restart를 해주어야만
+				agent에 반영할 수 있다.</para>
 		</note>
 	</para>
 </chapter>

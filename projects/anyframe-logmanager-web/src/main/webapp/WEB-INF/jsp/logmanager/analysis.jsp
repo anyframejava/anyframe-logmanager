@@ -28,82 +28,18 @@
 <script type="text/javascript"><!--
  
 function fncLogout(){
-	var msg = "Are you sure you want to logout ?";
+	var msg = '<spring:message code="logmanager.confirm.logout"/>';
     ans = confirm(msg);
     if (ans) {
-    	document.location.href="<c:url value='/logout.do'/>";
+    	document.location.href='<c:url value="/logout.do"/>';
     } else {
         return false;
     }
 }
 var isTailing = false;
 var pollingTerm = '<c:out value="${pollingTerm}"/>';
-var COLLECTION_BASED = '<%=LogManagerConstant.COLLECTION_BASED%>';
-var initAppenderName = '<c:out value="${param.appenderName}"/>';
 var initAppName = '<c:out value="${param.appName}"/>';
-
-/**
- * appender select box setup
- */
-function getAppenders(isCollection) {
-	var appName = $('#selectAppName').val();
-	if(isCollection) {
-		appName = COLLECTION_BASED;
-	}
-	$.get('<c:url value="/logManager.do?method=getAppenderList"/>&appName=' + appName, function(data) {
-		$('#selectAppender option').remove();
-		var appenders = data.appenders;
-		var name = null;
-		var value = null;
-		var map = new Map();
-		for(var i=0;i<appenders.length;i++) {
-			var appD = '';
-			if(isCollection) {
-				if(typeof(map.get(appenders[i].collectionName)) == 'undefined') {
-					name = appenders[i].collectionName;
-					map.put(appenders[i].collectionName, appenders[i].collectionName);
-				} else {
-					continue;
-				}
-				
-			}else {
-				name = appenders[i].appenderName;
-			}
-			value = appenders[i].collectionName;
-			$('#selectAppender').append('<option value="' + value + '">' + name + '</option>');
-		}
-		if(initAppenderName != '') {
-			$('#selectAppender').val(initAppenderName);
-		}
-		if(isCollection) getApps(true);
-	});
-}
-
-function getApps(isCollection) {
-	var self = $('#selectAppender');
-	if(isCollection) {
-		var url = '<c:url value="/logManager.do?method=getAppListByCollection"/>';
-		$.get(url, 'collectionName=' + self.val(), function(data){
-			$('#selectAppName option').remove();
-			var apps = data.apps;
-			for(var i=0;i<apps.length;i++) {
-				$('#selectAppName').append('<option value="' + apps[i].appName + '">' + apps[i].appName + '</option>');
-			}
-			if(initAppName != '') {
-				$('#selectAppName').val(initAppName);
-			}
-		});
-	}else{
-		var url = '<c:url value="/logmanager.do?method=getAppList"/>';
-		$.get(url, '', function(data){
-			$('#selectAppName option').remove();
-			var apps = data.apps;
-			for(var i=0;i<apps.length;i++) {
-				$('#selectAppName').append('<option value="' + app.appName + '">' + app.appName + '</option>');
-			}
-		});
-	}
-}
+var DATE_FORMAT = 'yyyy-MM-dd HH:mm:ss,SSS';
 
 /**
  * log data draw(1row)
@@ -113,15 +49,44 @@ function drawLogData(i, log) {
 		$('#tbodyMessageText tr:first').remove();
 	} 
 	var html = '<tr class="log-row"><td class="number-cell">' + (1 + i) + '</td><td class="log-cell" id="' + log._id + '">';
-	html += '<pre><span class="level ' + log.level + ' NEW">[' + log.level + ']&nbsp;</span><span class="timestamp ' + log.level + ' NEW">[' 
-		+ log.timestampString + ']&nbsp;</span><span class="client-ip ' + log.level + ' NEW">[' 
-		+ log.mdc.clientIp + ']&nbsp;</span><span class="user-id ' + log.level + ' NEW">[' 
-		+ log.mdc.userId + ']&nbsp;</span><span class="class-name ' + log.level + ' NEW">[' 
-		+ log.className + '.</span><span class="method-name ' + log.level + ' NEW">' 
-		+ log.methodName + '()]&nbsp;</span><span class="line-number ' + log.level + ' NEW">[line ' 
-		+ log.lineNumber + ']&nbsp;</span><span class="thread ' + log.level + ' NEW">[' 
-		+ log.thread + ']&nbsp;</span><span class="message ' + log.level + ' NEW">' + log.message + '</span></pre>';
+	html += '<pre>';
+	html += '<span class="level ' + log.level + ' NEW">[' + log.level + ']&nbsp;</span>';
+	html += '<span class="timestamp ' + log.level + ' NEW">['	+ log.timestamp.dateFormat(DATE_FORMAT) + ']&nbsp;</span>'; 
+	if(log.mdc) {
+		html += '<span class="client-ip ' + log.level + ' NEW">' + (log.clientIp ? '[' + log.clientIp + ']&nbsp;' : '') + '</span>';
+		html += '<span class="user-id ' + log.level + ' NEW">' + (log.userId?'[' + log.userId + ']&nbsp;':'') + '</span>';	
+	}
+	if(log.className != null) {
+		html += '<span class="class-name ' + log.level + ' NEW">[' + log.className + '</span>';
+		if(log.methodName != null) {
+			html += '<span class="method-name ' + log.level + ' NEW">.' + log.methodName + '()]&nbsp;</span>';	
+		}else{
+			html += '<span class="method-name ' + log.level + ' NEW">]&nbsp;</span>';
+		}
+	}else if(log.methodName != null) {
+		html += '<span class="method-name ' + log.level + ' NEW">[' + log.methodName + '()]&nbsp;</span>';	
+	}
+	
+	if(log.lineNumber != null) {
+		html += '<span class="line-number ' + log.level + ' NEW">[line ' + log.lineNumber + ']&nbsp;</span>';	
+	}
+	if(log.thread != null) {
+		html += '<span class="thread ' + log.level + ' NEW">[' + log.thread + ']&nbsp;</span>' ;	
+	}
+	
+	for(var key in log) {
+		if(log[key] != null) {
+			if(key != '_id' && key != 'level' && key != 'timestamp' && key != 'className' 
+					&& key != 'methodName' && key != 'lineNumber' && key != 'thread' && key != 'message') {
+				html += '<span class="else ' + log.level + ' NEW">[' + log[key] + ']&nbsp;</span>';	
+			}
+		}
+	}
+	
+	html += '<span class="message ' + log.level + ' NEW">' + log.message.escapeHTML() + '</span>'; 
+	html += '</pre>';
 	html += '</td></tr>';
+	
 	$('#tbodyMessageText').append(html);
 }
 
@@ -262,28 +227,6 @@ $(document).ready(function() {
 			isTailing = false;
 			onSearch();
 		}
-	});
-
-	/**
-	 * 'Collection Based' check box click event handler
-	 */
-	$('#checkboxCollectionBased').click(function(e) {
-		if($('#checkboxCollectionBased').attr('checked') == 'checked') {
-			$('.appender-title').html('Collection');
-			getAppenders(true);
-			$('#selectAppName').unbind('change');
-			$('#selectAppender').change(function(e) {
-				getApps(true);
-			});
-		} else {
-			$('.appender-title').html('Appender');
-			getAppenders(false);
-			$('#selectAppender').unbind('change');
-			$('#selectAppName').change(function(e) {
-				getAppenders(false);
-			});
-		} 
-		
 	});
 
 	/**
@@ -462,14 +405,6 @@ $(document).ready(function() {
 	});
 
 	/**
-	 * app. name change event handler
-	 * call getAppenders() function
-	 */
-	$('#selectAppName').change(function(e) {
-		getAppenders(false);
-	});
-
-	/**
 	 * switch to grid style search
 	 **/
 	$('#gridStyle').click(function(e){
@@ -478,12 +413,6 @@ $(document).ready(function() {
 		$('#searchForm').submit();
 	});
 
-	// appender select box initialize
-	if($('#checkboxCollectionBased').attr('checked')) {
-		getAppenders(true);
-	}else{
-		getAppenders(false);
-	}
 
 	if($('#checkboxAdvancedOptions').is(':checked')) {
 		$('tr.advanced-option,td.advanced-option').toggle();
@@ -534,8 +463,8 @@ $(document).ready(function() {
         <div class="topnavi">
         	<ul>
             	<c:if test="${not empty sessionScope.loginAccount.userId}">
-            		<li class="end"><a href="javascript:fncLogout();">
-            		<c:out value="${sessionScope.loginAccount.userId}"/>님 Logout</a></li>
+            		<li class="end"><a href="#" onclick="javascript:fncLogout();">
+            		<c:out value="${sessionScope.loginAccount.userId}"/>&nbsp;<spring:message code="logmanager.logout.message"/></a></li>
             	</c:if>
             </ul>
 		</div>
@@ -549,6 +478,7 @@ $(document).ready(function() {
                     <li><a href="<c:url value="/logManager.do?method=analysis4gridForm"/>"><spring:message code="logmanager.analysis.title"/></a></li>
 				<c:if test="${sessionScope.loginAccount.userType=='Administrator'}">
 					<li><a href="<c:url value="/logManager.do?method=agentList"/>">Log Agent Management</a></li>
+					<li><a href="<c:url value="/logManager.do?method=repositoryListForm"/>">Log Repository Management</a></li>
                    	<li><a href="<c:url value="/logManager.do?method=appList"/>">Log Application Management</a></li>
                    	<li><a href="<c:url value="/account.do?method=view"/>">Account Management</a></li>
 				</c:if>
@@ -561,8 +491,8 @@ $(document).ready(function() {
                 <div id="innercontents">
                 	<div id="tabs">
 	                	<ul>
-	                		<li><a href="#gridStyle" id="gridStyle">Grid Style</a></li>
-	                		<li class="selected"><a href="#textStyle" id="textStyle">Text Style</a></li>
+	                		<li><a href="#gridStyle" id="gridStyle"><spring:message code="logmanager.analysis.grid.style"/></a></li>
+	                		<li class="selected"><a href="#textStyle" id="textStyle"><spring:message code="logmanager.analysis.text.style"/></a></li>
 	                	</ul>
                 	</div>
 					<div id="divSearchCondition" class="search_area">
@@ -579,7 +509,6 @@ $(document).ready(function() {
                             <tbody>
                             	<tr>
 									<td colspan="4" class="align_right nonebg">
-										<form:checkbox id="checkboxCollectionBased" path="collectionBased" class="checkbox_search" value="true" label="Collection Based"/>
 										<form:checkbox id="checkboxAdvancedOptions" path="advancedOptions" value="true" label="Advanced Options"/>
 										<form:checkbox id="checkboxMatchedLogOnly" path="matchedLogOnly" value="true" label="Matched Log Only"/>
 										<form:checkbox id="checkboxLogTailingMode" path="logTailingMode" value="true" label="Log Tailing"/>										
@@ -590,9 +519,9 @@ $(document).ready(function() {
 									<td class="topline">
 										<form:select id="selectAppName" class="select_search" path="appName" items="${appNameList}"/>
 									</td>
-									<th class="topline"><spring:message code="logmanager.analysis.appender"/></th>
+									<th class="topline"><spring:message code="logmanager.analysis.repository"/></th>
 									<td class="topline">
-										<select id="selectAppender" name="appenderName" class="select_search"/>
+										<form:select id="selectRepository" path="repositoryName" class="select_search" items="${repositoryList}"/>
 									</td>
 								</tr>
 								<tr class="advanced-option">
@@ -669,14 +598,14 @@ $(document).ready(function() {
 								<td width="50%">
 									<div class="btncontainer_left">
 										<span>
-				                            <label for="txtLineLimit">Line Limit : </label>&nbsp;<input type="text" size="3" id="txtLineLimit" value="500" style="text-align:right;"/>
+				                            <label for="txtLineLimit"><spring:message code="logmanager.analysis.line.limit"/> : </label>&nbsp;<input type="text" size="3" id="txtLineLimit" value="500" style="text-align:right;"/>
 				                        </span>
 				                    </div>
 								</td>
 								<td width="50%">
 									<div class="btncontainer_right">
 				                        <span class="button tableout">
-				                            <button id="btnSearch">Search</button>
+				                            <button id="btnSearch"><spring:message code="logmanager.button.search"/></button>
 				                        </span>
 				                    </div>
 								</td>
@@ -685,7 +614,7 @@ $(document).ready(function() {
 						
 					</div>
 					<table width="100%">
-						<tr><td style="text-align:left;">[<span class="spanListCount"></span>&nbsp;rows]</td><td style="text-align:right;"><a href="#" class="btn-clear">Clear</a>&nbsp;|&nbsp;<a href="#" class="btn-export">Export</a></td></tr>
+						<tr><td style="text-align:left;">[<span class="spanListCount"></span>&nbsp;<spring:message code="logmanager.analysis.rows"/>]</td><td style="text-align:right;"><a href="#" class="btn-clear"><spring:message code="logmanager.button.clear"/></a>&nbsp;|&nbsp;<a href="#" class="btn-export"><spring:message code="logmanager.button.export"/></a></td></tr>
 					</table>
 					<div id="divMessageText" class="margin_top0">
 						<table width="100%" cellspacing="2" cellpadding="2" border="0">
@@ -693,7 +622,7 @@ $(document).ready(function() {
 						</table>
 					</div>
 					<table width="100%">
-						<tr><td style="text-align:right;"><input type="checkbox" id="checkboxLogTailingModeBottom"/><label for="checkboxLogTailingModeBottom">&nbsp;Log Tailing</label></td></tr>
+						<tr><td style="text-align:right;"><input type="checkbox" id="checkboxLogTailingModeBottom"/><label for="checkboxLogTailingModeBottom">&nbsp;<spring:message code="logmanager.analysis.logtailing"/></label></td></tr>
 					</table>
 				</div><!-- // innercontents E -->
             </div><!-- // contents E -->
@@ -702,21 +631,21 @@ $(document).ready(function() {
 
 	<hr />
 	<div id="footer_wrap">
-		<div id="footer">Copyright 2012 www.anyframejava.org</div>
+		<div id="footer"><spring:message code="logmanager.footer.copyright"/></div>
 	</div>
 </div>
 
-<div id="export-format-form" title="Export Format Select">
+<div id="export-format-form" title="<spring:message code="logmanager.analysis.export.title"/>">
 	<div class="view poplayer margin_top10">
 		<table summary="">
-		    <caption>Export Format Select Form</caption>
+		    <caption><spring:message code="logmanager.analysis.export.title"/></caption>
 		    <colgroup>
 		        <col style="width:50%;" />
 		        <col style="width:50%;" />
 		    </colgroup>
 		    <tr>
-		        <td class="topline bottomline"><a href="#" id="txtFormat">Text(*.txt)</a></td>
-		        <td class="topline bottomline"><a href="#" id="xlsFormat">Excel(*.xls)</a></td>
+		        <td class="topline bottomline"><a href="#" id="txtFormat"><spring:message code="logmanager.analysis.export.text"/></a></td>
+		        <td class="topline bottomline"><a href="#" id="xlsFormat"><spring:message code="logmanager.analysis.export.excel"/></a></td>
 		    </tr>
 		</table>
 	</div>

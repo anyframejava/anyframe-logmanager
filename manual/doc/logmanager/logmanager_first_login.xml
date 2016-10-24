@@ -11,11 +11,14 @@
 	</para>
 	<mediaobject>
 		<imageobject role="html">
-			<imagedata fileref="../image/logmanager/logmanager009.jpg" format="JPG" align="center"/>
+			<imagedata fileref="../image/logmanager/160_033.jpg" format="JPG" align="center"/>
 		</imageobject>
 		<imageobject role="fo">
-			<imagedata fileref="../image/logmanager/pdf/logmanager009.jpg" format="JPG" align="center"/>
+			<imagedata fileref="../image/logmanager/pdf/160_033.jpg" format="JPG" align="center"/>
 		</imageobject>
+		<textobject>
+			<phrase>최초 접속 시 로그인 화면 이미지</phrase>
+		</textobject> 
 		<caption>최초 접속 시 로그인 화면</caption>
 	</mediaobject>
 	<para>
@@ -25,15 +28,6 @@
 			</listitem>
 		</itemizedlist>
 	</para>
-	<mediaobject>
-		<imageobject role="html">
-			<imagedata fileref="../image/logmanager/logmanager010.jpg" format="JPG" align="center"/>
-		</imageobject>
-		<imageobject role="fo">
-			<imagedata fileref="../image/logmanager/pdf/logmanager010.jpg" format="JPG" align="center"/>
-		</imageobject>
-		<caption>최초 사용자 등록 팝업</caption>
-	</mediaobject>
 	<para>
 		<itemizedlist>
 			<listitem>
@@ -43,11 +37,14 @@
 	</para>
 	<mediaobject>
 		<imageobject role="html">
-			<imagedata fileref="../image/logmanager/logmanager011.jpg" format="JPG" align="center"/>
+			<imagedata fileref="../image/logmanager/160_034.jpg" format="JPG" align="center"/>
 		</imageobject>
 		<imageobject role="fo">
-			<imagedata fileref="../image/logmanager/pdf/logmanager011.jpg" format="JPG" align="center"/>
+			<imagedata fileref="../image/logmanager/pdf/160_034.jpg" format="JPG" align="center"/>
 		</imageobject>
+		<textobject>
+			<phrase>최초 접속 시 사용자 정보 입력 화면 이미지</phrase>
+		</textobject>
 		<caption>최초 사용자 정보 입력</caption>
 	</mediaobject>
 	<para>
@@ -59,11 +56,14 @@
 	</para>
 	<mediaobject>
 		<imageobject role="html">
-			<imagedata fileref="../image/logmanager/LM151-004.JPG" format="JPG" align="center"/>
+			<imagedata fileref="../image/logmanager/160_001.jpg" format="JPG" align="center"/>
 		</imageobject>
 		<imageobject role="fo">
-			<imagedata fileref="../image/logmanager/pdf/LM151-004.JPG" format="JPG" align="center"/>
+			<imagedata fileref="../image/logmanager/pdf/160_001.jpg" format="JPG" align="center"/>
 		</imageobject>
+		<textobject>
+			<phrase>사용자 등록 후 최초 로그인 이미지</phrase>
+		</textobject>
 		<caption>사용자 등록 후 최초 로그인</caption>
 	</mediaobject>
 </chapter>

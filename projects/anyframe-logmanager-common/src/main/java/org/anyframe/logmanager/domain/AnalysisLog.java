@@ -21,6 +21,8 @@ import java.util.Map;
 import java.util.Set;
 
 /**
+ * This is AnalysisLog class.
+ * 
  * @author Jaehyoung Eum
  */
 public class AnalysisLog extends BaseLog {
@@ -30,12 +32,9 @@ public class AnalysisLog extends BaseLog {
 	private String className;
 	private String methodName;
 	private String logger;
-	
+
 	private Map<String, String> mdc;
-	
-	@SuppressWarnings("unused")
-	private String timestampString;
-	
+
 	/**
 	 * @return the serverId
 	 */
@@ -44,7 +43,8 @@ public class AnalysisLog extends BaseLog {
 	}
 
 	/**
-	 * @param serverId the serverId to set
+	 * @param serverId
+	 *            the serverId to set
 	 */
 	public void setServerId(String serverId) {
 		this.serverId = serverId;
@@ -58,7 +58,8 @@ public class AnalysisLog extends BaseLog {
 	}
 
 	/**
-	 * @param logger the logger to set
+	 * @param logger
+	 *            the logger to set
 	 */
 	public void setLogger(String logger) {
 		this.logger = logger;
@@ -72,7 +73,8 @@ public class AnalysisLog extends BaseLog {
 	}
 
 	/**
-	 * @param mdc the mdc to set
+	 * @param mdc
+	 *            the mdc to set
 	 */
 	public void setMdc(Map<String, String> mdc) {
 		this.mdc = mdc;
@@ -84,45 +86,37 @@ public class AnalysisLog extends BaseLog {
 	public String getTimestampString() {
 		return super.getTimestamp() != null ? (new SimpleDateFormat("yyyy-MM-dd HH:mm:ss, SSS")).format(super.getTimestamp()) : null;
 	}
-	
-	/**
-	 * @param timestampString the timestampString to set
-	 */
-	public void setTimestampString(String timestampString) {
-		this.timestampString = timestampString;
-	}
 
-	
 	/**
 	 * @return the className
 	 */
 	public String getClassName() {
 		return className;
 	}
-	
+
 	/**
-	 * @param className the className to set
+	 * @param className
+	 *            the className to set
 	 */
 	public void setClassName(String className) {
 		this.className = className;
 	}
-	
+
 	/**
 	 * @return the methodName
 	 */
 	public String getMethodName() {
 		return methodName;
 	}
-	
+
 	/**
-	 * @param methodName the methodName to set
+	 * @param methodName
+	 *            the methodName to set
 	 */
 	public void setMethodName(String methodName) {
 		this.methodName = methodName;
 	}
-	
-	
-	
+
 	/**
 	 * @return the agentId
 	 */
@@ -131,7 +125,8 @@ public class AnalysisLog extends BaseLog {
 	}
 
 	/**
-	 * @param agentId the agentId to set
+	 * @param agentId
+	 *            the agentId to set
 	 */
 	public void setAgentId(String agentId) {
 		this.agentId = agentId;
@@ -143,32 +138,38 @@ public class AnalysisLog extends BaseLog {
 	public String getAppName() {
 		return appName;
 	}
-	
+
 	/**
-	 * @param apName the apName to set
+	 * @param apName
+	 *            the apName to set
 	 */
 	public void setAppName(String appName) {
 		this.appName = appName;
 	}
-	
-	/* (non-Javadoc)
+
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see org.anyframe.logmanager.domain.BaseLog#toString()
 	 */
 	@Override
 	public String toString() {
 		Set<String> keySet = null;
 		StringBuffer sb = new StringBuffer();
-		if(mdc != null) {
+		if (mdc != null) {
 			keySet = mdc.keySet();
 			sb.append(", mdc=[");
 			Iterator<String> i = keySet.iterator();
-			while(i.hasNext()) {
+			while (i.hasNext()) {
 				String key = i.next();
 				sb.append(", ").append(key).append("=").append(mdc.get(key));
 			}
 			sb.append("]");
 		}
-		
-		return super.toString() + "\nAnalysisLog [serverId=" + serverId + ", agentId=" + agentId + ", appName=" + appName + ", className=" + className + ", methodName=" + methodName + sb.toString() + "]" ;
+
+		return super.toString() + "\nAnalysisLog [serverId=" + serverId
+				+ ", agentId=" + agentId + ", appName=" + appName
+				+ ", className=" + className + ", methodName=" + methodName
+				+ sb.toString() + "]";
 	}
 }

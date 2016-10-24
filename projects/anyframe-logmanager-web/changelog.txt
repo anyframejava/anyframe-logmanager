@@ -2,6 +2,86 @@
 ==========================
 http://www.anyframejava.org
 
+Changes in version 1.6.0 (2012-12-28)
+-------------------------------------
+* 주요 변경 내역
+  - 정규식 기반의 로그 수집기능 개선
+  - Log Repository 관리기능 추가
+  - 내부 구조 개선으로 Agent 안정성 강화
+
+* 참조 라이브러리 변경 내역
+  - mongo-java-driver-2.8.0.jar를 mongo-java-driver-2.10.1.jar로 버젼 변경
+  - log4mongo-0.7.0.jar에 대한 dependency 제거
+  - anyframe-core-1.5.0.RC1.jar를 anyframe-core-1.5.0.jar파일로 버전 변경
+  - anyframe-logmanager-common-1.5.2.jar dependency 추가
+  
+* 해결된 이슈목록
+  [LA-20]Log Manager 1.6.0 개발
+    - [LA-15] 로그 수집기능 개선
+    - [LA-22] Collection(Log Repository) 관리기능 개발
+    - [LA-23] 로그 조회기능 개선
+    - [LA-24] 1.6.0 테스트
+    - [LA-25] 패키징 및 매뉴얼 작성
+    - [LA-26] 1.6.0 릴리즈
+
+* 상세 변경 내역
+[LA-20] Log Manager 1.6.0 개발(공통)
+ - HessianRuntime Exception 처리 추가
+ - 미사용 클래스 제거
+ - 메시지 리소스 추가 반영
+ - common dependency 제거
+ - 패키징시 log4j.xml을 bundle.jar에 포함
+ - PMD violation 조치
+ - 1024*768 해상도에서 화면 스크롤발생 해결
+
+[LA-15] 로그 수집기능 개선
+- set log collection 기능 추가
+- log4mongo dependency 제거
+- Mongo Java Driver 2.10.1 로 업그레이드
+- logging framework 적용
+- exception 처리 로직 개선
+- mongo.appender.collection 제거
+- mongo.logcollection.collection, mongo.logcollectionresult.collection, mongo.default.collection 추가
+- LogCollector로 refactoring
+- logmanager 형식으로 기술된 log data format를 정규식으로 변환해주는 util 추가
+- 정규식 형태의 로그파일명을 걸러내는 name filter 추가
+- 지정된 날짜 이후의 파일들만 걸러내기 위한 Comparator 추가
+- 크리티컬 예외오류 발생시 System.exit(1) 실행
+- 정규식 기반의 로그데이타 파싱기능 추가
+- logmanager 정의 포맷을 정규식으로 변환기능 적용
+- agent 관련 인터페이스 정비
+- appender 관련 api 제거
+- application 스키마 수정(appender, logger 등등)
+
+[LA-22] Collection(Log Repository) 관리기능 개발
+ - 로그 저장소 생성 및 관리기능
+ - repository type 추가
+ - 메시지 리소스 반영 작업
+ - log repository view 및 UI 개발
+
+[LA-23] 로그 조회기능 개선
+ - MongoDbAppender 저장 스키마 변경(mdc 제거)
+ - AnalysisLog를 대체하여 로그데이타를 표현할 Map 기반의 객체
+ - excel export 기능 개선
+ - 미사용 리소스 제거
+ - 로그 데이타 스키마 확장
+ - 관련 config 설정 추가/변경
+ - 관련 UI 스타일 변경
+ - 내부 구조 개선에 따른 app와 repository 종속관계 해제
+ 
+[LA-24] 1.6.0 테스트
+ - 최초 로그인 시Firefox에서 User Type에 아무내용도 나오지 않는 문제 수정
+ - Log Analysis 화면에서 Duration checkbox에서 오른쪽 상단 Advanced Options 선택후 Duration에서 hour를 선택할 시 현재시간 기준으로 
+   1시간, 3시간, 하루, 1주일, 1달 전셋팅 시 오작동하는 문제 수정
+ - 매뉴얼 오기 수정
+ - Logout 버튼을 누를 경우 아니오라고 선택하면 False라는 내용과 함께 새하얀 페이지만 나오는 문제 수정
+ - IE: 로그인 화면에서 ID 입력하고 Tab 을 누르면 Password 로 가야하는데 브라우져 탭으로 가는 오류 수정
+ - log4j framework 로 policy edit 에 들어가서 GUI 로 변경시 appender 등에서 key, value 값이 비어있어도 Param 에 추가가 되는 오류 수정
+ - Set Log Data Collection Form에서 파일을 분명 없는 것을 입력해도 Status가 녹색체크로 정상표시가 되는 오류 수정
+ - LogApplication 삭제시 LogCollection Data 삭제 안하던 문제 해결
+ - 입력이 완료되지 않은 상태애서 Enter 키를 누르면 창이 사라지면서 작업 내용이 사라지는 버그 수정
+
+
 Changes in version 1.5.1 (2012-11-09)
 -------------------------------------
 * 주요 변경 내역
@@ -49,6 +129,7 @@ Changes in version 1.5.1 (2012-11-09)
   - 로그 정책 editor에서 layout 섹션 없어지는 현상 수정
   - GUI Editor pattern layout 표시 관련 버그 수정
   - 메시지 어구 수정("save is successful")
+  
 
 Changes in version 1.5.0 (2012-06-15)
 -------------------------------------

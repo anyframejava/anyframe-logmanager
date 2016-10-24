@@ -1,18 +1,17 @@
-/* 
- * Copyright (C) 2002-2012 Robert Stewart (robert@wombatnation.com)
+/*
+ * Copyright 2008-2012 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ *      http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *
  */
 package org.anyframe.logmanager.util;
 
@@ -46,12 +45,11 @@ import org.w3c.dom.NodeList;
 
 /**
  * xml parser class for logback.xml
- *
- * @author jaehyoung.eum
- *
+ * 
+ * @author Jaehyoung Eum
  */
 public class LogbackXmlBuilder {
-	
+
 	private static final String ROOT = "root";
 	private static final String APPENDER = "appender";
 	private static final String LOGGER = "logger";
@@ -66,7 +64,7 @@ public class LogbackXmlBuilder {
 	private static final String LAYOUT = "layout";
 	private static final String SIFTING_APPENDER = "ch.qos.logback.classic.sift.SiftingAppender";
 	private static final String DUPLICATED_APENDER = "duplicated appender";
-	
+
 	private Document logbackXmlDoc;
 
 	/**
@@ -78,7 +76,7 @@ public class LogbackXmlBuilder {
 		super();
 		parse(logbackXmlPath);
 	}
-	
+
 	/**
 	 * constructor
 	 * 
@@ -89,30 +87,25 @@ public class LogbackXmlBuilder {
 		super();
 		parse(is);
 	}
-	
+
 	/**
 	 * @return
 	 * @throws Exception
 	 */
 	public String getXmlString() throws Exception {
-		try {
-			Source source = new DOMSource(logbackXmlDoc);
-			StringWriter writer = new StringWriter();
-			
-			Result result = new StreamResult(writer);
-			
-			TransformerFactory tf = TransformerFactory.newInstance();
-			tf.setAttribute("indent-number", new Integer(4));
-			
-			Transformer xformer = tf.newTransformer();
-			xformer.transform(source, result);
-			return writer.toString();
-		} catch (TransformerException ex) {
-			ex.printStackTrace();
-			return null;
-		}
+		Source source = new DOMSource(logbackXmlDoc);
+		StringWriter writer = new StringWriter();
+
+		Result result = new StreamResult(writer);
+
+		TransformerFactory tf = TransformerFactory.newInstance();
+		tf.setAttribute("indent-number", new Integer(4));
+
+		Transformer xformer = tf.newTransformer();
+		xformer.transform(source, result);
+		return writer.toString();
 	}
-	
+
 	/**
 	 * get root node
 	 * 
@@ -122,7 +115,6 @@ public class LogbackXmlBuilder {
 	public Root getLogbackRoot() throws Exception {
 		return getRootNode();
 	}
-	
 
 	/**
 	 * get appenders from xml dom
@@ -143,7 +135,6 @@ public class LogbackXmlBuilder {
 	public List<Logger> getLogbackLogger() throws Exception {
 		return getLoggerNodeList();
 	}
-	
 
 	/**
 	 * @param logbackXmlPath2
@@ -154,13 +145,14 @@ public class LogbackXmlBuilder {
 
 		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 		// dtd 기준 parsing 막기 위해 -> 없애면 FileNotFoundException 발생
-		factory.setAttribute("http://apache.org/xml/features/nonvalidating/load-external-dtd", false);
+		factory.setAttribute(
+				"http://apache.org/xml/features/nonvalidating/load-external-dtd",
+				false);
 		DocumentBuilder builder = factory.newDocumentBuilder();
 
 		logbackXmlDoc = builder.parse(f);
 	}
 
-	
 	/**
 	 * @param is
 	 * @throws Exception
@@ -168,12 +160,14 @@ public class LogbackXmlBuilder {
 	private void parse(InputStream is) throws Exception {
 		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 		// dtd 기준 parsing 막기 위해 -> 없애면 FileNotFoundException 발생
-		factory.setAttribute("http://apache.org/xml/features/nonvalidating/load-external-dtd", false);
+		factory.setAttribute(
+				"http://apache.org/xml/features/nonvalidating/load-external-dtd",
+				false);
 		DocumentBuilder builder = factory.newDocumentBuilder();
 		logbackXmlDoc = builder.parse(is);
-		
+
 	}
-	
+
 	/**
 	 * get root logger
 	 * 
@@ -184,8 +178,9 @@ public class LogbackXmlBuilder {
 		Node rootNode = logbackXmlDoc.getElementsByTagName(ROOT).item(0);
 
 		Root root = new Root();
-		root.setLevel(rootNode.getAttributes().getNamedItem(LEVEL).getNodeValue());
-		
+		root.setLevel(rootNode.getAttributes().getNamedItem(LEVEL)
+				.getNodeValue());
+
 		NodeList list = rootNode.getChildNodes();
 		ArrayList<String> appenders = new ArrayList<String>();
 		for (int i = 0; i < list.getLength(); i++) {
@@ -200,7 +195,7 @@ public class LogbackXmlBuilder {
 		root.setAppenderRefs(appenders);
 		return root;
 	}
-	
+
 	/**
 	 * get logger list from logback.xml dom
 	 * 
@@ -226,13 +221,14 @@ public class LogbackXmlBuilder {
 			}
 			logger.setAppenderRefs(appenders);
 			logger.setName(loggerAttr.getNamedItem(NAME).getNodeValue());
-			logger.setAdditivity(loggerAttr.getNamedItem(ADDITIVITY).getNodeValue());
+			logger.setAdditivity(loggerAttr.getNamedItem(ADDITIVITY)
+					.getNodeValue());
 			logger.setLevel(loggerAttr.getNamedItem(LEVEL).getNodeValue());
 			result.add(logger);
 		}
 		return result;
 	}
-	
+
 	/**
 	 * get appender list from logback.xml dom
 	 * 
@@ -240,12 +236,12 @@ public class LogbackXmlBuilder {
 	 * @throws Exception
 	 */
 	private List<Appender> getAppenderNodeList() throws Exception {
-		List<Appender> result = null;//new ArrayList<Appender>();
+		List<Appender> result = null;// new ArrayList<Appender>();
 		NodeList list = logbackXmlDoc.getElementsByTagName(APPENDER);
 		Map<String, Appender> appenderMap = new HashMap<String, Appender>();
 		boolean isSiftingAppender = false;
 		for (int i = 0; i < list.getLength(); i++) {
-			if(isSiftingAppender) {
+			if (isSiftingAppender) {
 				isSiftingAppender = false;
 				continue;
 			}
@@ -266,29 +262,34 @@ public class LogbackXmlBuilder {
 					paramList.add(param);
 				} else if (child.getNodeName().equals(LAYOUT)) {
 					NamedNodeMap paramAttr = child.getAttributes();
-					layout.setLayoutClass(paramAttr.getNamedItem(CLASS).getNodeValue());
+					layout.setLayoutClass(paramAttr.getNamedItem(CLASS)
+							.getNodeValue());
 					NodeList layoutChild = child.getChildNodes();
 					for (int k = 0; k < layoutChild.getLength(); k++) {
 						Node paramNode = layoutChild.item(k);
 						if (paramNode.getNodeName().equals(PARAM)) {
-							NamedNodeMap layoutParamAttr = paramNode.getAttributes();
+							NamedNodeMap layoutParamAttr = paramNode
+									.getAttributes();
 							Param param = new Param();
-							param.setName(layoutParamAttr.getNamedItem(NAME).getNodeValue());
-							param.setValue(layoutParamAttr.getNamedItem(VALUE).getNodeValue());
+							param.setName(layoutParamAttr.getNamedItem(NAME)
+									.getNodeValue());
+							param.setValue(layoutParamAttr.getNamedItem(VALUE)
+									.getNodeValue());
 							layout.setParam(param);
 						}
 					}
 				}
 			}
 			appender.setName(appenderAttr.getNamedItem(NAME).getNodeValue());
-			appender.setAppenderClass(appenderAttr.getNamedItem(CLASS).getNodeValue());
+			appender.setAppenderClass(appenderAttr.getNamedItem(CLASS)
+					.getNodeValue());
 			appender.setParams(paramList);
 			appender.setLayout(layout);
-			if(SIFTING_APPENDER.equals(appender.getAppenderClass())) {
+			if (SIFTING_APPENDER.equals(appender.getAppenderClass())) {
 				isSiftingAppender = true;
 			}
-			//result.add(appender);
-			if(appenderMap.containsKey(appender.getName())) {
+			// result.add(appender);
+			if (appenderMap.containsKey(appender.getName())) {
 				appender.setAppenderClass(DUPLICATED_APENDER);
 			}
 			appenderMap.put(appender.getName(), appender);
@@ -296,5 +297,5 @@ public class LogbackXmlBuilder {
 		result = new ArrayList<Appender>(appenderMap.values());
 		return result;
 	}
-	
+
 }

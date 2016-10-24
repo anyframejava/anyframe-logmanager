@@ -3,7 +3,7 @@
 	<para>여기서는 Log Manager의 각 구성요소들의 설정방법에 대하여 안내하고 있다.</para>
 	<section id="logmanager_web_xml">
 		<title>web.xml과 Logging Policy File(log4j.xml 등) - Legacy Application</title>
-		<para>Legacy Application의 web.xml과 Logging Policy File(log4j.xml 등)을 설정하는 방법은 Log Manager plugin 매뉴얼에서 제공하고 있으며 내용은 <ulink url="http://dev.anyframejava.org/docs/anyframe/plugin/optional/logmanager/1.0.2/reference/htmlsingle/logmanager.html#logmanager_configuration">여기</ulink>를 클릭하여 참조한다.</para>
+		<para>Legacy Application의 web.xml과 Logging Policy File(log4j.xml 등)을 설정하는 방법은 Log Manager plugin 매뉴얼에서 제공하고 있으며 내용은 <ulink url="http://dev.anyframejava.org/docs/anyframe/plugin/optional/logmanager/1.0.4-SNAPSHOT/reference/htmlsingle/logmanager.html#logmanager_configuration">여기</ulink>를 클릭하여 참조한다.</para>
 	</section>
 	<section id="logmanager_mongo_properties">
 		<title>mongo.properties - Log Manager Web</title>
@@ -20,9 +20,12 @@ mongo.socketKeepAlive=true
 mongo.socketTimeout=1500
 mongo.slaveOk=true
 mongo.database.name=logs #log data가 저장될 collection 명
-mongo.admin.collection=LogApplication  #log application 정보가 저장될 collection 명
+mongo.app.collection=LogApplication  #log application 정보가 저장될 collection 명
 mongo.agent.collection=LogAgent #log agent service 정보가 저장될 collection 명
 mongo.appender.collection=LogAppender #log application 내의 appender 정보가 저장될 collection 명
+mongo.logcollection.collection=LogCollection #log application 내의 로그 수집 정보가 저장될 collection 명
+mongo.logcollectionresult.collection=LogCollectionResult #log application 내의 로그 수집 결과가 저장될 collection 명
+mongo.default.collection=Default #로그 수집시 default 로 사용될 log repository collection 명
 mongo.account.collection=Account #account 정보가 저장될 collection 명]]></programlisting>
 	</section>
 	<section id="log_agent_service_config">
@@ -55,8 +58,12 @@ mongo.socketKeepAlive=true
 mongo.socketTimeout=1500
 mongo.database.name=logs
 mongo.app.collection=LogApplication
-mongo.appender.collection=LogAppender
 mongo.agent.collection=LogAgent
+mongo.appender.collection=LogAppender
+mongo.logcollection.collection=LogCollection
+mongo.logcollectionresult.collection=LogCollectionResult
+mongo.default.collection=Default
+mongo.account.collection=Account
 
 #################################### Log App Info. ######################################################
 <emphasis role="bold">default.polling.time=1000s # 기본 polling time 정보</emphasis>

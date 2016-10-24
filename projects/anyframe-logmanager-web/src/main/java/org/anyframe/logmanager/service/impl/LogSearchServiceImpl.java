@@ -15,54 +15,71 @@
  */
 package org.anyframe.logmanager.service.impl;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import org.anyframe.logmanager.domain.AnalysisLog;
-import org.anyframe.logmanager.domain.BaseLog;
 import org.anyframe.logmanager.domain.LogApplication;
+import org.anyframe.logmanager.domain.LogDataMap;
 import org.anyframe.logmanager.domain.LogSearchCondition;
 import org.anyframe.logmanager.service.LogSearchService;
 import org.springframework.stereotype.Service;
 
 /**
+ * This is LogSearchServiceImpl class.
+ * 
  * @author Jaehyoung Eum
- *
  */
 @Service("logSearchService")
 public class LogSearchServiceImpl implements LogSearchService {
-	
+
 	@Inject
 	@Named("logSearchDao")
 	private LogSearchDao dao;
-	
+
 	@Inject
 	@Named("logApplicationDao")
 	private LogApplicationDao appDao;
-	
-	/* (non-Javadoc)
-	 * @see org.anyframe.logmanager.service.LogSearchService#searchAnalysisLog(org.anyframe.logmanager.domain.SearchCondition)
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * org.anyframe.logmanager.service.LogSearchService#searchAnalysisLog(org
+	 * .anyframe.logmanager.domain.SearchCondition)
 	 */
 	@SuppressWarnings("unchecked")
-	public List<AnalysisLog> searchAnalysisLog(LogSearchCondition searchCondition) throws Exception {
-		return (List<AnalysisLog>)dao.searchLog(searchCondition, AnalysisLog.class, searchCondition.getCollection());
+	public List<LogDataMap> searchAnalysisLog(LogSearchCondition searchCondition) throws Exception {
+//		return (List<AnalysisLog>) dao.searchLog(searchCondition, AnalysisLog.class, searchCondition.getCollection());
+		return (List<LogDataMap>) dao.searchLog(searchCondition, LogDataMap.class, searchCondition.getCollection());
 	}
+
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * org.anyframe.logmanager.service.LogSearchService#getLogApplicationList
+	 * (org.anyframe.logmanager.domain.LogApplication, boolean)
+	 */
+	public List<String> getActiveLogApplicationNameList() throws Exception {
+		List<String> appNameList = new ArrayList<String>();
+		List<LogApplication> appList = appDao.getActiveLogApplicationList();
+		int size = appList.size();
+		for (int i = 0; i < size; i++) {
+			appNameList.add(appList.get(i).getAppName());
+		}
+		return appNameList;
+	}
+
 
 	/* (non-Javadoc)
-	 * @see org.anyframe.logmanager.service.LogSearchService#searchBaseLog(org.anyframe.logmanager.domain.SearchCondition)
+	 * @see org.anyframe.logmanager.service.LogSearchService#getLogData(java.lang.String, java.lang.String)
 	 */
-	@SuppressWarnings("unchecked")
-	public List<BaseLog> searchBaseLog(LogSearchCondition searchCondition) throws Exception {
-		return (List<BaseLog>)dao.searchLog(searchCondition, BaseLog.class, searchCondition.getCollection());
+	public LogDataMap getLogData(String id, String repositoryName) throws Exception {
+		return dao.getLogData(id, repositoryName);
 	}
-
-	/* (non-Javadoc)
-	 * @see org.anyframe.logmanager.service.LogSearchService#getLogApplicationList(org.anyframe.logmanager.domain.LogApplication, boolean)
-	 */
-	public List<LogApplication> getActiveLogApplicationList() throws Exception {
-		return appDao.getActiveLogApplicationList();
-	}
-
 }

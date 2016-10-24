@@ -15,25 +15,20 @@
  */
 package org.anyframe.logmanager.service.impl;
 
-import java.io.File;
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.anyframe.logmanager.LogManagerConstant;
-import org.anyframe.logmanager.domain.Appender;
-import org.anyframe.logmanager.domain.LogAppender;
 import org.anyframe.logmanager.domain.LogApplication;
 import org.anyframe.logmanager.service.LogApplicationService;
-import org.anyframe.logmanager.util.Log4jXmlBuilder;
-import org.anyframe.logmanager.util.LogbackXmlBuilder;
 import org.springframework.stereotype.Service;
 
 /**
+ * This is LogApplicationServiceImpl class.
+ * 
  * @author Jaehyoung Eum
- *
  */
 @Service("logApplicationService")
 public class LogApplicationServiceImpl implements LogApplicationService {
@@ -42,42 +37,10 @@ public class LogApplicationServiceImpl implements LogApplicationService {
 	@Named("logApplicationDao")
 	private LogApplicationDao dao;
 	
-	/* (non-Javadoc)
-	 * @see org.anyframe.logmanager.service.LogApplicationService#getInitLogApplication()
-	 */
-	public void getInitLogApplication() throws Exception {
-		/*List<LogApplication> list = null;
-		list = dao.getAllLogApplicationList();
-		if(list != null) {
-			int l = list.size();
-			for(int i=0;i<l;i++) {
-				LogApplication app = (LogApplication)list.get(i);
-				// TODO: log4j xml 파일을 읽어서 logger 및 appender 정보를 다시 셋팅한다.
-				if((new File(app.getLog4jXmlPath())).exists()) {
-					Log4jXmlBuilder log4jxml = new Log4jXmlBuilder(app.getLog4jXmlPath());
-					
-					List<Appender> appenders = log4jxml.getLog4jAppender();
-					List<Appender> filteredAppenders = new ArrayList<Appender>();
-					if(appenders != null) {
-						for(int j=0;j<appenders.size();j++){
-							Appender appender = (Appender)appenders.get(j);
-							if(LogManagerConstant.APPENDER_CLASS.equals(appender.getAppenderClass())) {
-								filteredAppenders.add(appender);
-							}
-						}
-					}
-					app.setAppenders(filteredAppenders);
-
-					List<Logger> loggers = log4jxml.getLog4jLogger();
-					app.setLoggers(loggers);
-				}else {
-					app.setStatus(LogManagerConstant.APP_STATUS_FAILED);
-				}
-				
-				dao.saveLogApplication(app);
-			}
-		}*/
-	}
+	@Inject
+	@Named("logCollectionDao")
+	private LogCollectionDao logCollectionDao;
+	
 	
 	/* (non-Javadoc)
 	 * @see org.anyframe.logmanager.service.LogApplicationService#getLogApplicationList(org.anyframe.logmanager.domain.LogApplication)
@@ -91,43 +54,6 @@ public class LogApplicationServiceImpl implements LogApplicationService {
 			}
 		}
 		return list;
-	}
-
-	/* (non-Javadoc)
-	 * @see org.anyframe.logmanager.service.LogApplicationService#loadLog4jXml(org.anyframe.logmanager.domain.LogApplication)
-	 */
-	public LogApplication loadLoggingPolicyFile(LogApplication param) throws Exception {
-		if((new File(param.getLoggingPolicyFilePath())).exists()) {
-			
-			List<Appender> appenders = null;
-			
-			if(LogManagerConstant.LOGGING_FRAMEWORKS[0].equals(param.getLoggingFramework())) { // log4j
-				Log4jXmlBuilder builder = new Log4jXmlBuilder(param.getLoggingPolicyFilePath());
-				appenders = builder.getLog4jAppender();
-				List<Appender> filteredAppenders = new ArrayList<Appender>();
-				if(appenders != null) {
-					for(int i=0;i<appenders.size();i++){
-						Appender appender = (Appender)appenders.get(i);
-						if(LogManagerConstant.APPENDER_CLASS_LOG4J.equals(appender.getAppenderClass())) {
-							filteredAppenders.add(appender);
-						}
-					}
-				}
-				param.setAppenders(filteredAppenders);
-				param.setLoggers(builder.getLog4jLogger());
-				param.setRoot(builder.getLog4jRoot());
-			}else{ // logback
-				LogbackXmlBuilder builder = new LogbackXmlBuilder(param.getLoggingPolicyFilePath());
-				// TODO dsfdsfdfsdfsdf
-			}
-			
-			
-			
-			
-		}else {
-			return null;
-		}
-		return param;
 	}
 
 	/* (non-Javadoc)
@@ -149,185 +75,22 @@ public class LogApplicationServiceImpl implements LogApplicationService {
 		return dao.checkLogApplicationExist(param);
 	}
 
-	/* (non-Javadoc)
-	 * @see org.anyframe.logmanager.service.LogApplicationService#saveLogApplication(org.anyframe.logmanager.domain.LogApplication, java.lang.String[], java.lang.String[])
-	 */
-	public void saveLogApplication(LogApplication param, String[] loggers, String[] appenders) throws Exception {
-		
-		/*LogApplication app = loadLog4jXml(param);
-		
-		if(app != null) {
-			app.setId(param.getId());
-			List<Appender> appenderList = app.getAppenders();
-			List<Logger> loggerList = app.getLoggers();
-			for(int i=0;i<appenderList.size();i++) {
-				Appender appender = (Appender)appenderList.get(i);
-
-				// appender monitorLevel info update
-				for(int j=0;j<appenders.length;j++) {
-					//log.debug("appenders[j]={}", appenders[j]);
-					String[] appenderArray = appenders[j].split("\\|");
-					if(appender.getName().equals(appenderArray[0])){
-						boolean f = false;
-						for(int k=0;k<appender.getParams().size();k++) {
-							Param p = (Param)appender.getParams().get(k);
-							if(p.getName().equals(LogManagerConstant.MONITOR_LEVEL)){
-								p.setValue(appenderArray[1]);
-								f = true;
-								break;
-							}
-						}
-						if(!f) {
-							Param p = new Param();
-							p.setName(LogManagerConstant.MONITOR_LEVEL);
-							p.setValue(appenderArray[1]);
-							appender.getParams().add(p);
-						}
-					}
-				}
-			}
-			
-			// logger level info update
-			for(int j=0;j<loggers.length;j++) {
-				String[] loggerArray = loggers[j].split("\\|");
-				if("root".equals(loggerArray[0])){
-					app.getRoot().setLevel(loggerArray[1]);
-					continue;
-				}else{
-					for(int i=0;i<loggerList.size();i++) {
-						Logger logger = (Logger)loggerList.get(i);
-						if(logger.getName().equals(loggerArray[0])){
-							logger.setLevel(loggerArray[1]);
-							break;
-						}	
-					}
-				}
-			}
-			
-			app.setStatus(LogManagerConstant.APP_STATUS_ACTIVE);
-			dao.saveLogApplication(app);
-			saveLog4jXmlFile(app);
-			
-		}else {
-			throw new Exception("Unable To access : " + param.getLog4jXmlPath());
-		}*/
-	}
 	
 	/* (non-Javadoc)
 	 * @see org.anyframe.logmanager.service.LogApplicationService#saveLogApplication(org.anyframe.logmanager.domain.LogApplication, java.lang.String[], java.lang.String[], int[], boolean[])
 	 */
-	public void saveLogApplication(LogApplication param, String[] appenders, String[] pollingTimes, int[] monitorLevels, boolean[] fileAppenders, String[] collectionNames, int[] status) throws Exception {
-		param.setStatus(LogManagerConstant.APP_STATUS_ACTIVE);
+	public void saveLogApplication(LogApplication param) throws Exception {
 		
 		dao.saveLogApplication(param);
 		
-		LogAppender logAppender = new LogAppender();
-		logAppender.setAgentId(param.getAgentId());
-		logAppender.setAppName(param.getAppName());
-		
-		dao.inactivateAllLogAppender(logAppender);
-		
-		if(appenders != null) {
-			for(int i=0;i<appenders.length;i++) {
-				logAppender.setAppenderName(appenders[i]);
-				logAppender.setMonitorLevel(monitorLevels[i]);
-				logAppender.setPollingTime(pollingTimes[i]);
-				logAppender.setFileAppender(fileAppenders[i]);
-				logAppender.setCollectionName(collectionNames[i]);
-				logAppender.setStatus(status[i]);	
-				if(dao.checkLogAppender(logAppender) > 0) {
-					dao.updateLogAppender(logAppender);
-				}else{
-					dao.saveLogAppender(logAppender);	
-				}
-			}
-		}
-		
 	}
 	
-	/* (non-Javadoc)
-	 * @see org.anyframe.logmanager.service.LogApplicationService#getAppenderList(org.anyframe.logmanager.domain.LogApplication)
-	 */
-	public List<Appender> getAppenderList(LogApplication param, String userType) throws Exception {
-		/*List<Appender> appenders = dao.getAppenderList(param);
-		List<Appender> r = new ArrayList<Appender>();
-		if(appenders != null) {
-			if(LogManagerConstant.DETAIL_USER_TYPES[1].equals(userType)) {
-				int l = appenders.size();
-				for(int i=0;i<l;i++) {
-					Appender appender = appenders.get(i);
-					int l2 = appender.getParams().size();
-					for(int j=0;j<l2;j++) {
-						Param p = appender.getParams().get(j);
-						if(LogManagerConstant.MONITOR_LEVEL.equals(p.getName())) {
-							if(p.getValue().equals("1")) {
-								r.add(appender);
-							}
-							break;
-						}
-					}
-				}
-				return r;
-			}else {
-				return appenders;
-			}
-		}else{
-			return null;
-		}*/
-		return null;
-	}
-	
-	/* (non-Javadoc)
-	 * @see org.anyframe.logmanager.service.LogApplicationService#getAppenderList(java.lang.String, java.lang.String, java.lang.String)
-	 */
-	public List<LogAppender> getAppenderList(String agentId, String appName, String userType) throws Exception {
-		if(LogManagerConstant.DETAIL_USER_TYPES[1].equals(userType)) {
-			return dao.getAppenderList(agentId, appName, LogManagerConstant.MONITOR_LEVEL_DEV_VISIBLE);
-		}else{
-			return dao.getAppenderList(agentId, appName, LogManagerConstant.MONITOR_LEVEL_ADMIN_ONLY);
-		}
-		
-	}
-
-	/* (non-Javadoc)
-	 * @see org.anyframe.logmanager.service.LogApplicationService#getAppenderList(java.lang.String, java.lang.String)
-	 */
-	public List<LogAppender> getAppenderList(String appName, String userType) throws Exception {
-		if(LogManagerConstant.DETAIL_USER_TYPES[1].equals(userType)) {
-			return dao.getAppenderList(appName, LogManagerConstant.MONITOR_LEVEL_DEV_VISIBLE);
-		}else{
-			return dao.getAppenderList(appName, LogManagerConstant.MONITOR_LEVEL_ADMIN_ONLY);
-		}
-	}
-	
-	/* (non-Javadoc)
-	 * @see org.anyframe.logmanager.service.LogApplicationService#getAppenderList(java.lang.String)
-	 */
-	public List<LogAppender> getAppenderList(String userType) throws Exception {
-		if(LogManagerConstant.DETAIL_USER_TYPES[1].equals(userType)) {
-			return dao.getAppenderList(LogManagerConstant.MONITOR_LEVEL_DEV_VISIBLE);
-		}else{
-			return dao.getAppenderList(LogManagerConstant.MONITOR_LEVEL_ADMIN_ONLY);
-		}
-	}
-	
-	/* (non-Javadoc)
-	 * @see org.anyframe.logmanager.service.LogApplicationService#getLogAppenderListByCollection(java.lang.String, java.lang.String)
-	 */
-	public List<LogAppender> getLogAppenderListByCollection(String collectionName, String userType) throws Exception {
-		if(LogManagerConstant.DETAIL_USER_TYPES[1].equals(userType)) {
-			return dao.getAppenderListByCollection(collectionName, LogManagerConstant.MONITOR_LEVEL_DEV_VISIBLE);
-		}else{
-			return dao.getAppenderListByCollection(collectionName, LogManagerConstant.MONITOR_LEVEL_ADMIN_ONLY);
-		}
-	}
-
 	/* (non-Javadoc)
 	 * @see org.anyframe.logmanager.service.LogApplicationService#deleteApplication(org.anyframe.logmanager.domain.LogApplication)
 	 */
 	public void deleteApplication(LogApplication param) throws Exception {
 		dao.deleteApplication(param);
-		dao.deleteLogAppender(param.getAgentId(), param.getAppName());
+		logCollectionDao.deleteLogCollectionByAppNameAndAgentId(param.getAppName(), param.getAgentId());
 	}
 
 	/* (non-Javadoc)
@@ -340,4 +103,5 @@ public class LogApplicationServiceImpl implements LogApplicationService {
 			dao.activateApplication(param);
 		}
 	}
+
 }

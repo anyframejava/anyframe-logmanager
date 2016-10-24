@@ -16,11 +16,14 @@
 	</para>
 	<mediaobject>
 		<imageobject role="html">
-			<imagedata fileref="../image/logmanager/LM151-033.JPG" format="JPG" align="center"/>
+			<imagedata fileref="../image/logmanager/160_031.jpg" format="JPG" align="center"/>
 		</imageobject>
 		<imageobject role="fo">
-			<imagedata fileref="../image/logmanager/pdf/LM151-033.JPG" format="JPG" align="center"/>
+			<imagedata fileref="../image/logmanager/pdf/160_031.jpg" format="JPG" align="center"/>
 		</imageobject>
+		<textobject>
+			<phrase>Appender를 사용하여 직접 Log를 저장하거나 File 형태로 저장된 로그를 가져와서 parsing 하여 저장하는 Log Manager의 구조를 설명한다.</phrase>
+		</textobject>
 		<caption>S/W Architecture Diagram</caption>
 	</mediaobject>
 	
@@ -28,11 +31,14 @@
 	
 	<mediaobject>
 		<imageobject role="html">
-			<imagedata fileref="../image/logmanager/logmanager002.jpg" format="JPG" align="center"/>
+			<imagedata fileref="../image/logmanager/160_032.jpg" format="JPG" align="center"/>
 		</imageobject>
 		<imageobject role="fo">
-			<imagedata fileref="../image/logmanager/pdf/logmanager002.jpg" format="JPG" align="center"/>
+			<imagedata fileref="../image/logmanager/pdf/160_032.jpg" format="JPG" align="center"/>
 		</imageobject>
+		<textobject>
+			<phrase>Log Manager는 Multi-Server 환경에서도 Log Agent Service를 이용하여 Log Application을 관리할 수 있다.</phrase>
+		</textobject> 
 		<caption>Multi-Server Service Senario</caption>
 	</mediaobject>  
 </chapter>

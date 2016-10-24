@@ -29,11 +29,14 @@
 D:\mongodb\mongodb-win32-x86_64-2.2.0\bin> mongod --dbpath D:\mongodb\data]]></programlisting>
 		<mediaobject>
 			<imageobject role="html">
-				<imagedata fileref="../image/logmanager/logmanager008.jpg" format="JPG" align="center"/>
+				<imagedata fileref="../image/logmanager/160_036.jpg" format="JPG" align="center"/>
 			</imageobject>
 			<imageobject role="fo">
-				<imagedata fileref="../image/logmanager/pdf/logmanager008.jpg" format="JPG" align="center"/>
+				<imagedata fileref="../image/logmanager/pdf/160_036.jpg" format="JPG" align="center"/>
 			</imageobject>
+			<textobject>
+				<phrase>Mongo-DB 구동로그를 확인</phrase>
+			</textobject> 
 			<caption>구동여부 확인</caption>
 		</mediaobject>
 	</section>

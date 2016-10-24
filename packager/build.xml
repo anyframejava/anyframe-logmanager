@@ -5,7 +5,7 @@
 	<property environment="env" />
 	
 	<!-- TODO : Please, check your variables -->
-	<property name="logmanager.version" value="1.5.1" />
+	<property name="logmanager.version" value="1.6.0" />
 	<!-- <property name="package.basedir" value="D:/Server/quickbuild-3.0.10/workspace/BuildProjects/Log Manager/Packager/Nightly/build"/> -->
 	<property name="package.basedir" value="."/>
 	<property name="dist" value="${package.basedir}/dist/"/>

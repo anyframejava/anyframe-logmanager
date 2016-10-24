@@ -16,27 +16,18 @@
 package org.anyframe.logmanager.service;
 
 import java.util.List;
+import java.util.Map;
 
-import org.anyframe.logmanager.domain.AnalysisLog;
-import org.anyframe.logmanager.domain.BaseLog;
-import org.anyframe.logmanager.domain.LogApplication;
+import org.anyframe.logmanager.domain.LogDataMap;
 import org.anyframe.logmanager.domain.LogSearchCondition;
 
 /**
+ * This is LogSearchService class.
+ * 
  * @author Jaehyoung Eum
- *
  */
 public interface LogSearchService {
-	
-	/**
-	 * get list of base log data
-	 * 
-	 * @param searchCondition
-	 * @return
-	 * @throws Exception
-	 */
-	public List<BaseLog> searchBaseLog(LogSearchCondition searchCondition) throws Exception;
-	
+
 	/**
 	 * get list of analysis log data
 	 * 
@@ -44,8 +35,8 @@ public interface LogSearchService {
 	 * @return
 	 * @throws Exception
 	 */
-	public List<AnalysisLog> searchAnalysisLog(LogSearchCondition searchCondition) throws Exception;
-	
+	public List<LogDataMap> searchAnalysisLog(LogSearchCondition searchCondition) throws Exception;
+
 	/**
 	 * get active log application list
 	 * 
@@ -54,6 +45,14 @@ public interface LogSearchService {
 	 * @return
 	 * @throws Exception
 	 */
-	public List<LogApplication> getActiveLogApplicationList() throws Exception;
+	public List<String> getActiveLogApplicationNameList() throws Exception;
+	
+	/**
+	 * @param id
+	 * @param collectionName
+	 * @return
+	 * @throws Exception
+	 */
+	public LogDataMap getLogData(String id, String repositoryName) throws Exception;
 
 }

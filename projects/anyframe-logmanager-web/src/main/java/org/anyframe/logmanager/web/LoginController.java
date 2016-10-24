@@ -33,11 +33,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
  */
 @Controller("loginController")
 public class LoginController {
-	
+
 	@Inject
 	@Named("accountService")
 	private AccountService accountService;
-	
+
 	/**
 	 * 
 	 * @param account
@@ -48,14 +48,13 @@ public class LoginController {
 	 */
 	@RequestMapping("/login.do")
 	public String login(Account account, Model model, HttpSession session) throws Exception {
-		
+
 		Account resultAccount = accountService.get(account.getUserId());
-		
-		if(resultAccount!=null && resultAccount.getPassword().equals(account.getPassword())){
+
+		if (resultAccount != null && resultAccount.getPassword().equals(account.getPassword())) {
 			session.setAttribute("loginAccount", resultAccount);
 			return "redirect:/logManager.do?method=analysis4gridForm";
-		}
-		else{
+		} else {
 			model.addAttribute("rejectMessage", "Authentication failed. Try again.");
 			return "forward:/welcome.do?method=view";
 		}

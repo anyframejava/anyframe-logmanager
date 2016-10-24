@@ -1,40 +1,44 @@
-ÔªøAnyframe LogManager ÌîÑÎ°úÏ†ùÌä∏ ÎÇ¥Ïóê ÏÇ¨Ïö©Îêú Ïô∏Î∂Ä Ïò§Ìîà ÏÜåÏä§Ïùò Í≤ΩÏö∞ Ïõê Ïò§Ìîà ÏÜåÏä§Ïùò ÎùºÏù¥ÏÑºÏä§ Ï†ïÏ±ÖÏùÑ Îî∞Î•∏Îã§. ÏïÑÎûòÎäî Í∞Å Ïô∏Î∂Ä Ïò§Ìîà ÏÜåÏä§Ïùò Ï†ïÎ≥¥(ÎùºÏù¥ÏÑºÏä§, ÏÜåÏä§ ÏΩîÎìú Î∞è ÎùºÏù¥Î∏åÎü¨Î¶¨ Îã§Ïö¥Î°úÎìú Îì±)Î•º ÏñªÏùÑ Ïàò ÏûàÎäî ÏÇ¨Ïù¥Ìä∏ URLÏù¥ÎØÄÎ°ú Ï∞∏Í≥†ÌïòÎèÑÎ°ù ÌïúÎã§.
+Anyframe «¡∑Œ¡ß∆Æ ≥ªø° ªÁøÎµ» ø‹∫Œ ø¿«¬ º“Ω∫¿« ∞ÊøÏ ø¯ ø¿«¬ º“Ω∫¿« ∂Û¿ÃºæΩ∫ ¡§√•¿ª µ˚∏•¥Ÿ. 
+æ∆∑°¥¬ ∞¢ ø‹∫Œ ø¿«¬ º“Ω∫¿« ¡§∫∏(∂Û¿ÃºæΩ∫, º“Ω∫ ƒ⁄µÂ π◊ ∂Û¿Ã∫Í∑Ø∏Æ ¥ŸøÓ∑ŒµÂ µÓ)∏¶ æÚ¿ª ºˆ ¿÷¥¬ ªÁ¿Ã∆Æ URL¿Ãπ«∑Œ ¬¸∞Ì«œµµ∑œ «—¥Ÿ.
 
-1. Anyframe LogManager Repo Libraries
-1) AOP Alliance 1.0 : http://aopalliance.sourceforge.net, Public Domain
-2) Apache Commons BeanUtils 1.8.0 : http://commons.apache.org/beanutils/, Apache Software License 2.0 
-3) Apache Commons Collections 3.2 : http://commons.apache.org/collections/, Apache Software License 2.0 
-4) Apache Commons DBCP 1.2.2 : http://commons.apache.org/dbcp/, Apache Software License 2.0 
-5) Apache Commons IO 1.4 : http://commons.apache.org/io/,  Apache Software License 2.0 
-7) Apache Commons Net 3.0.1 : http://commons.apache.org/net/, Apache Software License 2.0 
-8) Apache Commons Pool 1.5.3 : http://commons.apache.org/pool/, Apache Software License 2.0 
-9) Apache POI 3.7 : http://poi.apache.org/ , Apache Software License 2.0
-10) Apache Velocity 1.6.2 : http://velocity.apache.org/, Apache Software License 2.0 
-11) AspectJ runtime 1.6.8 : http://www.aspectj.org, Eclipse Public License - v 1.0
-12) AspectJ weaver 1.6.8 : http://www.aspectj.org, Eclipse Public License - v 1.0
-13) Bean Validation API 1.0.0.GA : http://www.jcp.org/en/jsr/detail?id=303, Apache Software License 2.0 
-14) Mongo Java Driver 2.7.2 : http://www.mongodb.org/, Apache Software License 2.0
-15) Hessian Binary web service protocol 3.1.6 : http://hessian.caucho.com/#Java, Apache Software License 2.0
-16) google-gson 1.7.1 : http://code.google.com/p/google-gson/, Apache Software License 2.0
-17) Log4j 1.2.15 : http://logging.apache.org/log4j, Apache Software License 2.0 
-18) JCL 1.1.1 implementation over SLF4J 1.6.4 : http://www.slf4j.org, MIT License 
-19) Hibernate Validator 4.1.0.Final : http://www.hibernate.org/subprojects/validator.html, Apache License Version 2.0
-20) HSQLDB 2.0.0 : http://www.hsqldb.org/, Hsqldb License
-21) Jackson JSON processor(JACKSON) 1.9.7 : http://jackson.codehaus.org , BSD License
-22) Jakarta Taglibs 1.1.2 : http://jakarta.apache.org/taglibs/index.html , Apache License Version 2.0
-23) Java Architecture for XML Binding (JAXB) 2.2 : https://jaxb.dev.java.net/, Common Development and Distribution License Version 1.0
-24) Java Transaction API (JTA) 1.1 : http://java.sun.com/javaee/technologies/jta/index.jsp, JTA 1.0.1
-25) JavaServer Pages Standard Tag Library 1.1.2 : http://java.sun.com/products/jsp/jstl/ , Apache License V2.0
-26) Javax Servlet API 2.5 : http://java.sun.com/products/servlet/LICENSE, Sun Microsystems, Inc.  Binary Code License
-27) javax.inject 1 : http://grepcode.com , Apache Software License 2.0 
-28) jMock 2.4.0 : http://www.jmock.org/, jMock BSD License
-29) JSP(JavaServer Pages Technology) 2.1  : http://www.oracle.com/technetwork/java/javaee/jsp/index.html, Sun Microsystems, Inc.  Binary Code License
-30) JSR 250 : https://jsr250.dev.java.net/, COMMON DEVELOPMENT AND DISTRIBUTION LICENSE (CDDL)
-31) JUnit 4.9 : http://www.junit.org/, Common Public License 1.0
-32) Log4mongo for Java 0.7.0 : http://log4mongo.org/display/PUB/Home, Apache Software License 2.0 
-33) SLF4J API Module 1.6.4 : http://www.slf4j.org , SLF4J Licence
-34) Spring Framework 3.1.1.RELEASE : http://www.springsource.org/, Apache Software License 2.0 
-35) Spring Data Core 1.2.0.RELEASE : http://www.springsource.org/spring-data/commons, Apache Software License 2.0 
-36) Spring Data Mongodb 1.0.1.RELEASE : http://www.springsource.org/spring-data/mongodb, Apache Software License 2.0 
-37) EMMA 2.0.5312 : http://emma.sourceforge.net, Common Public License 1.0
- 
+1) AOP Alliance (Java/J2EE AOP standard) 1.0 : http://sourceforge.net/projects/aopalliance/, Public Domain
+2) Apache Ant 1.6.5 : http://ant.apache.org/, Apache License Version 2.0
+3) Apache Geronimo 1.0 : http://incubator.apache.org/projects/geronimo/index.html, Apache License Version 2.0
+4) Apache Geronimo 1.1 : http://incubator.apache.org/projects/geronimo/index.html, Apache License Version 2.0
+5) Apache Jakarta Commons Collections 3.2 : http://commons.apache.org/collections/, Apache License Version 2.0
+6) Apache Jakarta Commons IO 1.4 : http://commons.apache.org/io/, Apache License Version 2.0
+7) Apache Jakarta Commons Net 3.0.1 : http://commons.apache.org/net/, Apache 1.1
+8) Apache Jakarta Commons Pool 1.5.3 : http://commons.apache.org/pool/, Apache License Version 2.0
+9) Apache Jakarta DBCP 1.2.2 : http://commons.apache.org/dbcp/, Apache License Version 2.0
+10) Apache Jakarta Log4j 1.2.15 : http://logging.apache.org/log4j/2.x/, Apache License Version 2.0
+11) Apache Jakarta Taglibs current : http://tomcat.apache.org/taglibs/index.html, Apache License Version 2.0
+12) Apache POI 3.7 : http://poi.apache.org/index.html, Apache 1.1
+13) Apache-Jakarta BeanUtils 1.8.0 : http://commons.apache.org/beanutils/index.html, Apache License Version 2.0
+14) Apache-Jakarta Velocity Tools 1.6.2 : http://velocity.apache.org/tools/devel/, Apache License Version 2.0
+15) ASM 3.1 : http://asm.ow2.org/, ASM License
+16) aspectj 1.6.8 : http://www.aspectj.org, Eclipse Public License - v 1.0
+17) Common Annotations - JSR-250 1.0 :  http://www.hibernate.org/, COMMON DEVELOPMENT AND DISTRIBUTION LICENSE (CDDL) Version 1.0
+18) Eclipse JDT Core Batch Compiler 3.5.1 : http://www.eclipse.org/jdt/core/, Eclipse Public License - v 1.0
+19) EMMA code coverage maven-1.0-plugin-0.4 : http://emma.sourceforge.net/, Common Public License
+20) GlassFish 2.1 : http://glassfish.java.net/, COMMON DEVELOPMENT AND DISTRIBUTION LICENSE (CDDL) Version 1.0
+21) google-gson 1.7.1 : http://code.google.com/p/google-gson/, Apache License Version 2.0
+22) Hessian Binary Web Service Protocol 3.1.6 : http://hessian.caucho.com/, Apache 1.1
+23) Hibernate Validator 4.1.0 Final : http://hibernate.org/subprojects/validator, Apache License Version 2.0
+24) jackson-core 1.9.7 : https://github.com/FasterXML/jackson-core/, Apache License Version 2.0
+25) Java Transaction API (JTA) (JSR-907) 1.1 : http://www.oracle.com/technetwork/java/index.html, Java Transaction API 1.1 License
+26) javax.activation 1.1 : https://github.com/kohsuke/javax.activation/, COMMON DEVELOPMENT AND DISTRIBUTION LICENSE (CDDL) Version 1.0
+27) javax.inject 1 : http://code.google.com/p/atinject, Apache License Version 2.0
+28) JAXB 2.0 Project 2.2 : http://jaxb.java.net/, COMMON DEVELOPMENT AND DISTRIBUTION LICENSE (CDDL) Version 1.0
+29) Jetty - Java HTTP Servlet Server 7.5.4 : http://jetty.codehaus.org/jetty/, Apache License Version 2.0
+30) jMock 2.4.0 : http://www.jmock.org/, BSD 2.0
+31) jsp-api-2.1  : http://java.net/projects/jsp, Sun Servlet Binary Code License
+32) JUnit 4.9 : http://www.junit.org/, Common Public License
+33) mail 1.4.1 : https://github.com/mikel/mail/, COMMON DEVELOPMENT AND DISTRIBUTION LICENSE (CDDL) Version 1.0
+34) mongo-java-driver 2.10.1 : http://www.mongodb.org/, Apache License Version 2.0
+35) servlet-api-2.5  : https://github.com/saces/servlet-api-2.5/, Sun Servlet Binary Code License
+36) slf4j v_1.6.4 : http://www.slf4j.org, MIT License V2
+37) Spring Framework - springframework 3.1.1 : http://www.springsource.org/spring-framework, Apache License Version 2.0
+38) validation 1.0.0.GA : http://beanvalidation.org, Apache License Version 2.0
+
+
+

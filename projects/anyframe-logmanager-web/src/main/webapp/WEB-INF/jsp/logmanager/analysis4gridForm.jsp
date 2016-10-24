@@ -43,82 +43,21 @@
 <script type="text/javascript">
 <!-- 
 function fncLogout(){
-	var msg = "Are you sure you want to logout ?";
+	var msg = '<spring:message code="logmanager.confirm.logout"/>';
     ans = confirm(msg);
     if (ans) {
-    	document.location.href="<c:url value='/logout.do'/>";
+    	document.location.href='<c:url value="/logout.do"/>';
     } else {
         return false;
     }
 }
 var gridId = 'tblLogList';
-var COLLECTION_BASED = '<%=LogManagerConstant.COLLECTION_BASED%>';
-var initAppenderName = '<c:out value="${param.appenderName}"/>';
 var initAppName = '<c:out value="${param.appName}"/>';
+var DATE_FORMAT = 'yyyy-MM-dd HH:mm:ss,SSS';
 
 /**
- * appender select box setup
+ * set log level style
  */
-function getAppenders(isCollection) {
-	var appName = $('#selectAppName').val();
-	if(isCollection) {
-		appName = COLLECTION_BASED;
-	}
-	$.get('<c:url value="/logManager.do?method=getAppenderList"/>&appName=' + appName, function(data) {
-		$('#selectAppender option').remove();
-		var appenders = data.appenders;
-		var name = null;
-		var value = null;
-		var map = new Map();
-		for(var i=0;i<appenders.length;i++) {
-			var appD = '';
-			if(isCollection) {
-				if(typeof(map.get(appenders[i].collectionName)) == 'undefined') {
-					name = appenders[i].collectionName;
-					map.put(appenders[i].collectionName, appenders[i].collectionName);
-				} else {
-					continue;
-				}
-				
-			}else {
-				name = appenders[i].appenderName;
-			}
-			value = appenders[i].collectionName;
-			$('#selectAppender').append('<option value="' + value + '">' + name + '</option>');
-		}
-		if(initAppenderName != '') {
-			$('#selectAppender').val(initAppenderName);
-		}
-		if(isCollection) getApps(true);
-	});
-}
-
-function getApps(isCollection) {
-	var self = $('#selectAppender');
-	if(isCollection) {
-		var url = '<c:url value="/logManager.do?method=getAppListByCollection"/>';
-		$.get(url, 'collectionName=' + self.val(), function(data){
-			$('#selectAppName option').remove();
-			var apps = data.apps;
-			for(var i=0;i<apps.length;i++) {
-				$('#selectAppName').append('<option value="' + apps[i].appName + '">' + apps[i].appName + '</option>');
-			}
-			if(initAppName != '') {
-				$('#selectAppName').val(initAppName);
-			}
-		});
-	}else{
-		var url = '<c:url value="/logmanager.do?method=getAppList"/>';
-		$.get(url, '', function(data){
-			$('#selectAppName option').remove();
-			var apps = data.apps;
-			for(var i=0;i<apps.length;i++) {
-				$('#selectAppName').append('<option value="' + app.appName + '">' + app.appName + '</option>');
-			}
-		});
-	}
-}
-
 function setLogLevelStyle(rowId, tv, rawObject, cm, rdata) {
    	return 'class="' + cm.classes + ' ' + rawObject.level + '"';
 }
@@ -128,25 +67,30 @@ $(document).ready(function() {
 	$('#divMessageGrid').html('<table id="' + gridId + '"></table><div class="boardNavigation"><div id="pagination" class="pagination"></div><button id="btnPagenationSearch"/></div>');
 	$('#' + gridId).jqGrid({
 		url : '<c:url value="/logManager.do?method=analysis4grid"/>',
-		mtype:'POST',
+		mtype : 'POST',
 		postData : $('#searchForm').serialize(),
 		datatype : 'json',
-		colNames : ['Level', 'Time Stamp', 'Client IP', 'User ID', 'Class Name', 'Method Name', 'Line', 'Thread', 'Message'],
+		colNames : ['<spring:message code="logmanager.analysis.level"/>', '<spring:message code="logmanager.analysis.timestamp"/>', 
+		            '<spring:message code="logmanager.analysis.client.ip"/>', '<spring:message code="logmanager.analysis.userid"/>', 
+		            '<spring:message code="logmanager.analysis.classname"/>', '<spring:message code="logmanager.analysis.methodname"/>', 
+		            '<spring:message code="logmanager.analysis.line"/>', '<spring:message code="logmanager.analysis.thread"/>', 
+		            '<spring:message code="logmanager.analysis.message"/>', '<spring:message code="logmanager.analysis.id"/>'],
 		colModel : [{name:'level', index:'level', width:30, align:'center', sortable:false, classes:'level',cellattr: setLogLevelStyle},
-					//{name:'timestamp', index:'timestamp', width:60, sortable:false, classes:'timestamp', formatter:'date', formatoptions: {newformat:'Y-m-d H:i:s'},cellattr: setLogLevelStyle},
-					{name:'timestampString', index:'timestampString', width:80, sortable:false, classes:'timestamp',cellattr: setLogLevelStyle},
-					{name:'mdc.clientIp', index:'mdc.clientIp', width:40, sortable:false, classes:'client-ip',cellattr: setLogLevelStyle, hidden:false},
-					{name:'mdc.userId', index:'mdc.userId', width:30, sortable:false, classes:'user-id',cellattr: setLogLevelStyle, hidden:true},
+					{name:'timestamp', index:'timestamp', width:80, sortable:false, classes:'timestamp',cellattr: setLogLevelStyle},
+					{name:'clientIp', index:'clientIp', width:40, sortable:false, classes:'client-ip',cellattr: setLogLevelStyle, hidden:true},
+					{name:'userId', index:'userId', width:30, sortable:false, classes:'user-id',cellattr: setLogLevelStyle, hidden:true},
 					{name:'className', index:'className', width:40, sortable:false, classes:'class-name',cellattr: setLogLevelStyle, hidden:true},
 					{name:'methodName', index:'methodName', width:40, sortable:false, classes:'method-name',cellattr: setLogLevelStyle, hidden:true},
 					{name:'lineNumber', index:'lineNumber', width:15, align:'center', sortable:false, classes:'line-number',cellattr: setLogLevelStyle, hidden:true},
 					{name:'thread', index:'thread', width:30, sortable:false, classes:'thread',cellattr: setLogLevelStyle, hidden:true},
-					{name:'message', index:'message', width:300, sortable:false, classes:'message',cellattr: setLogLevelStyle}],
+					{name:'message', index:'message', width:300, sortable:false, classes:'message',cellattr: setLogLevelStyle},
+					{name:'_id', index:'_id', width:300, sortable:false, classes:'_id',cellattr: setLogLevelStyle, hidden:true}],
 		jsonReader: {
 			repeatitems: false
 		},
 		viewrecoreds : true,
 		autowidth : true,
+		//autoencode:true,
 		height : '100%',
 		sortable : false,
 		rowNum : $('#pageSize').val(), 
@@ -154,7 +98,7 @@ $(document).ready(function() {
 			var ids = $("#" + gridId).jqGrid('getDataIDs');
 			for(var i=0;i < ids.length;i++){
 				var ret = $("#" + gridId).jqGrid('getRowData',ids[i]);
-				$("#" + gridId).jqGrid('setRowData',ids[i],{'message': '<pre>' + ret.message + '</pre>'});
+				$("#" + gridId).jqGrid('setRowData',ids[i],{'message': '<pre>' + ret.message.escapeHTML() + '</pre>', 'timestamp': ret.timestamp.dateFormat(DATE_FORMAT)});
 			}
 	    }, 
 		loadError: function(xhr,st,err) {
@@ -213,24 +157,74 @@ $(document).ready(function() {
 		},
 		onSelectRow : function(rowid, status, e) {
 			var ret = $("#" + gridId).jqGrid('getRowData',rowid);
-			
-			$('#span-level').html(ret.level);
-			$('#span-timestamp').html(ret.timestampString);
-			$('#span-clientIp').html(ret['mdc.clientIp']);
-			$('#span-userId').html(ret['mdc.userId']);
-			$('#span-className').html(ret.className);
-			$('#span-methodName').html(ret.methodName);
-			$('#span-lineNumber').html(ret.lineNumber);
-			$('#span-thread').html(ret.thread);
-			$('#span-message').html(ret.message);
-			
-			$('#log-detail-form').dialog({width:430,position:['center', 'center']});
-			$('#log-detail-form').dialog('open');
-			$('#log-detail-form').dialog({
-				width:$('#log-detail-form table').width() + 70
+			var id = ret._id;
+			var url = '<c:url value="/logManager.do?method=getLogData"/>&id=' + id + '&repositoryName=' + $('#selectRepository').val();
+			$.get(url, function(data){
+				
+				$('#log-detail-form tbody tr').hide();
+				
+				$('#span-level').html(data.log.level);
+				$('#span-level').parent().parent('tr').show();
+				
+				$('#span-timestamp').html(data.log.timestamp.dateFormat(DATE_FORMAT));
+				$('#span-timestamp').parent().parent('tr').show();
+				
+				if(data.log.clientIp != null) {
+					$('#span-clientIp').html(data.log.clientIp);
+					$('#span-clientIp').parent().parent('tr').show();
+				}
+				
+				if(data.log.userId != null) {
+					$('#span-userId').html(data.log.userId);
+					$('#span-userId').parent().parent('tr').show();
+				}
+				
+				if(data.log.className != null) {
+					$('#span-className').html(data.log.className);
+					$('#span-className').parent().parent('tr').show();
+				}
+				
+				if(data.log.methodName != null) {
+					$('#span-methodName').html(data.log.methodName);
+					$('#span-methodName').parent().parent('tr').show();
+				}
+				
+				if(data.log.lineNumber != null) {
+					$('#span-lineNumber').html(data.log.lineNumber);
+					$('#span-lineNumber').parent().parent('tr').show();
+				}
+				
+				if(data.log.thread != null) {
+					$('#span-thread').html(data.log.thread);
+					$('#span-thread').parent().parent('tr').show();
+				}
+				
+				for(var key in data.log) {
+					if(key != '_id' && key != 'level' && key != 'timestamp' && key != 'className' 
+							&& key != 'methodName' && key != 'lineNumber' && key != 'thread' && key != 'message') {
+						if(data.log[key] != null) {
+							if($('#span-' + key).length > 0) {
+								$('#span-' + key).html(data.log[key]);
+								$('#span-' + key).parent().parent('tr').show();
+							}else{
+								$('#span-thread').parent().parent('tr').after('<tr><th>' + key + '</th><td><span id="span-' + key + '">' + data.log[key] + '</span></td></tr>');	
+							}
+						}
+					}
+				}
+				
+				$('#span-message').html('<pre>' + data.log.message.escapeHTML() + '</pre>');
+				$('#span-message').parent().parent('tr').show();
+				
+				$('#log-detail-form').dialog({width:430,position:['center', 'center']});
+				$('#log-detail-form').dialog('open');
+				$('#log-detail-form').dialog({
+					width:$('#log-detail-form table').width() + 70
+				});	
 			});
+			
 		},
-		caption : 'Log Messages'
+		caption : '<spring:message code="logmanager.analysis.grid.title"/>'
 	});
 
 	$("#btnPagenationSearch").click(function() {
@@ -256,28 +250,6 @@ $(document).ready(function() {
 		}
 	});
 
-	/**
-	 * 'Collection Based' check box click event handler
-	 */
-	$('#checkboxCollectionBased').click(function(e) {
-		if($('#checkboxCollectionBased').attr('checked') == 'checked') {
-			$('.appender-title').html('Collection');
-			getAppenders(true);
-			$('#selectAppName').unbind('change');
-			$('#selectAppender').change(function(e) {
-				getApps(true);
-			});
-		} else {
-			$('.appender-title').html('Appender');
-			getAppenders(false);
-			$('#selectAppender').unbind('change');
-			$('#selectAppName').change(function(e) {
-				getAppenders(false);
-			});
-		} 
-		
-	});
-	
 	/**
 	 * 'AdvancedOptions' check box click event handler
 	 */
@@ -328,7 +300,7 @@ $(document).ready(function() {
 		$('#checkboxUseToDate').attr('checked', false);
 		var aDate = getTime(1).split(','); 
 		$('#textFromDate').val(aDate[0]);
-		$('#selectFromHour').val(aDate[1].length == 1 ? '0' + aDate[1] : aDate[1]);
+		$('#selectFromHour').val(aDate[1].zf(2));
 	});
 
 	/**
@@ -340,7 +312,7 @@ $(document).ready(function() {
 		$('#checkboxUseToDate').attr('checked', false);
 		var aDate = getTime(3).split(','); 
 		$('#textFromDate').val(aDate[0]);
-		$('#selectFromHour').val(aDate[1].length == 1 ? '0' + aDate[1] : aDate[1]);
+		$('#selectFromHour').val(aDate[1].zf(2));
 	});
 
 	/**
@@ -409,14 +381,6 @@ $(document).ready(function() {
 	});
 
 	/**
-	 * app. name change event handler
-	 * call getAppenders() function
-	 */
-	$('#selectAppName').change(function(e) {
-		getAppenders(false);
-	});
-
-	/**
 	 * switch to text style search
 	 **/
 	$('#textStyle').click(function(e){
@@ -424,13 +388,6 @@ $(document).ready(function() {
 		$('#searchForm').attr('action', '<c:url value="/logManager.do?method=analysisForm"/>');
 		$('#searchForm').submit();
 	});
-
-	// appender select box initialize
-	if($('#checkboxCollectionBased').attr('checked')) {
-		getAppenders(true);
-	}else{
-		getAppenders(false);
-	}
 
 	// -----------------------------------------------------------------------------------
 	//  init value setting
@@ -500,8 +457,8 @@ $(document).ready(function() {
         <div class="topnavi">
         	<ul>
             	<c:if test="${not empty sessionScope.loginAccount.userId}">
-            		<li class="end"><a href="javascript:fncLogout();">
-            		<c:out value="${sessionScope.loginAccount.userId}"/>님 Logout</a></li>
+            		<li class="end"><a href="#" onclick="javascript:fncLogout();">
+            		<c:out value="${sessionScope.loginAccount.userId}"/>&nbsp;<spring:message code="logmanager.logout.message"/></a></li>
             	</c:if>
             </ul>
 		</div>
@@ -515,6 +472,7 @@ $(document).ready(function() {
                     <li><a href="<c:url value="/logManager.do?method=analysis4gridForm"/>">Log Analysis</a></li>
                 <c:if test="${sessionScope.loginAccount.userType=='Administrator'}">
 					<li><a href="<c:url value="/logManager.do?method=agentList"/>">Log Agent Management</a></li>
+					<li><a href="<c:url value="/logManager.do?method=repositoryListForm"/>">Log Repository Management</a></li>
                     <li><a href="<c:url value="/logManager.do?method=appList"/>">Log Application Management</a></li>
                     <li><a href="<c:url value="/account.do?method=view"/>">Account Management</a></li>
 				</c:if>
@@ -523,19 +481,19 @@ $(document).ready(function() {
 			<hr/>
 			
 			<div id="contents">
-				<h2>Log Analysis</h2>
+				<h2><spring:message code="logmanager.analysis.title"/></h2>
                 <div id="innercontents">
                 	<div id="tabs">
 	                	<ul>
-	                		<li class="selected"><a href="#gridStyle" id="gridStyle">Grid Style</a></li>
-	                		<li><a href="#textStyle" id="textStyle">Text Style</a></li>
+	                		<li class="selected"><a href="#gridStyle" id="gridStyle"><spring:message code="logmanager.analysis.grid.style"/></a></li>
+	                		<li><a href="#textStyle" id="textStyle"><spring:message code="logmanager.analysis.text.style"/></a></li>
 	                	</ul>
                 	</div>
 					<div id="divSearchCondition" class="search_area">
 						<form:form name="searchForm" id="searchForm" method="post" target="_self" commandName="searchCondition">
 							<form:hidden path="pageIndex"/>
 							<form:hidden path="pageSize"/>
-						<table summary="App, Search Type, 검색결과, Logger, C/L IP, User ID, Duration, loglevel, this level only, Program Info, Method Name, 메시지 Text를 검색하는 표입니다.">
+						<table summary="App, Search Type, Serch Result, Logger, C/L IP, User ID, Duration, loglevel, this level only, Program Info, Method Name">
 							<caption>Search Area</caption>
                             <colgroup>
                                 <col style="width:18%;" />
@@ -546,34 +504,32 @@ $(document).ready(function() {
                             <tbody>
                             	<tr>
 									<td colspan="4" class="align_right nonebg">
-										<form:checkbox id="checkboxCollectionBased" path="collectionBased" class="checkbox_search" value="true" label="Collection Based"/>
 										<form:checkbox id="checkboxAdvancedOptions" path="advancedOptions" class="checkbox_search" value="true" label="Advanced Options"/>
 										<form:checkbox id="checkboxMatchedLogOnly" path="matchedLogOnly" class="checkbox_search" value="true" label="Matched Log Only"/>
-										<%-- <form:checkbox id="checkboxLogTailingMode" path="logTailingMode" class="checkbox_search" value="true" label="Log Tailing"/> --%>										
 									</td>
 								</tr>
 								<tr id="trApp">
-									<th class="topline">App. Name</th>
+									<th class="topline"><spring:message code="logmanager.analysis.app.name"/></th>
 									<td class="topline">
 										<form:select id="selectAppName" class="select_search" path="appName" items="${appNameList}"/>
 									</td>
-									<th class="topline appender-title">Appender</th>
+									<th class="topline appender-title"><spring:message code="logmanager.analysis.repository"/></th>
 									<td class="topline">
-										<select id="selectAppender" name="appenderName" class="select_search"/>
+										<form:select id="selectRepository" path="repositoryName" class="select_search" items="${repositoryList}"/>
 									</td>
 								</tr>
 								<tr class="advanced-option">
-									<th>Client IP</th>
+									<th><spring:message code="logmanager.analysis.client.ip"/></th>
 									<td>
 										<form:input id="inputClientIp" class="advanced-form" path="clientIp"/>
 									</td>
-									<th>User ID</th>
+									<th><spring:message code="logmanager.analysis.userid"/></th>
 									<td>
 										<form:input id="inputUserId" class="advanced-form" path="userId"/>
 									</td>
 								</tr>
 								<tr>
-									<th rowspan="2">Duration</th>
+									<th rowspan="2"><spring:message code="logmanager.analysis.duration"/></th>
 									<td id="tdDurTempl" colspan="3">
 										<form:radiobutton path="durationTemplate" id="rdo1Hour" value="1" label="1 Hour"/>&nbsp;
 										<form:radiobutton path="durationTemplate" id="rdo3Hour" value="2" label="3 Hours"/>&nbsp;
@@ -605,27 +561,27 @@ $(document).ready(function() {
 									</td>
 								</tr>
 								<tr>
-									<th>Log Level</th>
+									<th><spring:message code="logmanager.analysis.log.level"/></th>
 									<td colspan="3">
 										<form:select id="selectLogLevel" path="level" items="${levels}"/>
 										<form:select id="selectLogDirectionSupport" path="logLevelDirection">
-											<form:option value="1">△&nbsp;(Including High Level)</form:option>
-											<form:option value="0">〓&nbsp;(This Level Only)</form:option>
-											<form:option value="2">▽&nbsp;(Including Sub Level)</form:option>
+											<form:option value="1">△&nbsp;(<spring:message code="logmanager.analysis.high"/>)</form:option>
+											<form:option value="0">〓&nbsp;(<spring:message code="logmanager.analysis.only"/>)</form:option>
+											<form:option value="2">▽&nbsp;(<spring:message code="logmanager.analysis.sub"/>)</form:option>
 										</form:select>
 									</td>
 								</tr>
 								<tr class="advanced-option">
-									<th>Program Info.</th>
+									<th><spring:message code="logmanager.analysis.program"/></th>
 									<td colspan="3">
-										<label for="inputClassName">Class Name</label>&nbsp;<form:input id="inputClassName" class="advanced-form" path="className"/>
-										&nbsp;&nbsp;<label for="inputMethodName">Method Name</label>&nbsp;<form:input id="inputMethodName" class="advanced-form" path="methodName"/>
+										<label for="inputClassName"><spring:message code="logmanager.analysis.classname"/></label>&nbsp;<form:input id="inputClassName" class="advanced-form" path="className"/>
+										&nbsp;&nbsp;<label for="inputMethodName"><spring:message code="logmanager.analysis.methodname"/></label>&nbsp;<form:input id="inputMethodName" class="advanced-form" path="methodName"/>
 									</td>
 								</tr>
 								<tr>
-									<th class="bottomline">Message Text</th>
+									<th class="bottomline"><spring:message code="logmanager.analysis.message.text"/></th>
 									<td colspan="3" class="bottomline">
-										<form:input id="inputMessageText" path="messageText"/>("blank" to be more complex search)
+										<form:input id="inputMessageText" path="messageText"/>(<spring:message code="logmanager.analysis.blank"/>)
 									</td>
 								</tr>
                             </tbody>
@@ -633,12 +589,12 @@ $(document).ready(function() {
 						</form:form>
 						<div class="btncontainer_right">
 	                        <span class="button tableout">
-	                            <button id="btnSearch">Search</button>
+	                            <button id="btnSearch"><spring:message code="logmanager.button.search"/></button>
 	                        </span>
 	                    </div>
 					</div>
 					<table width="100%">
-						<tr><td style="text-align:left;">[<span class="spanListCount"></span>&nbsp;rows]</td><td style="text-align:right;"><a href="#" class="btn-export">Export</a></td></tr>
+						<tr><td style="text-align:left;">[<span class="spanListCount"></span>&nbsp;<spring:message code="logmanager.analysis.rows"/>]</td><td style="text-align:right;"><a href="#" class="btn-export"><spring:message code="logmanager.button.export"/></a></td></tr>
 					</table>
 					<div id="divMessageGrid" class="margin_top0">
 					</div>
@@ -649,67 +605,67 @@ $(document).ready(function() {
 
 	<hr />
 	<div id="footer_wrap">
-		<div id="footer">Copyright 2012 www.anyframejava.org</div>
+		<div id="footer"><spring:message code="logmanager.footer.copyright"/></div>
 	</div>
 </div>
 
-<div id="export-format-form" title="Export Format Select">
+<div id="export-format-form" title="<spring:message code="logmanager.analysis.export.title"/>">
 	<div class="view poplayer margin_top10">
 		<table summary="">
-		    <caption>Export Format Select Form</caption>
+		    <caption><spring:message code="logmanager.analysis.export.title"/></caption>
 		    <colgroup>
 		        <col style="width:50%;" />
 		        <col style="width:50%;" />
 		    </colgroup>
 		    <tr>
-		        <td class="topline bottomline"><a href="#" id="txtFormat">Text(*.txt)</a></td>
-		        <td class="topline bottomline"><a href="#" id="xlsFormat">Excel(*.xls)</a></td>
+		        <td class="topline bottomline"><a href="#" id="txtFormat"><spring:message code="logmanager.analysis.export.text"/></a></td>
+		        <td class="topline bottomline"><a href="#" id="xlsFormat"><spring:message code="logmanager.analysis.export.excel"/></a></td>
 		    </tr>
 		</table>
 	</div>
 </div>
-<div id="log-detail-form" title="Log Detail Info.">
+<div id="log-detail-form" title="<spring:message code="logmanager.analysis.detail.title"/>">
 	<div class="view poplayer margin_top10">
 		<table summary="">
-		    <caption>Log Detail Info.</caption>
+		    <caption><spring:message code="logmanager.analysis.detail.title"/></caption>
 		    <colgroup>
 		        <col style="width:30%;" />
 		        <col style="width:60%;" />
 		    </colgroup>
 		    <tr>
-		        <th class="topline">Level</th>
+		        <th class="topline"><spring:message code="logmanager.analysis.level"/></th>
 		        <td class="topline"><span id="span-level"></span></td>
 		    </tr>
 		    <tr>
-		        <th>Time Stamp</th>
+		        <th><spring:message code="logmanager.analysis.timestamp"/></th>
 		        <td><span id="span-timestamp"></span></td>
 		    </tr>
 		    <tr>
-		        <th>Client IP</th>
+		        <th><spring:message code="logmanager.analysis.client.ip"/></th>
 		        <td><span id="span-clientIp"></span></td>
 		    </tr>
 		    <tr>
-		        <th>User ID</th>
+		        <th><spring:message code="logmanager.analysis.userid"/></th>
 		        <td><span id="span-userId"></span></td>
 		    </tr>
 		    <tr>
-		        <th>Class Name</th>
+		        <th><spring:message code="logmanager.analysis.classname"/></th>
 		        <td><span id="span-className"></span></td>
 		    </tr>
 		    <tr>
-		        <th>Method Name</th>
+		        <th><spring:message code="logmanager.analysis.methodname"/></th>
 		        <td><span id="span-methodName"></span></td>
 		    </tr>
 		    <tr>
-		        <th>Line Number</th>
+		        <th><spring:message code="logmanager.analysis.linenumber"/></th>
 		        <td><span id="span-lineNumber"></span></td>
 		    </tr>
 		    <tr>
-		        <th>Thread</th>
+		        <th><spring:message code="logmanager.analysis.thread"/></th>
 		        <td><span id="span-thread"></span></td>
 		    </tr>
 		    <tr>
-		        <th class="bottomline">Message</th>
+		        <th class="bottomline"><spring:message code="logmanager.analysis.message"/></th>
 		        <td class="bottomline"><span id="span-message"></span></td>
 		    </tr>
 		</table>

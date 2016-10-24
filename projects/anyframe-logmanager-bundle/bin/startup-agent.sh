@@ -1,7 +1,7 @@
 #!/bin/sh
 
 Log=console.log
-VERSION=1.5.1
+VERSION=1.6.0
 ID=logagent
 
 CACHE=`find .. -name "meta-agent"`
@@ -30,8 +30,8 @@ done
  
 PRGDIR=`dirname "$PRG"`
 ARGS="-D$ID -Xmx32m -XX:NewRatio=1 -XX:MinHeapFreeRatio=20 -XX:MaxHeapFreeRatio=25 -Djava.security.egd=file:/dev/urandom"
-
+AGENT_DIR=../
 LOGMANAGERF=`ls $PRGDIR | grep jar`
-nohup java $ARGS -jar ${PRGDIR}/${LOGMANAGERF} conf/logagent.ini >> $Log &
+nohup java $ARGS -Dagent.dir=${AGENT_DIR} -jar ${PRGDIR}/${LOGMANAGERF} conf/logagent.ini >> $Log &
 
 tail -f $Log

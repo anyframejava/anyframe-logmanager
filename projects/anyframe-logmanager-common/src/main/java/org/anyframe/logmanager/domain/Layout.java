@@ -19,13 +19,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * @author Jaehyoung Eum 
- *
+ * This is Layout class.
+ * 
+ * @author Jaehyoung Eum
  */
 public class Layout {
 	private String layoutClass;
 	private List<Param> params;
-	
+
 	/**
 	 * 
 	 * @return
@@ -33,21 +34,21 @@ public class Layout {
 	public String getLayoutClass() {
 		return layoutClass;
 	}
-	
+
 	/**
 	 * @param layoutClass
 	 */
 	public void setLayoutClass(String layoutClass) {
 		this.layoutClass = layoutClass;
 	}
-	
+
 	/**
 	 * @return
 	 */
 	public List<Param> getParams() {
 		return params;
 	}
-	
+
 	/**
 	 * @param param
 	 */
@@ -57,26 +58,30 @@ public class Layout {
 
 	public Param getParam(String paramName) {
 		int paramSize = -1;
-		if(params != null) {
+		if (params != null) {
 			paramSize = this.params.size();
-			for(int i=0;i<paramSize;i++) {
-				if(paramName.equals(params.get(i).getName())){
+			for (int i = 0; i < paramSize; i++) {
+				if (paramName.equals(params.get(i).getName())) {
 					return params.get(i);
 				}
 			}
 			return null;
-		}else{
+		} else {
 			return null;
 		}
-		
+
 	}
-	
+
 	public void setParam(Param param) {
-		if(this.params == null) this.params = new ArrayList<Param>();
+		if (this.params == null) {
+			this.params = new ArrayList<Param>();
+		}
 		this.params.add(param);
 	}
-	
-	/* (non-Javadoc)
+
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see java.lang.Object#toString()
 	 */
 	@Override

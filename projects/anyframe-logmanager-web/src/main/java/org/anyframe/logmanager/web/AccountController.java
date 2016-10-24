@@ -44,8 +44,7 @@ public class AccountController {
 	@Inject
 	@Named("accountService")
 	private AccountService accountService;
-	
-	
+
 	/**
 	 * 
 	 * @param model
@@ -53,32 +52,33 @@ public class AccountController {
 	 * @throws Exception
 	 */
 	@RequestMapping(params = "method=view")
-	public String view(Model model) throws Exception{
+	public String view(Model model) throws Exception {
 		model.addAttribute("search", new SearchVO());
-		model.addAttribute("account",new Account());
+		model.addAttribute("account", new Account());
 		model.addAttribute("searchUserTypeList", LogManagerConstant.SEARCH_USER_TYPES);
 		model.addAttribute("userTypeList", LogManagerConstant.DETAIL_USER_TYPES);
 		return "logmanager/accountList";
 	}
-	
+
 	/**
 	 * check for account duplication
+	 * 
 	 * @param userId
 	 * @param model
 	 * @return
 	 * @throws Exception
 	 */
 	@RequestMapping(params = "method=checkAccountExist")
-	public String checkAccountExist(@RequestParam("userId") String userId, Model model) throws Exception{
+	public String checkAccountExist(@RequestParam("userId") String userId, Model model) throws Exception {
 		Account account = accountService.get(userId);
-		if(account == null) {
+		if (account == null) {
 			model.addAttribute("isExist", false);
-		}else{
+		} else {
 			model.addAttribute("isExist", true);
 		}
 		return "jsonView";
 	}
-	
+
 	/**
 	 * 
 	 * @param account
@@ -87,9 +87,8 @@ public class AccountController {
 	 * @throws Exception
 	 */
 	@RequestMapping(params = "method=list")
-	public String list(SearchVO search, Model model)
-			throws Exception {
-		if(search.getPageIndex() <=0)
+	public String list(SearchVO search, Model model) throws Exception {
+		if (search.getPageIndex() <= 0)
 			search.setPageIndex(1);
 		Page resultPage = accountService.getList(search);
 		Map<String, Object> jsonModel = new HashMap<String, Object>();
@@ -115,7 +114,6 @@ public class AccountController {
 		return "jsonView";
 	}
 
-
 	/**
 	 * @param session
 	 * @param model
@@ -128,15 +126,15 @@ public class AccountController {
 		accountService.save(account);
 		return "jsonView";
 	}
-	
+
 	/**
 	 * 
 	 * @param account
 	 * @return
 	 * @throws Exception
 	 */
-	@RequestMapping(params= "method=create")
-	public String create(Account account) throws Exception{
+	@RequestMapping(params = "method=create")
+	public String create(Account account) throws Exception {
 		accountService.create(account);
 		return "jsonView";
 	}

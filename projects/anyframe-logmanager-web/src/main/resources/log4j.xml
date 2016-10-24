@@ -10,7 +10,7 @@
     
     <!--  for mvc exception logging -->
 	<logger name="controller.logs" additivity="false">
-		<level value="WARN" />
+		<level value="INFO" />
 		<appender-ref ref="console" />
 	</logger>
     

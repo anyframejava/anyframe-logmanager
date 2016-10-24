@@ -26,46 +26,52 @@ import org.anyframe.pagination.Page;
  * @author Heewon Jung
  */
 public interface AccountService {
-	
-	/** 
+
+	/**
 	 * Create account
+	 * 
 	 * @param account
 	 * @throws Exception
 	 */
 	void create(Account account) throws Exception;
-	
+
 	/**
 	 * Update account
+	 * 
 	 * @param account
 	 * @throws Exception
 	 */
 	void save(Account account) throws Exception;
-	
+
 	/**
 	 * Remove account
+	 * 
 	 * @param userId
 	 * @throws Exception
 	 */
 	void remove(String userId) throws Exception;
-	
+
 	/**
 	 * Get account by userId
+	 * 
 	 * @param userId
 	 * @return
 	 * @throws Exception
 	 */
 	Account get(String userId) throws Exception;
-	
+
 	/**
 	 * Get account list with paging
+	 * 
 	 * @param search
 	 * @return
 	 * @throws Exception
 	 */
 	Page getList(SearchVO search) throws Exception;
-	
+
 	/**
 	 * Check admin
+	 * 
 	 * @return
 	 * @throws Exception
 	 */

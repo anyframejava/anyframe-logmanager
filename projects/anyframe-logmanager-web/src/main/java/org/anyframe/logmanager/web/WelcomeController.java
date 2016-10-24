@@ -25,32 +25,31 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 /**
- * This WelcomeController class is a Controller class to provide show welcome page
- * functionality.
+ * This WelcomeController class is a Controller class to provide show welcome
+ * page functionality.
  * 
  * @author Heewon Jung
  */
 @Controller
 @RequestMapping("/welcome.do")
 public class WelcomeController {
-	
+
 	@Inject
 	@Named("accountService")
 	private AccountService accountService;
-	
-	
+
 	/**
 	 * 
 	 * @param model
 	 * @return
 	 */
 	@RequestMapping(params = "method=view")
-	public String checkAdminAccountExist(Model model) throws Exception{
+	public String checkAdminAccountExist(Model model) throws Exception {
 		boolean isAdminExist = accountService.checkAdminExist();
 		model.addAttribute("isAdminExist", isAdminExist);
 		return "forward:/anyframe.jsp";
 	}
-	
+
 	/**
 	 * 
 	 * @param account
@@ -58,7 +57,7 @@ public class WelcomeController {
 	 * @throws Exception
 	 */
 	@RequestMapping(params = "method=save")
-	public String create(Account account) throws Exception{
+	public String create(Account account) throws Exception {
 		accountService.create(account);
 		return "jsonView";
 	}

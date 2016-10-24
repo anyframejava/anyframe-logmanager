@@ -21,10 +21,13 @@ pre {word-wrap:break-word;white-space:pre-wrap;white-space:-moz-pre-wrap;white-s
 /*.highlight { background-color: #aaeb75; }*/
 
 .poplayer {width : 100%;}
-#wrap {min-height:700px;}
+#wrap {min-height:600px;}
 #footer {text-align:center;}
 
 .search_area table.btn td {background:none; background-color:#FFF; padding:0; line-height:130%;}
+
+.view th {font-size:96%;}
+.view input[type=text] {width:100%;}
 
 #tabs {position:relative; float:left; width:100%; border-bottom:1px solid #BBB;}
 #tabs ul {margin:0; width:100% !important; margin:5px 0 0 0;}
@@ -41,10 +44,7 @@ pre {word-wrap:break-word;white-space:pre-wrap;white-space:-moz-pre-wrap;white-s
 #inputClientIp,#inputUserId {width:100%;}
 #inputClassName,#inputMethodName{width:240px;}
 #textFromDate,#textToDate {width:70px;}
-#btnLog4jXmlLoad {padding : 0 2px 0 2px;}
-
-#txtAppName {width:100%;}
-#txtLog4jXmlPath {width:80%;}
+#btnLoggingPolicyFileLoad {padding : 0 2px 0 2px;}
 
 #pageNav {text-align:center;}
 #btnPagenationSearch {display:none;}
@@ -61,8 +61,8 @@ th {text-align:right;}
 
 select.select_search {width:100%;}
 
-#tblAppender {margin-top:10px;font-size:50%;}
-img.editBtn,img.removeBtn, img.editor-select {cursor:pointer;}
+#tblAppender {margin-top:10px;}
+img.editBtn,img.removeBtn, img.editor-select, img.set-logcollection {cursor:pointer;}
 #textEdit textarea {width:100%;height:600px}
 input.param-name {width:90%;}
 input.param-value {width:100%;}
@@ -70,5 +70,21 @@ input.param-value {width:100%;}
 .view table td.icon {padding:0;text-align:right;}
 td.value, td.class {word-wrap:break-word;white-space:pre-wrap;white-space:-moz-pre-wrap;white-space:-pre-wrap;white-space:-o-pre-wrap;word-break:break-all;}
 
-#tblAppender th {font-size:9px;}
+#tblAppender th {font-size:96%;}
+#tblSetLogCollection th {font-size:96%;}
 #taXmlEditor {width: 100%; height:100%;}
+
+#txtCollectionTerm {width:30px;}
+#selectCollectionTermUnit {width:50px;}
+#taLogDataSample {width:100%;height:100px;margin:3px 0 4px 0;}
+#taRegularExp {width:100%;height:36px;margin:3px 0 4px 0;}
+
+.view table td.span-td-top {background:none;}
+td.span-td-bottom {height:26px;vertical-align:top;padding:0 0 0 0;}
+
+#ulColumnsInfo li {border-bottom : 1px #cccccc solid;}
+#ulColumnsInfo li:hover {background-color:#dddddd}
+.list table td.selected {background-color:#B8E0F5}
+.logcollection-delete-button, .result-status-button {cursor:pointer;}
+.result-status-icon {vertical-align:middle;}
+#tdMessage li {border-bottom : 1px #cccccc solid;padding:5px 5px 5px 5px;}

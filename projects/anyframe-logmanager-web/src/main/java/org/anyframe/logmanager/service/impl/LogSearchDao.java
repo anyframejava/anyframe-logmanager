@@ -26,6 +26,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.anyframe.logmanager.LogManagerConstant;
+import org.anyframe.logmanager.domain.LogDataMap;
 import org.anyframe.logmanager.domain.LogSearchCondition;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -39,18 +40,17 @@ import org.springframework.stereotype.Repository;
  * Log Manager log search mongo-db dao class
  * 
  * @author Jaehyoung Eum
- *
+ * 
  */
 @Repository("logSearchDao")
 public class LogSearchDao {
-	
+
 	private static Logger logger = LoggerFactory.getLogger(LogSearchDao.class);
-	
+
 	@Inject
 	@Named("mongoTemplate")
 	private MongoOperations mongoOperations;
-	
-	
+
 	/**
 	 * log search from mongo-db
 	 * 
@@ -59,34 +59,45 @@ public class LogSearchDao {
 	 * @throws Exception
 	 */
 	@SuppressWarnings({ "unchecked" })
-	public List searchLog(LogSearchCondition searchCondition, Class c, String collectionName) throws Exception{
+	public List searchLog(LogSearchCondition searchCondition, Class c, String repositoryName) throws Exception {
 		Query query = null;
-		if(searchCondition.isMatchedLogOnly()) {
+		if (searchCondition.isMatchedLogOnly()) {
 			query = query(generateSearchConditionMatchedLogOnly(searchCondition));
-		}else{
+		} else {
 			query = query(generateSearchCondition(searchCondition));
 		}
-		
-		if(searchCondition.getPageIndex() != -1) {
-			try{
-				long count = mongoOperations.count(query, collectionName);
+
+		if (searchCondition.getPageIndex() != -1) {
+			try {
+				long count = mongoOperations.count(query, repositoryName);
 				logger.debug("count=" + count);
 				searchCondition.setTotalCount(count);
-				
-			}catch(IllegalArgumentException e){
+
+			} catch (IllegalArgumentException e) {
 				searchCondition.setTotalCount(0);
 				return null;
 			}
 			query = query.skip((searchCondition.getPageIndex() - 1) * searchCondition.getPageSize()).limit(searchCondition.getPageSize());
-		}else{
+		} else {
 			query = query.limit(LogManagerConstant.MAX_ROW_LIMIT);
 		}
 		// sorting
 		query.sort().on("timestamp", Order.ASCENDING);
 		
-		return mongoOperations.find(query, c, collectionName);
+		return mongoOperations.find(query, c, repositoryName);
 	}
 	
+	/**
+	 * @param id
+	 * @param collectionName
+	 * @return
+	 * @throws Exception
+	 */
+	@SuppressWarnings({ "rawtypes" })
+	public LogDataMap getLogData(String id, String repositoryName) throws Exception {
+		return mongoOperations.findById(id, LogDataMap.class, repositoryName);
+	}
+
 	/**
 	 * generate search condition for log search from mongo-db
 	 * 
@@ -96,126 +107,127 @@ public class LogSearchDao {
 	 */
 	private Criteria generateSearchCondition(LogSearchCondition searchCondition) throws Exception {
 		Criteria criteria = null;
-		
+
 		// app name
-		if(searchCondition.getAppName() != null && !"".equals(searchCondition.getAppName())) {
+		if (searchCondition.getAppName() != null && !"".equals(searchCondition.getAppName())) {
 			criteria = where("appName").is(searchCondition.getAppName());
 		}
-		
+
 		// server id
-		if(searchCondition.getServerId() != null && !"".equals(searchCondition.getServerId())) {
+		if (searchCondition.getServerId() != null && !"".equals(searchCondition.getServerId())) {
 			criteria = criteria.and("serverId").is(searchCondition.getAgentId());
 		}
-		
+
 		// duration
-		if(searchCondition.isUseFromDate() && searchCondition.isUseToDate()) {
+		if (searchCondition.isUseFromDate() && searchCondition.isUseToDate()) {
 			logger.debug("duration type 1 : {} ~ {}", searchCondition.getFromDateTime(), searchCondition.getToDateTime());
 			criteria = criteria.and("timestamp").lte(searchCondition.getToDateTime()).gte(searchCondition.getFromDateTime());
-		} else if(searchCondition.isUseFromDate()) {
+		} else if (searchCondition.isUseFromDate()) {
 			logger.debug("duration type 2 : {}", searchCondition.getFromDateTime());
 			criteria = criteria.and("timestamp").gte(searchCondition.getFromDateTime());
-		} else if(searchCondition.isUseToDate()) {
+		} else if (searchCondition.isUseToDate()) {
 			logger.debug("duration type 3 : {}", searchCondition.getToDateTime());
 			criteria = criteria.and("timestamp").lte(searchCondition.getToDateTime());
 		}
-		
+
 		return criteria;
 	}
-	
+
 	/**
-	 * generate search condition for log search from mongo-db matched log only case
+	 * generate search condition for log search from mongo-db matched log only
+	 * case
 	 * 
 	 * @param searchCondition
 	 * @return
 	 * @throws Exception
 	 */
-	private Criteria generateSearchConditionMatchedLogOnly(LogSearchCondition searchCondition) throws Exception{
+	private Criteria generateSearchConditionMatchedLogOnly(LogSearchCondition searchCondition) throws Exception {
 		Criteria criteria = null;
-		
+
 		// app name
-		if(searchCondition.getAppName() != null && !"".equals(searchCondition.getAppName())) {
+		if (searchCondition.getAppName() != null && !"".equals(searchCondition.getAppName())) {
 			criteria = where("appName").is(searchCondition.getAppName());
 		}
-		
+
 		// server id
-//		if(searchCondition.getServerId() != null && !"".equals(searchCondition.getServerId())) {
-//			criteria = criteria.and("serverId").is(searchCondition.getAgentId());
-//		}
-		
+		// if(searchCondition.getServerId() != null && !"".equals(searchCondition.getServerId())) {
+		// 		criteria = criteria.and("serverId").is(searchCondition.getAgentId());
+		// }
+
 		// duration
-		if(searchCondition.isUseFromDate() && searchCondition.isUseToDate()) {
+		if (searchCondition.isUseFromDate() && searchCondition.isUseToDate()) {
 			criteria = criteria.and("timestamp").lte(searchCondition.getToDateTime()).gte(searchCondition.getFromDateTime());
-		} else if(searchCondition.isUseFromDate()) {
+		} else if (searchCondition.isUseFromDate()) {
 			criteria = criteria.and("timestamp").gte(searchCondition.getFromDateTime());
-		} else if(searchCondition.isUseToDate()) {
+		} else if (searchCondition.isUseToDate()) {
 			criteria = criteria.and("timestamp").lte(searchCondition.getToDateTime());
 		}
-		
+
 		// client IP
-		if(searchCondition.getClientIp() != null && !"".equals(searchCondition.getClientIp())) {
+		if (searchCondition.getClientIp() != null && !"".equals(searchCondition.getClientIp())) {
 			criteria = criteria.and("mdc.clientIp").is(searchCondition.getClientIp());
 		}
-		
+
 		// user id
-		if(searchCondition.getUserId() != null && !"".equals(searchCondition.getUserId())) {
+		if (searchCondition.getUserId() != null && !"".equals(searchCondition.getUserId())) {
 			criteria = criteria.and("mdc.userId").is(searchCondition.getUserId());
 		}
-		
+
 		// Class Name
-		if(searchCondition.getClassName() != null && !"".equals(searchCondition.getClassName())) {
+		if (searchCondition.getClassName() != null && !"".equals(searchCondition.getClassName())) {
 			criteria = criteria.and("className").regex(searchCondition.getClassName(), "i");
 		}
-		
+
 		// Method Name
-		if(searchCondition.getMethodName() != null && !"".equals(searchCondition.getMethodName())) {
+		if (searchCondition.getMethodName() != null && !"".equals(searchCondition.getMethodName())) {
 			criteria = criteria.and("methodName").regex(searchCondition.getMethodName(), "i");
 		}
-		
+
 		// Message Text
-		if(searchCondition.getMessageText() != null && !"".equals(searchCondition.getMessageText())) {
+		if (searchCondition.getMessageText() != null && !"".equals(searchCondition.getMessageText())) {
 			StringTokenizer st = new StringTokenizer(searchCondition.getMessageText());
 			StringBuffer buf = new StringBuffer();
-			while(st.hasMoreTokens()){
+			while (st.hasMoreTokens()) {
 				String keyword = st.nextToken();
 				buf.append("(?=.*").append(keyword).append(")");
 			}
 			criteria = criteria.and("message").regex(buf.toString(), "i");
 		}
-		
+
 		// Log Level Direction
-		if(searchCondition.getLogLevelDirection() == LogManagerConstant.LEVEL_THIS_ONLY) {
-			criteria = criteria.and("level").is(searchCondition.getLevel());	
-		}else if(searchCondition.getLogLevelDirection() == LogManagerConstant.LEVEL_INCLUDE_SUB) {
+		if (searchCondition.getLogLevelDirection() == LogManagerConstant.LEVEL_THIS_ONLY) {
+			criteria = criteria.and("level").is(searchCondition.getLevel());
+		} else if (searchCondition.getLogLevelDirection() == LogManagerConstant.LEVEL_INCLUDE_SUB) {
 			List<String> levels = new ArrayList<String>();
 			boolean flag = false;
-			for(int i=4;i>=0;i--) {
-				if(searchCondition.getLevel().equals(LogManagerConstant.LEVELS[i])) {
+			for (int i = 4; i >= 0; i--) {
+				if (searchCondition.getLevel().equals(LogManagerConstant.LEVELS[i])) {
 					levels.add(LogManagerConstant.LEVELS[i]);
 					flag = true;
-				}else{
-					if(flag) {
+				} else {
+					if (flag) {
 						levels.add(LogManagerConstant.LEVELS[i]);
 					}
 				}
 			}
 			criteria = criteria.and("level").in(levels);
-			
-		}else if(searchCondition.getLogLevelDirection() == LogManagerConstant.LEVEL_INCLUDE_HIGH) {
+
+		} else if (searchCondition.getLogLevelDirection() == LogManagerConstant.LEVEL_INCLUDE_HIGH) {
 			List<String> levels = new ArrayList<String>();
 			boolean flag = false;
-			for(int i=0;i<=4;i++) {
-				if(searchCondition.getLevel().equals(LogManagerConstant.LEVELS[i])) {
+			for (int i = 0; i <= 4; i++) {
+				if (searchCondition.getLevel().equals(LogManagerConstant.LEVELS[i])) {
 					levels.add(LogManagerConstant.LEVELS[i]);
 					flag = true;
-				}else{
-					if(flag) {
+				} else {
+					if (flag) {
 						levels.add(LogManagerConstant.LEVELS[i]);
 					}
 				}
 			}
 			criteria = criteria.and("level").in(levels);
 		}
-		
+
 		return criteria;
 	}
 

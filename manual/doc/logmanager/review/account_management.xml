@@ -10,15 +10,6 @@
 			<listitem><para>Account 상세조회 및 수정화면 호출</para></listitem>
 			<listitem><para>등록된 Account의 검색 기능 제공</para></listitem>
 		</itemizedlist>
-		<mediaobject>
-			<imageobject role="html">
-				<imagedata fileref="../image/logmanager/LM151-031.JPG" align="center" />
-			</imageobject>
-			<imageobject role="fo">
-				<imagedata fileref="../image/logmanager/pdf/LM151-031.JPG" format="JPG" align="center"/>
-			</imageobject>
-			<caption>Account Management List</caption>
-		</mediaobject>
 	</section>
 	<section id="logmanager_account_add">
 		<title>Account 등록/수정</title>
@@ -30,11 +21,14 @@
 		</itemizedlist>
 		<mediaobject>
 			<imageobject role="html">
-				<imagedata fileref="../image/logmanager/LM151-032.JPG" align="center" />
+				<imagedata fileref="../image/logmanager/160_009.jpg" align="center" />
 			</imageobject>
 			<imageobject role="fo">
-				<imagedata fileref="../image/logmanager/pdf/LM151-032.JPG" format="JPG" align="center"/>
+				<imagedata fileref="../image/logmanager/pdf/160_009.jpg" format="JPG" align="center"/>
 			</imageobject>
+			<textobject>
+				<phrase>Account Management 화면 이미지</phrase>
+			</textobject>
 			<caption>Account Management Regist/Update</caption>
 		</mediaobject>
 	</section>

@@ -3,13 +3,13 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
 		<groupId>org.anyframe</groupId>
-		<artifactId>anyframe-parent</artifactId>
+		<artifactId>anyframe-plugin-parent</artifactId>
 		<version>5.2.1</version>
 	</parent>
     <groupId>org.anyframe</groupId>
     <artifactId>anyframe-logmanager-web</artifactId>
     <packaging>war</packaging>
-    <version>1.5.1</version>
+    <version>1.6.0</version>
     <name>anyframe-logmanager-web</name>
     <dependencies>
 		<dependency>
@@ -112,7 +112,7 @@
         <dependency>
 		    <groupId>org.mongodb</groupId>
 		    <artifactId>mongo-java-driver</artifactId>
-		    <version>2.8.0</version>
+		    <version>2.10.1</version>
 		</dependency>
         <dependency>
             <groupId>taglibs</groupId>
@@ -210,11 +210,7 @@
 		    <artifactId>spring-data-commons-core</artifactId>
 		    <version>1.2.0.RELEASE</version>
 		</dependency>
-		<dependency>
-			<groupId>org.log4mongo</groupId>
-			<artifactId>log4mongo-java</artifactId>
-			<version>0.7.0</version>
-		</dependency>
+
 		<dependency>
             <groupId>org.codehaus.jackson</groupId>
             <artifactId>jackson-mapper-asl</artifactId>
@@ -249,12 +245,12 @@
 		<dependency>
             <groupId>org.anyframe</groupId>
             <artifactId>anyframe-core</artifactId>
-            <version>1.5.0.RC1</version>
+            <version>1.5.0</version>
         </dependency>
 		<dependency>
 			<groupId>org.anyframe</groupId>
 			<artifactId>anyframe-logmanager-common</artifactId>
-			<version>1.5.1</version>
+			<version>1.6.0</version>
 		</dependency>
     </dependencies>
     <properties>
@@ -302,7 +298,7 @@
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>anyframe-maven-plugin</artifactId>
-                <version>2.2.1.RC1</version>
+                <version>2.2.1</version>
                 <dependencies>
                     <dependency>
                         <groupId>hsqldb</groupId>

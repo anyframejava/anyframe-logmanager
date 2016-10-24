@@ -11,37 +11,26 @@
 		<itemizedlist>
 			<listitem><para>검색 조건은 기본적으로 5가지 항목이 제공되고 있으나, 검색화면 상단의 <emphasis role="bold">&quot;Advanced Options&quot;</emphasis> 체크 박스를 선택함으로써 보다 자세한 상세검색을 수행 할 수 있다.</para></listitem>
 			<listitem><para>&quot;Advanced Options&quot; 체크 박스 옆의 <emphasis role="bold">&quot;Matched Log Only&quot;</emphasis> 체크 박스를 선택하면 App Name과 Appender와 Duration 에 부합되는 내용들 중 나머지 검색조건에 해당하는 내용들을 highlight 처리하여 보여준다. 특정 키워드가 아닌 특정 영역을 검색/조회하고자 하는 경우 유용하게 사용될 수 있다.</para></listitem>
-			<listitem><para><emphasis role="bold">App Name</emphasis>은 Legacy Application을 나타내며, <emphasis role="bold">Appender</emphasis>는 Legacy Application 중 현재 MongoDB로 로깅 되고 있는 Appender를 의미한다.(Legacy Application 의 log4j.xml 설정을 참조)</para></listitem>
+			<listitem><para><emphasis role="bold">App Name</emphasis>은 Legacy Application을 나타내며, <emphasis role="bold">Repository</emphasis>는 Legacy Application의 로그 데이타가 저장되어 있는 Log Repository를 의미한다.(좀 더 좁은 의미로는 MongoDB의 Collection을 의미함)</para></listitem>
 			<listitem><para><emphasis role="bold">Duration</emphasis>은 로그 데이타의 검색 기간을 설정할 수 있으며, &quot;Advanced Options&quot;을 선택하면 달력 기반의 검색 UI를 사용할 수도 있다.</para></listitem>
 			<listitem><para><emphasis role="bold">Message Text</emphasis>는 로그 데이타의 특정 내용을 패턴 검색 할 수 있는 기능이며, &quot;blank&quot;를 통하여 복수의 키워드를 검색 조건으로 활용할 수 있다.</para></listitem>
 		</itemizedlist>
 		<mediaobject>
 			<imageobject role="html">
-				<imagedata fileref="../image/logmanager/LM151-006.JPG" align="center"/>
+				<imagedata fileref="../image/logmanager/160_003.jpg" align="center"/>
 			</imageobject>
 			<imageobject role="fo">
-				<imagedata fileref="../image/logmanager/pdf/LM151-006.JPG" align="center"/>
+				<imagedata fileref="../image/logmanager/pdf/160_003.jpg" align="center"/>
 			</imageobject>
+			<textobject>
+				<phrase>로그 조회화면 (Grid Type) 이미지</phrase>
+			</textobject>
 			<caption>Log Data List(Grid Type View)</caption>
 		</mediaobject>
-		<warning>
-			<title>Advanced Search Option 관련 유의사항</title>
-			<para>&quot;Advanced Options&quot;의 User ID와 Client IP는 패턴매칭이 아니여서 정확한 User ID와 IP를 넣어야 하지만, Class Name과 Method Name은 역시 패턴 검색이 가능하므로 일부만 입력하여 검색이 가능하다.</para>
-			<para>위의 내용은 Text Type View의 경우에도 동일하다</para>
-		</warning>
 		<itemizedlist>
 			<listitem><para>Grid Type View 화면의 경우 pagination 기능이 기본적으로 제공되며, 한 화면에 표시되는 데이타의 수는 10개이다.</para></listitem>
-			<listitem><para>Grid Type View 목록의 경우에는 Log Level, Time Stamp, Client IP, Message 만이 표시되며, 상세한 로그데이타가 필요한 경우 해당 로그를 클릭하면 아래 그림과 같은 팝업 형태로 로그 상세 정보를 제공한다.</para></listitem>
+			<listitem><para>Grid Type View 목록의 경우에는 Log Level, Time Stamp, Message 만이 표시되며, 상세한 로그데이타가 필요한 경우 해당 로그를 클릭하면 아래 그림과 같은 팝업 형태로 로그 상세 정보를 제공한다.</para></listitem>
 		</itemizedlist>
-		<mediaobject>
-			<imageobject role="html">
-				<imagedata fileref="../image/logmanager/LM151-014.JPG" align="center"/>
-			</imageobject>
-			<imageobject role="fo">
-				<imagedata fileref="../image/logmanager/pdf/LM151-014.JPG" align="center"/>
-			</imageobject>
-			<caption>Log Data Dialog Popup(Grid Type View)</caption>
-		</mediaobject>
 	</section>
 	
 	<section id="logmanager_loganalysis_text">
@@ -55,17 +44,24 @@
 		</itemizedlist>
 		<mediaobject>
 			<imageobject role="html">
-				<imagedata fileref="../image/logmanager/LM151-007.JPG" align="center"/>
+				<imagedata fileref="../image/logmanager/160_004.jpg" align="center"/>
 			</imageobject>
 			<imageobject role="fo">
-				<imagedata fileref="../image/logmanager/pdf/LM151-007.JPG" align="center"/>
+				<imagedata fileref="../image/logmanager/pdf/160_004.jpg" align="center"/>
 			</imageobject>
+			<textobject>
+				<phrase>로그 조회화면 (Test Type) 이미지</phrase>
+			</textobject>
 			<caption>Log Data List(Text Type View)</caption>
 		</mediaobject>
 		<warning>
 			<title>최대 검색 건수 관련 유의사항</title>
 			<para>Text Type View 화면은 한 번에 <emphasis role="bold">5000</emphasis>건 이상의 데이타가 검색된 경우 경고메시지와 함께 데이타를 출력하지 않는다. 이러한 경우에는 검색조건을 보다 상세히 하여 검색 범위를 좁힐 것을 권고한다.</para>
 		</warning>
+		<note>
+			<title>Advanced Search Option 관련 유의사항</title>
+			<para>&quot;Advanced Options&quot;의 User ID와 Client IP는 패턴매칭이 아니여서 정확한 User ID와 IP를 넣어야 하지만, Class Name과 Method Name은 역시 패턴 검색이 가능하므로 일부만 입력하여 검색이 가능하다.</para>
+		</note>
 	</section>
 	<section>
 		<title>조회 결과 Export</title>
@@ -73,52 +69,45 @@
 		<para>로그 목록 상단 우측의 'Export' 링크를 클릭하여 'Text'와 'Excel' 형식 중 선택하여 export 를 수행한다.</para>
 		<mediaobject>
 			<imageobject role="html">
-				<imagedata fileref="../image/logmanager/LM151-009.JPG" align="center"/>
+				<imagedata fileref="../image/logmanager/160_037.jpg" align="center"/>
 			</imageobject>
 			<imageobject role="fo">
-				<imagedata fileref="../image/logmanager/pdf/LM151-009.JPG" align="center"/>
+				<imagedata fileref="../image/logmanager/pdf/160_037.jpg" align="center"/>
 			</imageobject>
+			<textobject>
+				<phrase>Export 양식 선택 화면 이미지</phrase>
+			</textobject>
 			<caption>Export Form Select</caption>
 		</mediaobject>
 		<mediaobject>
 			<imageobject role="html">
-				<imagedata fileref="../image/logmanager/LM151-010.JPG" align="center"/>
+				<imagedata fileref="../image/logmanager/160_006.jpg" align="center"/>
 			</imageobject>
 			<imageobject role="fo">
-				<imagedata fileref="../image/logmanager/pdf/LM151-010.JPG" align="center"/>
+				<imagedata fileref="../image/logmanager/pdf/160_006.jpg" align="center"/>
 			</imageobject>
-			<caption>Export File List</caption>
-		</mediaobject>
-		<mediaobject>
-			<imageobject role="html">
-				<imagedata fileref="../image/logmanager/LM151-011.JPG" align="center"/>
-			</imageobject>
-			<imageobject role="fo">
-				<imagedata fileref="../image/logmanager/pdf/LM151-011.JPG" align="center"/>
-			</imageobject>
+			<textobject>
+				<phrase>Text 형태의 Export Data 샘플 이미지</phrase>
+			</textobject>
 			<caption>Text Format Example</caption>
 		</mediaobject>
 		<mediaobject>
 			<imageobject role="html">
-				<imagedata fileref="../image/logmanager/LM151-012.JPG" align="center"/>
+				<imagedata fileref="../image/logmanager/160_005.jpg" align="center"/>
 			</imageobject>
 			<imageobject role="fo">
-				<imagedata fileref="../image/logmanager/pdf/LM151-012.JPG" align="center"/>
+				<imagedata fileref="../image/logmanager/pdf/160_005.jpg" align="center"/>
 			</imageobject>
+			<textobject>
+				<phrase>Excel 형태의 Export Data 샘플 이미지</phrase>
+			</textobject>
 			<caption>Excel Format Example</caption>
 		</mediaobject>
-	</section>
-	<section>
-		<title>'Collection Based' 검색</title>
-		<para>'Collection'은  MongoDB에서 데이타를 저장하는 단위 저장소를 의미하며, RDBMS에서의 테이블과 유사하다고 보면 된다.</para>
-		<para>'Collection Based' 검색은 Anyframe Log Manager 1.5.1 버전에서부터 지원하는 로그 조회를 위한 검색 옵션이다.</para>
-		<para>1 개 이상의 클러스터링 설정이 되어 있는 엔터프라이즈 환경에서 동시에 하나의 repository에 로그를 저장하고 일괄 조회하기를 원할 경우 'Collection Based' 검색 옵션을 사용하여 로그를 조회하는 것이 가능하다</para>
-		<para>'Collection Based'을 체크할 경우 검색 옵션의 'Appender' 가 'Collection' 으로 변경되며, select box에는 현재 등록된 colleciton 목록이 표시되며, select box에서 collection 항목을 변경할 경우 해당 collection 에서 조회가능한 app 목록이 좌측 'App. Name' 의 select box에 반영되어 표시된다. 나머지 검색 옵션은 기존과 동일하다.</para>
-		<para>체크박스를 해제하면 원래의 검색 조건으로 돌아간다.</para>
 	</section>
 	<section id="logmanager_searchoption_table">
 		<title>Log Analysis 검색 옵션 정리</title>
 		<informaltable>
+		<caption>Log Analysis 검색 옵션</caption>
 			<tgroup cols="4">
 				<thead>
 					<row>
@@ -137,9 +126,9 @@
 					</row>
 					<row>
 						<entry/>
-						<entry><emphasis role="bold">Appender</emphasis></entry>
-						<entry>로그의 저장 단위로 Logging Policy File에서 정의하는 &lt;Appender/&gt;에 대응</entry>
-						<entry>App Name이 변경되면 자동적으로 reload 됨</entry>
+						<entry><emphasis role="bold">Repository</emphasis></entry>
+						<entry>로그의 실제 저장소, MongoDB의 Collection(=Table)에 해당함</entry>
+						<entry/>
 					</row>
 					<row>
 						<entry/>
@@ -188,12 +177,15 @@
 		</informaltable>
 		<mediaobject>
 			<imageobject role="html">
-				<imagedata fileref="../image/logmanager/LM151-013.JPG" align="center"/>
+				<imagedata fileref="../image/logmanager/160_038.jpg" align="center"/>
 			</imageobject>
 			<imageobject role="fo">
-				<imagedata fileref="../image/logmanager/pdf/LM151-013.JPG" align="center"/>
+				<imagedata fileref="../image/logmanager/pdf/160_038.jpg" align="center"/>
 			</imageobject>
-			<caption>Advanced Search Example</caption>
+			<textobject>
+				<phrase>Advanced Search Options 이미지</phrase>
+			</textobject>
+			<caption>Advanced Search Options</caption>
 		</mediaobject>
 	</section>
 </chapter>

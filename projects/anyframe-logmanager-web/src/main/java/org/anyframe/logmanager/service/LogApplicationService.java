@@ -17,26 +17,15 @@ package org.anyframe.logmanager.service;
 
 import java.util.List;
 
-import org.anyframe.logmanager.domain.Appender;
-import org.anyframe.logmanager.domain.LogAppender;
 import org.anyframe.logmanager.domain.LogApplication;
 
 /**
+ * This is LogApplicationService class.
+ * 
  * @author Jaehyoung Eum
- *
  */
 public interface LogApplicationService {
-	
-	/**
-	 * call log application list at log manager start-time
-	 * 
-	 * @param param
-	 * @return
-	 * @throws Exception
-	 * @deprecated 
-	 */
-	public void getInitLogApplication() throws Exception;
-	
+
 	/**
 	 * get log application list
 	 * 
@@ -45,15 +34,6 @@ public interface LogApplicationService {
 	 * @throws Exception
 	 */
 	public List<LogApplication> getLogApplicationList(LogApplication param) throws Exception;
-	
-	/**
-	 * load log4j.xml file
-	 * @deprecated instead use LogAgentService.getLoggingPolicyFileInfo(String agentId, String loggingPolicyFilePath, String loggingFramework)
-	 * @param param
-	 * @return
-	 * @throws Exception
-	 */
-	public LogApplication loadLoggingPolicyFile(LogApplication param) throws Exception;
 
 	/**
 	 * get log application info
@@ -63,7 +43,7 @@ public interface LogApplicationService {
 	 * @throws Exception
 	 */
 	public LogApplication getLogApplication(LogApplication param) throws Exception;
-	
+
 	/**
 	 * @param param
 	 * @return
@@ -73,24 +53,13 @@ public interface LogApplicationService {
 
 	/**
 	 * Check for Log Application Exist
+	 * 
 	 * @param param
 	 * @return
 	 * @throws Exception
 	 */
 	public LogApplication checkLogApplicationExist(LogApplication param) throws Exception;
-	
-	/**
-	 * save log application info
-	 * 
-	 * @param param
-	 * @param loggers
-	 * @param appenders
-	 * @throws Exception
-	 * @deprecated instead use saveLogApplication(LogApplication, String[], int[], String[])
-	 */
-	public void saveLogApplication(LogApplication param, String[] loggers, String[] appenders) throws Exception;
-	
-	
+
 	/**
 	 * save log application info
 	 * 
@@ -100,41 +69,8 @@ public interface LogApplicationService {
 	 * @param monitorLevels
 	 * @throws Exception
 	 */
-	public void saveLogApplication(LogApplication param, String[] appenders, String[] pollingTimes, int[] monitorLevels, boolean[] fileAppenders, String[] collectionNames, int[] status) throws Exception;
+	public void saveLogApplication(LogApplication param) throws Exception;
 
-	/**
-	 * get appender list of a log application
-	 * 
-	 * @param param
-	 * @return
-	 * @throws Exception
-	 * @deprecated instead use getAppenderList String, String, String)
-	 */
-	public List<Appender> getAppenderList(LogApplication param, String userType) throws Exception;
-	
-	/**
-	 * @param agentId
-	 * @param appName
-	 * @param userType
-	 * @return
-	 * @throws Exception
-	 */
-	public List<LogAppender> getAppenderList(String agentId, String appName, String userType) throws Exception;
-	
-	/**
-	 * @param appName
-	 * @param userType
-	 * @return
-	 * @throws Exception
-	 */
-	public List<LogAppender> getAppenderList(String appName, String userType) throws Exception;
-	
-	/**
-	 * @param userType
-	 * @return
-	 * @throws Exception
-	 */
-	public List<LogAppender> getAppenderList(String userType) throws Exception;
 
 	/**
 	 * delete log application info
@@ -152,12 +88,5 @@ public interface LogApplicationService {
 	 */
 	public void reloadApplication(LogApplication param) throws Exception;
 
-	/**
-	 * @param collectionName
-	 * @param userType
-	 * @return
-	 * @throws Exception
-	 */
-	public List<LogAppender> getLogAppenderListByCollection(String collectionName, String userType) throws Exception;
-	
+
 }

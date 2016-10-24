@@ -40,9 +40,9 @@ import org.osgi.framework.BundleException;
  */
 public class BundleStart {
 	
-	private static String CONFIG_FILE = "conf/logagent.ini";
+	private static String configFile = "conf/logagent.ini";
 	
-	private static String CACHE = "meta";
+	private static String cache = "meta";
 	
 	private final static String BUNDLE_LOC = "bundle";
 	
@@ -50,7 +50,7 @@ public class BundleStart {
 	
 	private static Bundle framework = null;
 	
-	private static String SHELL_PORT;
+	private static String shellPort;
 	
 	/**
 	 * @param args
@@ -58,28 +58,23 @@ public class BundleStart {
 	public static void main(String[] args) throws Exception {
 		// TODO Auto-generated method stub
 		if(args.length > 0){
-    		CONFIG_FILE = args[0];
-    		CACHE = "meta-agent";
+			configFile = args[0];
+			cache = "meta-agent";
     	}
     	
-        try
-        {            
+        try {            
             printWelcome();
             
             File home = new File(Felix.class.getProtectionDomain().getCodeSource().getLocation().toURI()).getParentFile().getParentFile();
-            startFramework(setFelixProperties(new File(home, CONFIG_FILE), new File(home, CACHE)) );
+            startFramework(setFelixProperties(new File(home, configFile), new File(home, cache)) );
             
             installBundles(new File(home, BUNDLE_LOC)); 
             
-        } catch (BundleException e) {
-            System.err.println("Could not create framework: " + e);
+        } catch (Exception e) {
+        	System.err.println("Could not create framework:");
             e.printStackTrace();
             System.exit(-1);
-        } catch (IOException e) {
-        	System.err.println("Could not create framework: " + e);
-            e.printStackTrace();
-            System.exit(-1);
-        }
+        }        
 	}
 	
 
@@ -87,7 +82,7 @@ public class BundleStart {
 	 * 
 	 */
 	private static void printWelcome() {
-        System.out.println("\n::: Welcome to Anyframe Log Manager Agent 1.5.1 :::");
+        System.out.println("\n::: Welcome to Anyframe Log Manager Agent 1.6.0 :::");
         System.out.println("===============================================\n");
 	}
 
@@ -131,8 +126,9 @@ public class BundleStart {
         Properties thirdProp = loadINI(config);
         if(thirdProp != null){
         	configMap.putAll(thirdProp);
-        	if(thirdProp.getProperty("http.port") == null)	// if there's no http.port
-        		configMap.put("http.port", String.valueOf(AGENT_PORT) );		
+        	if(thirdProp.getProperty("http.port") == null)	{ // if there's no http.port
+        		configMap.put("http.port", String.valueOf(AGENT_PORT) );
+        	}
         }
         
         // override properties from program's arguments
@@ -142,7 +138,7 @@ public class BundleStart {
         replaceKey(configMap, "http.port", "org.osgi.service.http.port");
         replaceKey(configMap, "shell.ip", "osgi.shell.telnet.ip");
         Object o = configMap.get("shell.port");
-        SHELL_PORT = o == null ? null : o.toString();
+        shellPort = o == null ? null : o.toString();
         replaceKey(configMap, "shell.port", "osgi.shell.telnet.port");
         replaceKey(configMap, "shell.maxconn", "osgi.shell.telnet.maxconn");
         return configMap;
@@ -185,19 +181,19 @@ public class BundleStart {
     	String[] libraries = libBundles();
     	// start bundles which are not belonging to lib
 		for(Bundle bnd : framework.getBundleContext().getBundles()) {
-			if(contains(libraries, bnd))
+			if(contains(libraries, bnd)) {
 				continue;
+			}
 			bnd.start();
 		}
 		
 		// if remote shell is loaded, show some guides.
     	for(Bundle bnd : framework.getBundleContext().getBundles()) {
-    		if(SHELL_PORT != null &&
+    		if(shellPort != null &&
     				bnd.getSymbolicName().equals("org.apache.felix.org.apache.felix.shell.remote") &&
     				bnd.getState() == Bundle.ACTIVE){
     			String ip = framework.getBundleContext().getProperty("osgi.shell.telnet.ip");
-    			System.out.println("::: You can access Oden by Telnet. (e.g. telnet " 
-    					+ (ip == null ? "localhost" : ip) + " " + SHELL_PORT +") :::\n");
+    			System.out.println("::: You can access Oden by Telnet. (e.g. telnet " + (ip == null ? "localhost" : ip) + " " + shellPort +") :::\n");
     		}
     	}
     	    	
@@ -210,8 +206,9 @@ public class BundleStart {
 	 */
 	private static boolean contains(String[] list, Bundle b){
     	for(String s : list){
-			if(b.getLocation().endsWith(s))
+			if(b.getLocation().endsWith(s)) {
 				return true;
+			}
 		}
     	return false;
     }
@@ -221,7 +218,9 @@ public class BundleStart {
      */
     private static String[] libBundles() {
     	String bnds = framework.getBundleContext().getProperty("bundle.libs");
-    	if(bnds == null) return new String[0];
+    	if(bnds == null) {
+    		return new String[0];
+    	}
     	return bnds.split("\\s");
     }
     
@@ -257,12 +256,13 @@ public class BundleStart {
      */
     public static void stopFramework() throws BundleException{
     	framework.stop();
+    	System.out.println("framework was stop.");
     }
     
     /**
      * @return
      */
-    public static Bundle framework(){
+    public static Bundle getFramework(){
     	return framework;
     }
 

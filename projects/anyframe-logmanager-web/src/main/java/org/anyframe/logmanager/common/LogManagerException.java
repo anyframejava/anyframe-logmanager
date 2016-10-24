@@ -15,9 +15,8 @@
  */
 package org.anyframe.logmanager.common;
 
-import org.springframework.context.MessageSource;
-
 import org.anyframe.exception.BaseException;
+import org.springframework.context.MessageSource;
 
 /**
  * This LogManagerException class contains various constructor for different
@@ -42,11 +41,8 @@ public class LogManagerException extends BaseException {
 	 * @param wrappedException
 	 *            the exception that is wrapped in this exception
 	 */
-	public LogManagerException(final MessageSource messageSource,
-			final String messageKey, final Object[] messageParameters,
-			final Throwable wrappedException) {
-		super(messageSource, messageKey, messageParameters, "Occured Error",
-				wrappedException);
+	public LogManagerException(final MessageSource messageSource, final String messageKey, final Object[] messageParameters, final Throwable wrappedException) {
+		super(messageSource, messageKey, messageParameters, "Occured Error", wrappedException);
 	}
 
 	/**
@@ -60,8 +56,7 @@ public class LogManagerException extends BaseException {
 	 * @param messageKey
 	 *            the message key of this exception
 	 */
-	public LogManagerException(final MessageSource messageSource,
-			final String messageKey, final Object[] messageParameters) {
+	public LogManagerException(final MessageSource messageSource, final String messageKey, final Object[] messageParameters) {
 		super(messageSource, messageKey, messageParameters);
 	}
 
@@ -74,8 +69,7 @@ public class LogManagerException extends BaseException {
 	 * @param messageKey
 	 *            the message key of this exception
 	 */
-	public LogManagerException(final MessageSource messageSource,
-			final String messageKey) {
+	public LogManagerException(final MessageSource messageSource, final String messageKey) {
 		super(messageSource, messageKey);
 		super.getMessageKey();
 	}
@@ -91,8 +85,7 @@ public class LogManagerException extends BaseException {
 	 * @param wrappedException
 	 *            the exception that is wrapped in this exception
 	 */
-	public LogManagerException(final MessageSource messageSource,
-			final String messageKey, final Throwable wrappedException) {
+	public LogManagerException(final MessageSource messageSource, final String messageKey, final Throwable wrappedException) {
 		super(messageSource, messageKey, wrappedException);
 	}
 

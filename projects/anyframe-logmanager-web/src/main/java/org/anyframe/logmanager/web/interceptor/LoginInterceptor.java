@@ -21,25 +21,27 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
 /**
-* This interceptor class is a Controller class to check user.
-* 
-* @author Heewon Jung
-*
-*/
-public class LoginInterceptor extends HandlerInterceptorAdapter{
-	
-	/* (non-Javadoc)
-	 * @see org.springframework.web.servlet.handler.HandlerInterceptorAdapter#preHandle(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse, java.lang.Object)
+ * This interceptor class is a Controller class to check user.
+ * 
+ * @author Heewon Jung
+ */
+public class LoginInterceptor extends HandlerInterceptorAdapter {
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * org.springframework.web.servlet.handler.HandlerInterceptorAdapter#preHandle
+	 * (javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse, java.lang.Object)
 	 */
 	@Override
-    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object hadler) throws Exception {
-        if(request.getSession().getAttribute("loginAccount") == null){
-        	response.sendRedirect("welcome.do?method=view");
-        	return false;
-        }
-        else {
-            return true;
-        }
-    }
+	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object hadler) throws Exception {
+		if (request.getSession().getAttribute("loginAccount") == null) {
+			response.sendRedirect("welcome.do?method=view");
+			return false;
+		} else {
+			return true;
+		}
+	}
 
 }

@@ -18,11 +18,12 @@ package org.anyframe.logmanager.domain;
 import java.io.Serializable;
 
 /**
+ * This is Account class.
+ * 
  * @author Jaehyoung Eum
- *
  */
-public class Account implements Serializable{
-	
+public class Account implements Serializable {
+
 	private static final long serialVersionUID = 1L;
 
 	private String userId;
@@ -86,12 +87,16 @@ public class Account implements Serializable{
 		this.userType = userType;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see java.lang.Object#toString()
 	 */
 	@Override
 	public String toString() {
-		return super.toString()+"\nAccount [userId=" + userId + ", userName=" + userName + ", password=" + password + ", userType=" + userType + "]";
+		return super.toString() + "\nAccount [userId=" + userId + ", userName="
+				+ userName + ", password=" + password + ", userType="
+				+ userType + "]";
 	}
-	
+
 }

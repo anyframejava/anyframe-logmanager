@@ -16,44 +16,46 @@
 package org.anyframe.logmanager.domain;
 
 /**
+ * This is Param class.
  * 
- * @author  Jaehyoung Eum
- *
+ * @author Jaehyoung Eum
  */
 public class Param {
-	
+
 	private String name;
 	private String value;
-	
+
 	/**
 	 * @return
 	 */
 	public String getName() {
 		return name;
 	}
-	
+
 	/**
 	 * @param name
 	 */
 	public void setName(String name) {
 		this.name = name;
 	}
-	
+
 	/**
 	 * @return
 	 */
 	public String getValue() {
 		return value;
 	}
-	
+
 	/**
 	 * @param value
 	 */
 	public void setValue(String value) {
 		this.value = value;
 	}
-	
-	/* (non-Javadoc)
+
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see java.lang.Object#toString()
 	 */
 	@Override

@@ -31,6 +31,8 @@ import org.springframework.aop.framework.Advised;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Service;
 
+import com.caucho.hessian.client.HessianRuntimeException;
+
 /**
  * This ExceptionTransfer class is an Aspect class to provide exception handling
  * on this project.
@@ -49,7 +51,7 @@ public class ExceptionTransfer {
 	private MessageSource messageSource;
 
 	@AfterThrowing(pointcut = "serviceMethod()", throwing = "exception")
-	public void transfer(JoinPoint thisJoinPoint, Exception exception) throws LogManagerException {
+	public void transfer(JoinPoint thisJoinPoint, Exception exception) throws Exception {
 		Object target = thisJoinPoint.getTarget();
 		while (target instanceof Advised) {
 			try {
@@ -64,6 +66,10 @@ public class ExceptionTransfer {
 		String opName = (thisJoinPoint.getSignature().getName()).toLowerCase();
 		Logger logger = LoggerFactory.getLogger(target.getClass());
 
+		if (exception instanceof HessianRuntimeException) {
+			throw exception;
+		}
+		
 		if (exception instanceof LogManagerException) {
 			LogManagerException logManagerEx = (LogManagerException) exception;
 			logger.error(logManagerEx.getMessage(), logManagerEx);

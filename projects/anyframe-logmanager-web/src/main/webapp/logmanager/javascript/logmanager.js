@@ -1,5 +1,38 @@
+
+// a global month names array
+var gsMonthNames = new Array(
+	'January',
+	'February',
+	'March',
+	'April',
+	'May',
+	'June',
+	'July',
+	'August',
+	'September',
+	'October',
+	'November',
+	'December'
+);
+
+// a global day names array
+var gsDayNames = new Array(
+	'Sunday',
+	'Monday',
+	'Tuesday',
+	'Wednesday',
+	'Thursday',
+	'Friday',
+	'Saturday'
+);
+
+String.prototype.zf = function(l) { return '0'.string(l - this.length) + this; };
+String.prototype.string = function(l) { var s = '', i = 0; while (i++ < l) { s += this; } return s; };
+Number.prototype.zf = function(l) { return this.toString().zf(l); };
+
 /** 
  * <pre>
+ * the date format prototype
  * Date 함수에 format 문장을 추가한다.
  * - Date를 주어진 포멧의 문자열로 변환한다. 
  * - 참고 : http://www.codeproject.com/jscript/dateformat.asp
@@ -7,26 +40,63 @@
  * @param fmt : 변환하기 위한 포멧 문자열
  * @return
  */
-Date.prototype.format = function(fmt) {
-    if (!this.valueOf()) return "";
+Date.prototype.format = function(fmt){
+	if (!this.valueOf())
+		return 'n.a.';//&nbsp;
  
-    var dt = this;
-    return fmt.replace(/(yyyy|yy|mm|dd|hh|mi|ss|am|pm)/gi,
-        function($1){
-            switch ($1){
-                case 'yyyy': return dt.getFullYear();
-                case 'yy':   return dt.getFullYear().toString().substr(2);
-                case 'mm':   return 1 + dt.getMonth() > 9 ? 1 + dt.getMonth() : '0' + (1 + dt.getMonth()) ;
-                case 'dd':   return dt.getDate() > 9 ? dt.getDate() : '0' + dt.getDate();
-                case 'hh':   return dt.getHours() > 9 ? dt.getHours() : '0' + dt.getHours();
-                case 'mi':   return dt.getMinutes() > 9 ? dt.getMinutes() : '0' + dt.getMinutes();
-                case 'ss':   return dt.getSeconds() > 9 ? dt.getSeconds() : '0' + dt.getSeconds();
-                case 'am':   return dt.getHours() < 12 ? 'am' : 'pm';
-                case 'pm':   return dt.getHours() < 12 ? 'am' : 'pm';
-            }
-        } 
+	var d = this;
+    return fmt.replace(/(yyyy|yy|y|MMMM|MMM|MM|M|dddd|ddd|dd|d|HH|H|hh|h|mm|m|ss|s|t|x|SSS)/g,
+    	function($1){
+    		switch ($1){
+	          	case 'yyyy': return d.getFullYear();
+	          	case 'yy':   return (d.getFullYear()%100).zf(2);
+	          	case 'y':      return (d.getFullYear()%100);
+	          	case 'MMMM': return gsMonthNames[d.getMonth()];
+	          	case 'MMM':   return gsMonthNames[d.getMonth()].substr(0, 3);
+	          	case 'MM':   return (d.getMonth() + 1).zf(2);
+	          	case 'M':      return (d.getMonth() + 1);
+	          	case 'dddd': return gsDayNames[d.getDay()];
+	          	case 'ddd':   return gsDayNames[d.getDay()].substr(0, 3);
+	          	case 'dd':   return d.getDate().zf(2);
+	          	case 'd':     return d.getDate();
+	          	case 'HH':   return d.getHours().zf(2);
+	          	case 'H':      return d.getHours();
+	          	case 'hh':   return ((h = d.getHours() % 12) ? h : 12).zf(2);
+	          	case 'h':      return ((h = d.getHours() % 12) ? h : 12);
+	          	case 'mm':   return d.getMinutes().zf(2);
+	          	case 'm':      return d.getMinutes();
+	          	case 'ss':   return d.getSeconds().zf(2);
+	          	case 's':      return d.getSeconds();
+	          	case 't':     return d.getHours() < 12 ? 'am' : 'pm';
+	          	case 'SSS':     return d.getMilliseconds().zf(3);
+	          	case 'x': var i = d.getDate() % 10; return 'thstndrd'.substr(2 * (i < 4) * i, 2);               
+    		}               
+    	}
     );
 };
+
+/**
+ * millisecond 형태의 date를 format 하여 출력
+ * @param f
+ * @returns
+ */
+Number.prototype.dateFormat = function(fmt) {
+	var d = new Date();
+	d.setTime(this);
+	return d.format(fmt);
+};
+
+/**
+ * millisecond 형태의 date를 format 하여 출력
+ * @param f
+ * @returns
+ */
+String.prototype.dateFormat = function(fmt) {
+	var d = new Date();
+	d.setTime(parseInt(this));
+	return d.format(fmt);
+};
+
 
 /** 
  * <pre>
@@ -54,6 +124,16 @@ String.prototype.toDate = function () {
 String.prototype.escapeHTML = function(){
   return $('<pre>').text(this.toString()).remove().html();
 };
+
+/**
+ * parse boolean
+ * 
+ * @param str
+ * @returns
+ */
+function parseBoolean(str) {
+  return /^true$/i.test(str);
+}
 
 /** 
  * <pre>
@@ -120,7 +200,7 @@ var currentDate = new Date();
  * @return
  */
 function getDate(d) {
-	return (new Date(Date.parse(currentDate) - d * 1000 * 60 * 60 * 24)).format('yyyy-mm-dd');
+	return (new Date(Date.parse(currentDate) - d * 1000 * 60 * 60 * 24)).format('yyyy-MM-dd');
 }
 
 /**
@@ -128,7 +208,7 @@ function getDate(d) {
  * @return
  */
 function getTime(t) {
-	return (new Date(Date.parse(currentDate) - 1000 * 60 * 60 * t)).format('yyyy-mm-dd,hh');
+	return (new Date(Date.parse(currentDate) - 1000 * 60 * 60 * t)).format('yyyy-MM-dd,HH');
 }
 
 /**
@@ -136,7 +216,7 @@ function getTime(t) {
  * @return
  */
 function getTimestamp(sec){
-	return ((new Date(Date.parse(currentDate) - 1000 * sec ))).format('yyyy-mm-dd hh:mi:ss')
+	return ((new Date(Date.parse(currentDate) - 1000 * sec ))).format('yyyy-MM-dd HH:mm:ss')
 }
 
 var REQUEST_CONTEXT = null;

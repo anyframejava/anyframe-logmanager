@@ -4,5 +4,7 @@ if exist ..\meta-agent (
  rd /S/Q ..\meta-agent
 )
 
+set AGENT_DIR=../
 set ARGS=-Xmx32m -XX:NewRatio=1 -XX:MinHeapFreeRatio=20 -XX:MaxHeapFreeRatio=25
-java %ARGS% -jar anyframe-logmanager-bundle-1.5.1.jar conf/logagent.ini
+
+java %ARGS% -Dagent.dir=%AGENT_DIR% -jar anyframe-logmanager-bundle-1.6.0.jar conf/logagent.ini

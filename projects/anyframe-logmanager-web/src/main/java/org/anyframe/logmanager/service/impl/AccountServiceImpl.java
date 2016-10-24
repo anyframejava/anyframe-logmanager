@@ -26,52 +26,71 @@ import org.springframework.stereotype.Service;
 
 /**
  * This class is a Implementation class to provide account crud functionality.
+ * 
  * @author Heewon Jung
- *
  */
 @Service("accountService")
-public class AccountServiceImpl implements AccountService{
+public class AccountServiceImpl implements AccountService {
 
 	@Inject
 	@Named("accountDao")
 	private AccountDao accountDao;
 
-	/* (non-Javadoc)
-	 * @see org.anyframe.logmanager.service.AccountService#create(org.anyframe.logmanager.domain.Account)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * org.anyframe.logmanager.service.AccountService#create(org.anyframe.logmanager
+	 * .domain.Account)
 	 */
 	public void create(Account account) throws Exception {
 		accountDao.create(account);
 	}
 
-	/* (non-Javadoc)
-	 * @see org.anyframe.logmanager.service.AccountService#save(org.anyframe.logmanager.domain.Account)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * org.anyframe.logmanager.service.AccountService#save(org.anyframe.logmanager
+	 * .domain.Account)
 	 */
 	public void save(Account account) throws Exception {
 		accountDao.save(account);
 	}
 
-	/* (non-Javadoc)
-	 * @see org.anyframe.logmanager.service.AccountService#remove(java.lang.String)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * org.anyframe.logmanager.service.AccountService#remove(java.lang.String)
 	 */
 	public void remove(String userId) throws Exception {
 		accountDao.remove(userId);
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see org.anyframe.logmanager.service.AccountService#get(java.lang.String)
 	 */
 	public Account get(String userId) throws Exception {
 		return accountDao.get(userId);
 	}
-	
-	/* (non-Javadoc)
-	 * @see org.anyframe.logmanager.service.AccountService#getList(org.anyframe.datatype.SearchVO)
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * org.anyframe.logmanager.service.AccountService#getList(org.anyframe.datatype
+	 * .SearchVO)
 	 */
 	public Page getList(SearchVO search) throws Exception {
 		return accountDao.getList(search);
 	}
-	
-	/* (non-Javadoc)
+
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see org.anyframe.logmanager.service.AccountService#checkAdminExist()
 	 */
 	public boolean checkAdminExist() throws Exception {

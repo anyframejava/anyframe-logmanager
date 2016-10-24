@@ -9,11 +9,14 @@
 	</itemizedlist>
 	<mediaobject>
 		<imageobject role="html">
-			<imagedata fileref="../image/logmanager/LM151-005.JPG" align="center" />
+			<imagedata fileref="../image/logmanager/160_002.jpg" align="center" />
 		</imageobject>
 		<imageobject role="fo">
-			<imagedata fileref="../image/logmanager/pdf/LM151-005.JPG" align="center" />
+			<imagedata fileref="../image/logmanager/pdf/160_002.jpg" align="center" />
 		</imageobject>
+		<textobject>
+			<phrase>로그인 후 첫 화면 이미지</phrase>
+		</textobject>
 		<caption>Main Page</caption>
 	</mediaobject>
 </chapter>

@@ -3,7 +3,7 @@
 	<property environment="env" />
 	
 	<property name="bundle.name" value="anyframe-logmanager-bundle-core" />
-	<property name="version" value="1.5.1"/>
+	<property name="version" value="1.6.0"/>
 			
 	<property name="src" location="${basedir}/src/main/java"/>
 	<property name="build" location="${basedir}/build"/>
@@ -48,12 +48,22 @@
 				excludes="org/anyframe/logmanager/domain/LogApplication.java">
 			<classpath>
 				<fileset dir="${basedir}/bundle.lib"/>
-				<fileset dir="${bundle.loc}"/>
+				<fileset dir="${bundle.loc}/../lib"/>
 			</classpath>
 		</javac>
 	</target>
 	
-	<target name="dist.bundle" depends="compile.bundle">
+	<target name="pmd">
+		<taskdef name="pmd" classname="net.sourceforge.pmd.ant.PMDTask"/>
+	    <pmd rulesetfiles="http://dev.anyframejava.org/docs/anyframe/plugin/ruleset.xml">
+	        <formatter type="xml" toFile="target/pmd.xml"/>
+	        <fileset dir="src">
+	            <include name="**/*.java"/>
+	        </fileset>
+	    </pmd>
+	</target>
+	    	
+	<target name="dist.bundle" depends="compile.bundle, pmd">
 		<copy todir="${build}">
 			<fileset dir="${basedir}" includes="OSGI-INF/*.xml"/>
 			<fileset dir="${basedir}">

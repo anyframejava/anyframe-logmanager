@@ -19,11 +19,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * @author Jaehyoung Eum 
- *
+ * This is Logger class.
+ * 
+ * @author Jaehyoung Eum
  */
 public class Logger {
-	
+
 	private String name;
 	private String additivity;
 	private String level;
@@ -84,23 +85,25 @@ public class Logger {
 	public void setAppenderRefs(ArrayList<String> appenderRefs) {
 		this.appenderRefs = appenderRefs;
 	}
-	
+
 	/**
 	 * @param appenderRef
 	 */
 	public void setAppenderRef(String appenderRef) {
-		if(this.appenderRefs == null) {
+		if (this.appenderRefs == null) {
 			this.appenderRefs = new ArrayList<String>();
 		}
 		this.appenderRefs.add(appenderRef);
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see java.lang.Object#toString()
 	 */
 	@Override
 	public String toString() {
-		return "Logger [name=" + name + ", additivity=" + additivity + ", level="
-				+ level + ", appenderRefs=" + appenderRefs + "]";
+		return "Logger [name=" + name + ", additivity=" + additivity
+				+ ", level=" + level + ", appenderRefs=" + appenderRefs + "]";
 	}
 }
