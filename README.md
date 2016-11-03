@@ -11,6 +11,7 @@ Anyframe Log Manager는 개발 및 유지보수 단계에서 로컬 개발 환�
 * **정규식 기반의 로그 수집기능 제공** : 정규식 기반의 로그 수집기능을 통해 로그 데이타의 형식에 구애받지 않고 데이타를 수집할 수 있다.
 
 ![](README_image/logmanager-1.6.0-lmp011.jpg)
+![](README_image/logmanager-1.6.0-lmp012.jpg)
 
 ## 주요기능
 
